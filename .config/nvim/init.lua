@@ -1,8 +1,3 @@
-vim.cmd([[
-  syntax off
-  filetype off
-  filetype plugin indent off
-]])
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
     vim.fn.system({
@@ -46,9 +41,4 @@ vim.defer_fn(function()
     require("autocmds")
     require("statusline")
     require("lsploc")
-    vim.cmd([[
-      syntax on
-      filetype on
-      filetype plugin indent on
-    ]])
 end, 0)
