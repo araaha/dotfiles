@@ -1,0 +1,48 @@
+#compdef gpg-agent
+
+# zsh completions for 'gpg-agent'
+# automatically generated with http://github.com/RobSis/zsh-completion-generator
+local arguments
+
+arguments=(
+  '--daemon[run in daemon mode (background)]'
+  '--server[run in server mode (foreground)]'
+  '--supervised[run in supervised mode]'
+  '--no-detach[do not detach from the console]'
+  {-s,--sh}'[sh-style command output]'
+  {-c,--csh}'[csh-style command output]'
+  '--options[read options from FILE]'
+  {-v,--verbose}'[verbose]'
+  {-q,--quiet}'[be somewhat more quiet]'
+  '--log-file[write server mode logs to FILE]'
+  '--disable-scdaemon[do not use the SCdaemon]'
+  '--scdaemon-program[use PGM as the SCdaemon program]'
+  '--extra-socket[accept some commands via NAME]'
+  '--keep-tty[ignore requests to change the TTY]'
+  '--keep-display[ignore requests to change the X display]'
+  '--enable-ssh-support[enable ssh support]'
+  '--ssh-fingerprint-digest[use ALGO to show ssh fingerprints]'
+  '--default-cache-ttl[expire cached PINs after N seconds]'
+  '--default-cache-ttl-ssh[expire SSH keys after N seconds]'
+  '--max-cache-ttl[set maximum PIN cache lifetime to N seconds]'
+  '--max-cache-ttl-ssh[set maximum SSH key lifetime to N seconds]'
+  '--ignore-cache-for-signing[do not use the PIN cache when signing]'
+  '--no-allow-external-cache[disallow the use of an external password cache]'
+  '--no-allow-mark-trusted[disallow clients to mark keys as "trusted"]'
+  '--allow-preset-passphrase[allow presetting passphrase]'
+  '--enforce-passphrase-constraints[do not allow bypassing the passphrase policy]'
+  '--min-passphrase-len[set minimal required length for new passphrases to N]'
+  '--min-passphrase-nonalpha[require at least N non-alpha characters for a new passphrase]'
+  '--check-passphrase-pattern[check new passphrases against pattern in FILE]'
+  '--max-passphrase-days[expire the passphrase after N days]'
+  '--enable-passphrase-history[do not allow the reuse of old passphrases]'
+  '--batch[never use the PIN-entry]'
+  '--no-allow-loopback-pinentry[disallow caller to override the pinentry]'
+  '--grab[let PIN-Entry grab keyboard and mouse]'
+  '--pinentry-program[use PGM as the PIN-Entry program]'
+  '--pinentry-timeout[set the Pinentry timeout to N seconds]'
+  '--allow-emacs-pinentry[allow passphrase to be prompted through Emacs]'
+  '*:filename:_files'
+)
+
+_arguments -s $arguments

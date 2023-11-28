@@ -1,0 +1,3 @@
+[filechooser]
+cmd         = /home/araaha/dotfiles/.local/share/xdg-filechooser/fzf-wrapper.sh
+default_dir = /home/araaha/Downloads

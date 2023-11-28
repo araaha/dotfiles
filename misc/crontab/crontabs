@@ -1,0 +1,5 @@
+*/10 * * * * /home/araaha/scripts/dunst-classes.sh
+*/5 * * * * /home/araaha/scripts/bluetooth-battery.sh
+*/5 * * * * /home/araaha/scripts/battery.sh
+* */12 * * * crontab -l > /home/araaha/dotfiles/misc/crontab/crontabs
+* * * * * /bin/zsh -c 'date > /home/araaha/dotfiles/misc/crontab/cron-test.txt'

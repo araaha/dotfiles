@@ -1,0 +1,8 @@
+xwallpaper --center ~/.local/share/Wallpapers/Pacman.png &
+/usr/bin/light -Ss "sysfs/backlight/amdgpu_bl0" 13 & 
+./.config/polybar/launch.sh & 
+picom -b &
+xset s off -dpms &
+udiskie -N &
+unclutter -idle 10 -root &
+dbus-update-activation-environment --systemd DISPLAY XDG_CURRENT_DESKTOP=openbox 

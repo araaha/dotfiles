@@ -1,0 +1,8 @@
+*.ttf filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+st filter=lfs diff=lfs merge=lfs -text
+nsxiv filter=lfs diff=lfs merge=lfs -text
+moar filter=lfs diff=lfs merge=lfs -text
+garbage filter=lfs diff=lfs merge=lfs -text
+nitch filter=lfs diff=lfs merge=lfs -text
+* !text !filter !merge !diff

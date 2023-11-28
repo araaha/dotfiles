@@ -1,0 +1,118 @@
+
+snippet `(([\w0-9_\.\(\)\[\]\*\&\|]|->)+)@vec` "std::vector<type>" A
+``rv = `std::vector<\${1:int}> ${m[1]}\${2: = { $3 \\}};` ``
+endsnippet
+
+snippet `(([\w0-9_\.\(\)\[\]\*\&\|]|->)+)@fif` "std::find_if (lambda)" A
+``rv = `std::find_if(${m[1]}.cbegin(), ${m[1]}.cend(),` ``
+        [](${1:auto const&} ${2:elem})
+        {
+            return ${2:elem} ${3:/* condition */};
+        }
+    );
+endsnippet
+
+snippet `(([\w0-9_\.\(\)\[\]\*\&\|]|->)+)@ffif` "std::find_if (functor)" A
+``rv = `std::find_if(${m[1]}.cbegin(), ${m[1]}.cend(),` `` ${1:funcName});
+endsnippet
+
+snippet `(([\w0-9_\.\(\)\[\]\*\&\|]|->)+)@find` "std::find" A
+``rv = `std::find(${m[1]}.cbegin(), ${m[1]}.cend(),` `` ${1:variableName});
+endsnippet
+
+
+
+snippet `(([\w0-9_\.\(\)\[\]\*\&\|]|->)+)@anyof` "std::any_of (lambda)" A
+``rv = `std::any_of(${m[1]}.cbegin(), ${m[1]}.cend(),` ``
+        [](${1:auto const&} ${2:elem})
+        {
+            return ${2:elem} ${3:/* condition */};
+        }
+    );
+endsnippet
+
+snippet `(([\w0-9_\.\(\)\[\]\*\&\|]|->)+)@fanyof` "std::any_of (functor)" A
+``rv = `std::any_of(${m[1]}.cbegin(), ${m[1]}.cend(),` `` ${1:funcName});
+endsnippet
+
+
+snippet `(([\w0-9_\.\(\)\[\]\*\&\|]|->)+)@allof` "std::all_of (lambda)" A
+``rv = `std::all_of(${m[1]}.cbegin(), ${m[1]}.cend(),` ``
+        [](${1:auto const&} ${2:elem})
+        {
+            return ${2:elem} ${3:/* condition */};
+        }
+    );
+endsnippet
+
+snippet `(([\w0-9_\.\(\)\[\]\*\&\|]|->)+)@fallof` "std::all_of (functor)" A
+``rv = `std::all_of(${m[1]}.cbegin(), ${m[1]}.cend(),` `` ${1:funcName});
+endsnippet
+
+
+snippet `(([\w0-9_\.\(\)\[\]\*\&\|]|->)+)@noneof` "std::none_of (lambda)" A
+``rv = `std::none_of(${m[1]}.cbegin(), ${m[1]}.cend(),` ``
+        [](${1:auto const&} ${2:elem})
+        {
+            return ${2:elem} ${3:/* condition */};
+        }
+    );
+endsnippet
+
+snippet `(([\w0-9_\.\(\)\[\]\*\&\|]|->)+)@fnoneof` "std::none_of (functor)" A
+``rv = `std::none_of(${m[1]}.cbegin(), ${m[1]}.cend(),` `` ${1:funcName});
+endsnippet
+
+
+snippet `(([\w0-9_\.\(\)\[\]\*\&\|]|->)+)@each` "std::for_each (lambda)" A
+``rv = `std::for_each(${m[1]}.begin(), ${m[1]}.end(),` ``
+        [](${1:auto const&} ${2:elem})
+        {
+            ${3:${2}};
+        }
+    );
+endsnippet
+
+snippet `(([\w0-9_\.\(\)\[\]\*\&\|]|->)+)@feach` "std::for_each (functor)" A
+``rv = `std::for_each(${m[1]}.begin(), ${m[1]}.end(),` `` ${1:funcName});
+endsnippet
+
+snippet `(([\w0-9_\.\(\)\[\]\*\&\|]|->)+)@neach` "std::for_each_n (lambda)" A
+``rv = `std::for_each_n(${m[1]}.begin(), \${1:sizeValue},` ``
+        [](${2:auto const&} ${3:elem})
+        {
+            ${4:${3}};
+        }
+    );
+endsnippet
+
+snippet `(([\w0-9_\.\(\)\[\]\*\&\|]|->)+)@fneach` "std::for_each_n (functor)" A
+``rv = `std::for_each_n(${m[1]}.begin(), \${1:sizeValue},` `` ${2:funcName});
+endsnippet
+
+
+snippet `(([\w0-9_\.\(\)\[\]\*\&\|]|->)+)@cif` "std::count_if (lambda)" A
+``rv = `std::count_if(${m[1]}.cbegin(), ${m[1]}.cend(),` ``
+        [](${1:auto const&} ${2:elem})
+        {
+            return ${2:elem} ${3:/* condition */};
+        }
+    );
+endsnippet
+
+snippet `(([\w0-9_\.\(\)\[\]\*\&\|]|->)+)@fcif` "std::count_if (functor)" A
+``rv = `std::count_if(${m[1]}.cbegin(), ${m[1]}.cend(),` `` ${1:funcName});
+endsnippet
+
+
+snippet `(([\w0-9_\.\(\)\[\]\*\&\|]|->)+)@count` "std::count" A
+``rv = `std::count(${m[1]}.cbegin(), ${m[1]}.cend(),` `` ${1:exactValue});
+endsnippet
+
+
+
+
+
+snippet `(([\w0-9_\.\(\)\[\]\*\&\|]|->)+)@=\>` "transform lambda on elem" A
+``rv = `[](auto const& ${m[1]}) { return \${1:${m[1]}}; }` ``
+endsnippet

@@ -1,0 +1,12 @@
+#compdef upower
+
+_arguments \
+         '*:file:_files' \
+         {-v,--version}'[Print version of client and daemon]' \
+         {-i,--show-info}'[Show information about object path]' \
+         '--monitor-detail[Monitor with detail]' \
+         {-m,--monitor}'[ Monitor activity from the power daemon]' \
+         {-w,--wakeups}'[Get the wakeup data]' \
+         {-d,--dump}'[Dump all parameters for all objects]' \
+         {-e,--enumerate}'[Enumerate objects paths for devices]' \
+         {-h,--help}'[Show help options]'

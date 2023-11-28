@@ -1,0 +1,12 @@
+icons         = true
+human         = true
+layout        = "inverted"
+suppress-size = true
+
+[du]
+suppress-size = false
+disk_usage    = "logical"
+layout        = "iflat"
+level         = 1
+human         = true
+icons         = true

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Calcurse
+Icon=calendar
+Terminal=false
+Exec=st -g 200x200 -e calcurse
+Categories=ConsoleOnly;System;FileTools;FileManager
+MimeType=inode/directory;

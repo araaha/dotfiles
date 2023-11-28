@@ -1,0 +1,1 @@
+@reboot /bin/bash -c /home/araaha/scripts/bat-80.sh

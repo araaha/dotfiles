@@ -1,0 +1,22 @@
+#command
+^F  forw-search
+\kr right-scroll
+\kl left-scroll
+\ef next-file
+\eb prev-file
+^G  goto-line
+\e[6;5~ repeat-search 
+\e[5;5~ reverse-search
+^C undo-hilite
+^P quit
+^R toggle-option N
+
+#line-edit
+\t       forw-complete
+\17      back-complete 
+^W       word-backspace
+
+\eb      word-left
+\ef      word-right
+^A       home
+^E       end

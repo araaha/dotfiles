@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<keys
+   name="User Shortcuts">
+  <bind
+     key="a"
+     modifiers="Shift"
+     action="org.ekips.filter.textext"
+     display="true" />
+  <bind
+     key="d"
+     modifiers="Shift"
+     action="org.inkscape.effect.func_plot.noprefs"
+     display="true" />
+  <bind
+     key="e"
+     modifiers="Shift"
+     action="org.inkscape.generate.pdf_latex"
+     display="true" />
+  <bind
+     key="w"
+     modifiers="Shift"
+     action="org.inkscape.effect.func_plot"
+     display="true" />
+</keys>

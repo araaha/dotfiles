@@ -1,0 +1,8 @@
+export ZDOTDIR=/home/araaha/.config/zsh
+
+if [[ -n $LF_LEVEL && -o nointeractive ]]; then
+    # re-define aliases here that you want active in lf
+    # for example
+    source ~/dotfiles/.config/zsh/configs/aliases.zsh
+fi
+

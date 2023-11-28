@@ -1,0 +1,25 @@
+# include light-theme
+include dark-theme
+set synctex true
+set synctex-editor-command "code --goto \"%{input}:%{line}\""
+set font "MesloLGS NF Regular 12"
+
+set guioptions none
+set selection-clipboard clipboard
+set statusbar-h-padding 0
+set statusbar-v-padding 0
+
+map = zoom in
+map <C-s> toggle_statusbar
+map W adjust_window width
+unmap <C-f>
+map <C-f> focus_inputbar /
+set window-height 1000
+set window-width 1000
+map <C-T> follow
+map <S-Return> search backward
+map <Return> search forward
+map <C-r> feedkeys ":source /home/araaha/.config/zathura-light<Return>"
+map <C-w> quit
+set window-height 3000
+set window-width 3000

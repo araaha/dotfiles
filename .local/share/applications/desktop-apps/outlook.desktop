@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Outlook
+Comment=Launches Outlook in the browser
+Icon=mail
+Terminal=false
+Exec=google-chrome-stable --start-fullscreen --app=https://outlook.office365.com/owa/

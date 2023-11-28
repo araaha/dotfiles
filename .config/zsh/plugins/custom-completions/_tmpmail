@@ -1,0 +1,10 @@
+#compdef tmpmail
+
+_arguments \
+         '*:file:_files' \
+		'-b[Specify BROWSER (default: w3m) that is used to render the HTML of the email.]' \
+		'-g[Generate a new email address, either the specified ADDRESS, or randomly creat…]' \
+		'-h[Show help.]' \
+		'-r[View the most recent email message.]' \
+		'-t[View the email as raw text, where all the HTML tags are removed.]' \
+		'--version[Show version El.]'

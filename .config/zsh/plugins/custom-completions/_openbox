@@ -1,0 +1,17 @@
+#compdef openbox
+
+_arguments \
+         '*:file:_files' \
+		'--help[Show a summary of the command line options available and exit.]' \
+		'--version[Show the version of the program and exit.]' \
+		'--replace[Replace the currently running window manager.]' \
+		'--config-file[Specify the path to the config file to use.]' \
+		'--reconfigure[If Openbox is already running on the display, tell it to reload its configur…]' \
+		'--restart[If Openbox is already running on the display, tell it to restart.]' \
+		'--exit[Exit Openbox.]' \
+		'--sm-disable[Do not connect to the session manager.]' \
+		'--sync[Run in synchronous mode (for debugging).]' \
+		'--startup[Run CMD after starting.]' \
+		'--debug[Display debugging output.]' \
+		'--debug-focus[Display debugging output for focus handling.]' \
+		'--debug-session[Display debugging output for session management.]'

@@ -1,0 +1,22 @@
+configuration {
+kb-cancel: "Escape,Control+w";
+kb-clear-line: "Control+BackSpace";
+kb-remove-word-back: "";
+kb-secondary-copy: "";
+kb-row-up: "Control+p";
+kb-row-down: "Control+n";
+kb-accept-entry: "Return,Tab";
+kb-element-next: "";
+kb-element-prev: "";
+font: "MesloLGS NF 15";
+modi: "window,drun,run";
+combi-modi: "window,drun,run";
+location: 0;
+matching: "fuzzy";
+drun-match-fields: "name,generic";
+}
+
+
+
+@theme "/home/araaha/dotfiles/.config/rofi/gruvbox.rasi"
+

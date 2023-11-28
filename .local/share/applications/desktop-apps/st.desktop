@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=St
+Icon=st
+Terminal=false
+Exec=st
+Categories=ConsoleOnly;System;FileTools;FileManager
+MimeType=inode/directory;

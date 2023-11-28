@@ -1,0 +1,79 @@
+#compdef picom
+
+_arguments \
+         '*:file:_files' \
+		{-h,--help}'[Get the usage text embedded in program code, which may be more up-to-date tha…]' \
+		{-r,--shadow-radius}'[The blur radius for shadows, in pixels. (defaults to 12).]' \
+		{-o,--shadow-opacity}'[The opacity of shadows. (0. 0 - 1. 0, defaults to 0. 75).]' \
+		{-l,--shadow-offset-x}'[The left offset for shadows, in pixels. (defaults to -15).]' \
+		{-t,--shadow-offset-y}'[The top offset for shadows, in pixels. (defaults to -15).]' \
+		{-I,--fade-in-step}'[Opacity change between steps while fading in. (0. 01 - 1. 0, defaults to 0.]' \
+		{-O,--fade-out-step}'[Opacity change between steps while fading out. (0. 01 - 1. 0, defaults to 0.]' \
+		{-D,--fade-delta}'[The time between steps in fade step, in milliseconds. (> 0, defaults to 10).]' \
+		{-c,--shadow}'[Enabled client-side shadows on windows.]' \
+		{-f,--fading}'[Fade windows in/out when opening/closing and when opacity changes, unless --n…]' \
+		'-F[Equals to -f. Deprecated.]' \
+		{-i,--inactive-opacity}'[Opacity of inactive windows. (0. 1 - 1. 0, defaults to 1. 0).]' \
+		{-e,--frame-opacity}'[Opacity of window titlebars and borders. (0. 1 - 1. 0, disabled by default).]' \
+		{-b,--daemon}'[Daemonize process. Fork to background after initialization.]' \
+		'--log-level[Set the log level.]' \
+		'--log-file[Set the log file.]' \
+		'--experimental-backends[Use the new, reimplemented version of the backends.]' \
+		'--show-all-xerrors[Show all X errors (for debugging).]' \
+		'--config[Look for configuration file at the path.]' \
+		'--write-pid-path[Write process ID to a file. it is recommended to use an absolute path.]' \
+		'--shadow-color[Color of shadow, as a hex string (#000000).]' \
+		'--shadow-red[Red color value of shadow (0. 0 - 1. 0, defaults to 0).]' \
+		'--shadow-green[Green color value of shadow (0. 0 - 1. 0, defaults to 0).]' \
+		'--shadow-blue[Blue color value of shadow (0. 0 - 1. 0, defaults to 0).]' \
+		'--inactive-opacity-override[Let inactive opacity set by -i override the _NET_WM_WINDOW_OPACITY values of …]' \
+		'--active-opacity[Default opacity for active windows. (0. 0 - 1. 0, defaults to 1. 0).]' \
+		'--inactive-dim[Dim inactive windows. (0. 0 - 1. 0, defaults to 0. 0).]' \
+		'--corner-radius[Sets the radius of rounded window corners.]' \
+		'--rounded-corners-exclude[Exclude conditions for rounded corners.]' \
+		'--mark-wmwin-focused[Try to detect WM windows (a non-override-redirect window with no child that h…]' \
+		'--mark-ovredir-focused[Mark override-redirect windows that doesn\(cqt have a child window with WM_ST…]' \
+		'--no-fading-openclose[Do not fade on window open/close.]' \
+		'--no-fading-destroyed-argb[Do not fade destroyed ARGB windows with WM frame.]' \
+		'--shadow-ignore-shaped[Do not paint shadows on shaped windows.]' \
+		'--detect-rounded-corners[Try to detect windows with rounded corners and don\(cqt consider them shaped …]' \
+		'--detect-client-opacity[Detect _NET_WM_WINDOW_OPACITY on client windows, useful for window managers n…]' \
+		{--vsync,--no-vsync}'[Enable/disable VSync.]' \
+		'--use-ewmh-active-win[Use EWMH _NET_ACTIVE_WINDOW to determine currently focused window, rather tha…]' \
+		'--unredir-if-possible[Unredirect all windows if a full-screen opaque window is detected, to maximiz…]' \
+		'--unredir-if-possible-delay[Delay before unredirecting the window, in milliseconds. Defaults to 0.]' \
+		'--unredir-if-possible-exclude[Conditions of windows that shouldn\(cqt be considered full-screen for unredir…]' \
+		'--shadow-exclude[Specify a list of conditions of windows that should have no shadow.]' \
+		'--clip-shadow-above[Specify a list of conditions of windows that should have no shadow painted ov…]' \
+		'--fade-exclude[Specify a list of conditions of windows that should not be faded.]' \
+		'--focus-exclude[Specify a list of conditions of windows that should always be considered focu…]' \
+		'--inactive-dim-fixed[Use fixed inactive dim value, instead of adjusting according to window opacit…]' \
+		'--detect-transient[Use WM_TRANSIENT_FOR to group windows, and consider windows in the same group…]' \
+		'--detect-client-leader[Use WM_CLIENT_LEADER to group windows, and consider windows in the same group…]' \
+		{--blur-method,--blur-size,--blur-deviation,--blur-strength}'[Parameters for background blurring, see the BLUR section for more information.]' \
+		'--blur-background[Blur background of semi-transparent / ARGB windows.]' \
+		'--blur-background-frame[Blur background of windows when the window frame is not opaque.]' \
+		'--blur-background-fixed[Use fixed blur strength rather than adjusting according to window opacity.]' \
+		'--blur-kern[Specify the blur convolution kernel, with the following format: . sp .]' \
+		'--blur-background-exclude[Exclude conditions for background blur.]' \
+		'--resize-damage[Resize damaged region by a specific number of pixels.]' \
+		'--invert-color-include[Specify a list of conditions of windows that should be painted with inverted …]' \
+		'--opacity-rule[Specify a list of opacity rules, in the format PERCENT:PATTERN, like 50:name …]' \
+		'--shadow-exclude-reg[Specify a X geometry that describes the region in which shadow should not be …]' \
+		'--xinerama-shadow-crop[Crop shadow of a window fully on a particular Xinerama screen to the screen.]' \
+		'--backend[Specify the backend to use: xrender, glx, or xr_glx_hybrid.]' \
+		'--glx-no-stencil[GLX backend: Avoid using stencil buffer, useful if you don\(cqt have a stenci…]' \
+		'--glx-no-rebind-pixmap[GLX backend: Avoid rebinding pixmap on window damage.]' \
+		'--no-use-damage[Disable the use of damage information.]' \
+		'--xrender-sync-fence[Use X Sync fence to sync clients\*(Aq draw calls, to make sure all draw calls…]' \
+		'--glx-fshader-win[GLX backend: Use specified GLSL fragment shader for rendering window contents.]' \
+		'--force-win-blend[Force all windows to be painted with blending.]' \
+		'--dbus[Enable remote control via D-Bus.]' \
+		'--benchmark[Benchmark mode. Repeatedly paint until reaching the specified cycles.]' \
+		'--benchmark-wid[Specify window ID to repaint in benchmark mode.]' \
+		'--no-ewmh-fullscreen[Do not use EWMH to detect fullscreen windows.]' \
+		'--max-brightness[Dimming bright windows so their brightness doesn\(cqt exceed this set value.]' \
+		'--transparent-clipping[Make transparent windows clip other windows like non-transparent windows do, …]' \
+		'--use-damage[.]' \
+		'--vsync-use-glfinish[might fix some rendering issues with this backend.]' \
+		'--blur-kerns[option. Corresponds to the.]'

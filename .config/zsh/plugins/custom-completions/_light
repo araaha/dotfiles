@@ -1,0 +1,18 @@
+#compdef light
+
+_arguments \
+         '*:file:_files' \
+		'-H[Show help text and exit.]' \
+		'-V[Show program version and exit.]' \
+		'-L[List available devices.]' \
+		'-A[Increase brightness by value.]' \
+		'-U[Decrease brightness by value.]' \
+		'-S[Set brightness to value.]' \
+		'-G[Get brightness, default.]' \
+		'-N[Set minimum brightness to value.]' \
+		'-P[Get minimum brightness.]' \
+		'-O[Save current brightness.]' \
+		'-I[Restore previously saved brightness El OPTIONS The behavior of the above comm…]' \
+		'-r[Interpret input and output values in raw mode.]' \
+		'-s[Specify device target path. Use L to list available devices.]' \
+		'-v[Set verbosity level, by default light only outputs read values: Pp -tag -widt…]'

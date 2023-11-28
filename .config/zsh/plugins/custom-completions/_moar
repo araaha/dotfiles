@@ -1,0 +1,27 @@
+#compdef moar
+
+# zsh completions for 'moar'
+# automatically generated with http://github.com/RobSis/zsh-completion-generator
+local arguments
+
+arguments=(
+  '-colors[highlighting palette size: 8, 16, 256, 16M, auto]'
+  '-debug[print debug logs after exiting]'
+  '-follow[follow piped input just like "tail -f"]'
+  '-no-clear-on-exit[retain screen contents when exiting moar]'
+  '-no-linenumbers[hide line numbers on startup, press left arrow key to show]'
+  '-no-statusbar[hide the status bar, toggle with =]'
+  '-quit-if-one-screen[dont page if contents fits on one screen]'
+  '-render-unprintable[how unprintable characters are rendered: highlight or whitespace]'
+  '-scroll-left-hint[shown when view can scroll left. One character with optional ANSI highlighting.]'
+  '-scroll-right-hint[shown when view can scroll right. One character with optional ANSI highlighting.]'
+  '-shift[horizontal scroll amount >=1, defaults to 16]'
+  '-statusbar[status bar style: inverse, plain or bold]'
+  '-style[highlighting style from https://xyproto.github.io/splash/docs/longer/all.html]'
+  '-trace[print trace logs after exiting]'
+  '-version[prints the moar version number]'
+  '-wrap[wrap long lines]'
+  '*:filename:_files'
+)
+
+_arguments -s $arguments

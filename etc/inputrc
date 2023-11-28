@@ -1,0 +1,59 @@
+# do not bell on tab-completion
+#set bell-style none
+
+set meta-flag on
+set input-meta on
+set convert-meta off
+set output-meta on
+set keyseq-timeout 0
+# add the contents of this file to ~/.inputrc
+set show-mode-in-prompt on
+
+# this is where the magic happens
+set editing-mode vi
+
+# vi INSERT prompt
+set vi-ins-mode-string "\1\e[30;44m\2 INS \1\e[0m\2 "
+
+# vi NORMAL prompt
+set vi-cmd-mode-string "\1\e[30;47m\2 NOR \1\e[0m\2 "
+
+# bash is a nice place to mix and match vim and emacs, to find your personal style
+$if mode=vi
+    # bind substring history commands to j and k on vi's command mode
+    set keymap vi-command
+    "k": history-substring-search-backward
+    "j": history-substring-search-forward
+
+    # I can't live without C-l to clear the screen
+    set keymap vi-insert
+    "\C-l": clear-screen
+$endif
+$if mode=emacs
+
+# for linux console and RH/Debian xterm
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
+"\e[5~": beginning-of-history
+"\e[6~": end-of-history
+"\e[7~": beginning-of-line
+"\e[3~": delete-char
+"\e[2~": quoted-insert
+"\e[5C": forward-word
+"\e[5D": backward-word
+"\e\e[C": forward-word
+"\e\e[D": backward-word
+"\e[1;5C": forward-word
+"\e[1;5D": backward-word
+
+# for rxvt
+"\e[8~": end-of-line
+
+# for non RH/Debian xterm, can't hurt for RH/DEbian xterm
+"\eOH": beginning-of-line
+"\eOF": end-of-line
+
+# for freebsd console
+"\e[H": beginning-of-line
+"\e[F": end-of-line
+$endif
