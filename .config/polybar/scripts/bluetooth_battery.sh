@@ -18,6 +18,7 @@ if dbus-send \
 
     echo "$str%"
 else 
+    echo "0"
     exit
 fi 
 

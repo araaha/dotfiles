@@ -35,10 +35,10 @@ require("lazy").setup({
     },
 })
 
+require("autocmds")
 vim.defer_fn(function()
-    require("options")
     require("keymaps")
-    require("autocmds")
+    require("options")
     require("statusline")
     require("lsploc")
 end, 0)

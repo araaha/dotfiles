@@ -3,4 +3,8 @@
 **.fls
 **.aux
 **.synctex.gz
-**feels_like.sh
+**/feels_like.sh
+**/cron-test.txt
+**/lazy-lock.json
+**/.zcompdump
+**/.zcompdump.zwc

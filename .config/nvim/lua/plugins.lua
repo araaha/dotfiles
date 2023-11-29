@@ -546,33 +546,91 @@ return {
             -- vim.keymap.set({ 'n', 't' }, '<A-p>', '<CMD>NavigatorPrevious<CR>')
         end
     },
+    -- {
+    --     "folke/flash.nvim",
+    --     version = false,
+    --     lazy    = true,
+    --     keys    = { 'd', 'v', 'f', 'F', 't', 'T', ';', ',' },
+    --     keys    = {
+    --         { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+    --     },
+    --     opts    = {
+    --         labels  = "acdefjklrsvw",
+    --         forward = false,
+    --         label   = {
+    --             uppercase = false,
+    --         },
+    --         modes   = {
+    --             char = {
+    --                 enabled = true,
+    --                 highlight = { backdrop = false },
+    --             },
+    --             search = {
+    --                 enabled = false,
+    --             }
+    --         }
+    --     },
+    --     config  = function(_, opts)
+    --         local flash = require('flash')
+    --         flash.setup(opts)
+    --         vim.api.nvim_set_hl(0, "FlashLabel", { fg = "#242424", bg = "#D8A657" })
+    --         vim.api.nvim_set_hl(0, "FlashCursor", { fg = "#D8A657", bg = "#242424" })
+    --         vim.api.nvim_set_hl(0, "FlashCurrent", { fg = "#242424", bg = "#7DAEA3" })
+    --     end,
+    -- },
     {
-        "folke/flash.nvim",
+        "backdround/improved-ft.nvim",
         version = false,
         lazy    = true,
-        keys    = { 'd', 'v', 'f', 'F', 't', 'T', ';', ',' },
+        event   = "VeryLazy",
         opts    = {
-            labels  = "acdefjklrsvw",
-            forward = false,
-            label   = {
-                uppercase = false,
-            },
-            modes   = {
-                char = {
-                    enabled = true,
-                    highlight = { backdrop = true },
-                },
-                search = {
-                    enabled = false,
-                }
-            }
         },
         config  = function(_, opts)
-            local flash = require('flash')
-            require('flash').setup(opts)
-            vim.api.nvim_set_hl(0, "FlashLabel", { fg = "#242424", bg = "#D8A657" })
-            vim.api.nvim_set_hl(0, "FlashCursor", { fg = "#D8A657", bg = "#242424" })
-            vim.api.nvim_set_hl(0, "FlashCurrent", { fg = "#242424", bg = "#7DAEA3" })
+            local ft = require("improved-ft")
+
+            vim.keymap.set({ "n", "x", "o" }, "f", function()
+                ft.jump({
+                    direction = "forward",
+                    offset = "none",
+                    pattern = nil,
+                    save_for_repetition = true,
+                })
+                vim.keymap.set({ "n", "x", "o" }, ";", ft.repeat_forward)
+                vim.keymap.set({ "n", "x", "o" }, ",", ft.repeat_backward)
+            end)
+
+            vim.keymap.set({ "n", "x", "o" }, "t", function()
+                ft.jump({
+                    direction = "forward",
+                    offset = "pre",
+                    pattern = nil,
+                    save_for_repetition = true,
+                })
+                vim.keymap.set({ "n", "x", "o" }, ";", ft.repeat_forward)
+                vim.keymap.set({ "n", "x", "o" }, ",", ft.repeat_backward)
+            end)
+
+            vim.keymap.set({ "n", "x", "o" }, "F", function()
+                ft.jump({
+                    direction = "backward",
+                    offset = "none",
+                    pattern = nil,
+                    save_for_repetition = true,
+                })
+                vim.keymap.set({ "n", "x", "o" }, ";", ft.repeat_backward)
+                vim.keymap.set({ "n", "x", "o" }, ",", ft.repeat_forward)
+            end)
+
+            vim.keymap.set({ "n", "x", "o" }, "T", function()
+                ft.jump({
+                    direction = "backward",
+                    offset = "pre",
+                    pattern = nil,
+                    save_for_repetition = true,
+                })
+                vim.keymap.set({ "n", "x", "o" }, ";", ft.repeat_backward)
+                vim.keymap.set({ "n", "x", "o" }, ",", ft.repeat_forward)
+            end)
         end,
     },
 }
