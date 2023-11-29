@@ -1,0 +1,34 @@
+#compdef calcurse
+
+# zsh completions for 'calcurse'
+# automatically generated with http://github.com/RobSis/zsh-completion-generator
+local arguments
+
+arguments=(
+  {-Q,--query}'[print items in a given query range]'
+  {-G,--grep}'[grep items from the data files]'
+  {-P,--purge}'[read items and write them back]'
+  {-a,-d,-n,-r,-s,-t}'[<number>]'
+  '--filter-[*              Filter items loaded by -Q, -G, -P and -x]'
+  '--format-[*              Rewrite output from -Q, -G and --dump-imported]'
+  '--from[limit day range of -Q.]'
+  '--to[limit day range of -Q.]'
+  '--days[limit day range of -Q.]'
+  {--limit,-l}'[limit number of query results]'
+  {--search,-S}'[match regular expression in queries]'
+  {-c,--calendar}'[the calendar data file to use]'
+  {-C,--confdir}'[the configuration directory to use]'
+  '--daemon[run notification daemon in the background]'
+  {-D,--datadir}'[the data directory to use]'
+  {-g,--gc}'[run the garbage collector]'
+  {-h,--help}'[show this help text]'
+  {-i,--import}'[import iCal data from file]'
+  {-q,--quiet}'[suppress import/export result message]'
+  '--read-only[do not save configuration or data files]'
+  '--status[display status of running instances]'
+  {-v,--version}'[show version information]'
+  {-x,--export}'[export to stdout in ical (default) or pcal format]'
+  '*:filename:_files'
+)
+
+_arguments -s $arguments

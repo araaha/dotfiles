@@ -9,7 +9,7 @@
 # http://zdharma.org/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
 ZSH_COMPLETION_GENERATOR_SRCDIR=${0:A:h}
 
-ZSH_COMPLETION_GENERATOR_DIR="$ZSH_COMPLETION_GENERATOR_SRCDIR/completions"
+ZSH_COMPLETION_GENERATOR_DIR="$ZDOTDIR/plugins/custom-completions"
 # which python to use
 local python
 if [[ -z $GENCOMPL_PY ]]; then
@@ -57,10 +57,7 @@ done
 for prg in "${programs[@]}"; do
     name=$prg
     if [ -f $ZSH_COMPLETION_GENERATOR_DIR/_$name ]; then
-        cp $ZSH_COMPLETION_GENERATOR_DIR/_$name $ZDOTDIR/plugins/custom-completions
-        rm $ZSH_COMPLETION_GENERATOR_DIR/_$name
-        sudo rm $ZDOTDIR/.zcompdump
-        sudo rm $ZDOTDIR/.zcompdump.zwc
+        echo _$name
     fi
 done
 

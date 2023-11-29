@@ -1,0 +1,46 @@
+#compdef chafa
+
+# zsh completions for 'chafa'
+# automatically generated with http://github.com/RobSis/zsh-completion-generator
+local arguments
+
+arguments=(
+  {-h,--help}'[show help.]'
+  '--version[show version.]'
+  {-v,--verbose}'[be verbose.]'
+  '--animate[whether to allow animation \[on, off\]. Defaults to on.]'
+  '--bg[background color of display (color name or hex).]'
+  {-C,--center}'[center images \[on, off\]. Defaults to off.]'
+  '--clear[clear screen before processing each file.]'
+  {-c,--colors}'[set output color mode; one of \[none, 2, 8, 16/8, 16, 240]'
+  '--color-extractor[method for extracting color from an area]'
+  '--color-space[color space used for quantization; one of \[rgb, din99d\].]'
+  '--dither[set output dither mode; one of \[none, ordered]'
+  '--dither-grain[set dimensions of dither grains in 1/8ths of a]'
+  '--dither-intensity[multiplier for dither intensity \[0.0 - inf\].]'
+  {-d,--duration}'[the time to show each file. If showing a single file]'
+  '--fg[foreground color of display (color name or hex).]'
+  '--fg-only[leave the background color untouched. This produces]'
+  '--fill[specify character symbols to use for fill/gradients.]'
+  '--font-ratio[/H  Target fonts width/height ratio. Can be specified as]'
+  {-f,--format}'[set output format; one of \[iterm, kitty, sixels]'
+  '--glyph-file[load glyph information from FILE, which can be any]'
+  '--invert[invert video. For display with bright backgrounds in]'
+  '--margin-bottom[when terminal size is detected, reserve at least NUM]'
+  '--margin-right[when terminal size is detected, reserve at least NUM]'
+  {-O,--optimize}'[compress the output by using control sequences]'
+  '--polite[polite mode \[on, off\]. Defaults to on. Turning this off]'
+  {-p,--preprocess}'[image preprocessing \[on, off\]. Defaults to on with 16]'
+  '--scale[scale image, respecting terminals maximum dimensions. 1.0]'
+  {-s,--size}'[set maximum output dimensions in columns and rows. By]'
+  '--speed[set the speed animations will play at. This can be]'
+  '--stretch[stretch image to fit output dimensions; ignore aspect.]'
+  '--symbols[specify character symbols to employ in final output.]'
+  '--threads[maximum number of CPU threads to use. If left unspecified]'
+  {-t,--threshold}'[threshold above which full transparency will be used]'
+  '--watch[watch a single input file, redisplaying it whenever its]'
+  {-w,--work}'[how hard to work in terms of CPU and memory \[1-9\]. 1 is the]'
+  '*:filename:_files'
+)
+
+_arguments -s $arguments
