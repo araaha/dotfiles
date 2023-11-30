@@ -46,6 +46,7 @@ return {
                 SpecialKey = { fg = "#7c6f64" },
                 NonText = { fg = "#7c6f64" },
                 SpecialChar = { fg = "#fb4934" },
+                CursorLine = { bg = "#282828" },
 
             },
             dim_inactive = false,
@@ -60,7 +61,9 @@ return {
         'ibhagwan/fzf-lua',
         version = false,
         lazy    = true,
-        event   = "VeryLazy",
+        cmd     = "FzfLua",
+        keys    = { "<C-t>", " fl" },
+        -- event   = "VeryLazy",
         config  = function()
             local fzf = require("fzf-lua")
             local actions = require("fzf-lua").actions
@@ -582,55 +585,14 @@ return {
         "backdround/improved-ft.nvim",
         version = false,
         lazy    = true,
-        event   = "VeryLazy",
+        keys    = { "f", "t", "F", "T", ";", "," },
         opts    = {
+            use_default_mappings = true,
+            use_relative_repetition = true,
         },
         config  = function(_, opts)
             local ft = require("improved-ft")
-
-            vim.keymap.set({ "n", "x", "o" }, "f", function()
-                ft.jump({
-                    direction = "forward",
-                    offset = "none",
-                    pattern = nil,
-                    save_for_repetition = true,
-                })
-                vim.keymap.set({ "n", "x", "o" }, ";", ft.repeat_forward)
-                vim.keymap.set({ "n", "x", "o" }, ",", ft.repeat_backward)
-            end)
-
-            vim.keymap.set({ "n", "x", "o" }, "t", function()
-                ft.jump({
-                    direction = "forward",
-                    offset = "pre",
-                    pattern = nil,
-                    save_for_repetition = true,
-                })
-                vim.keymap.set({ "n", "x", "o" }, ";", ft.repeat_forward)
-                vim.keymap.set({ "n", "x", "o" }, ",", ft.repeat_backward)
-            end)
-
-            vim.keymap.set({ "n", "x", "o" }, "F", function()
-                ft.jump({
-                    direction = "backward",
-                    offset = "none",
-                    pattern = nil,
-                    save_for_repetition = true,
-                })
-                vim.keymap.set({ "n", "x", "o" }, ";", ft.repeat_backward)
-                vim.keymap.set({ "n", "x", "o" }, ",", ft.repeat_forward)
-            end)
-
-            vim.keymap.set({ "n", "x", "o" }, "T", function()
-                ft.jump({
-                    direction = "backward",
-                    offset = "pre",
-                    pattern = nil,
-                    save_for_repetition = true,
-                })
-                vim.keymap.set({ "n", "x", "o" }, ";", ft.repeat_backward)
-                vim.keymap.set({ "n", "x", "o" }, ",", ft.repeat_forward)
-            end)
+            ft.setup(opts)
         end,
     },
 }
