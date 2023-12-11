@@ -1,9 +1,8 @@
 return {
     {
         "ellisonleao/gruvbox.nvim",
-        lazy = true,
+        lazy = false,
         event = "VeryLazy",
-        priority = 1000,
         opts = {
             undercurl = false,
             underline = false,
@@ -33,7 +32,7 @@ return {
                 ["@namespace"] = { fg = '#fb4934' },
                 ["@variable"] = { fg = '#7DAEA3' },
                 Pmenu = { fg = "None", bg = "None" },
-                PmenuSel = { fg = "#e6dbaf", bg = "#7DAEA3" },
+                PmenuSel = { fg = "#e6dbaf", bg = "#7c6f64" },
                 PmenuSbar = { fg = "None", bg = "None" },
                 PmenuThumb = { fg = "None", bg = "None" },
                 ["@constant.bash"] = { fg = "#7DAEA3" },
@@ -46,8 +45,7 @@ return {
                 SpecialKey = { fg = "#7c6f64" },
                 NonText = { fg = "#7c6f64" },
                 SpecialChar = { fg = "#fb4934" },
-                CursorLine = { bg = "#282828" },
-
+                NvimSurroundHighlight = { bg = "#fe8019", fg = "#242424" }
             },
             dim_inactive = false,
             transparent_mode = true,
@@ -63,7 +61,6 @@ return {
         lazy    = true,
         cmd     = "FzfLua",
         keys    = { "<C-t>", " fl" },
-        -- event   = "VeryLazy",
         config  = function()
             local fzf = require("fzf-lua")
             local actions = require("fzf-lua").actions
@@ -170,13 +167,13 @@ return {
         'smoka7/hop.nvim',
         version = false,
         lazy = true,
-        keys = { "v", "d", "<M-c>" },
+        keys = { "<C-q>", "v", "V", "d", "<M-c>" },
         opts = { keys = 'werasdfcvjlk', quit_key = '<C-c>', jump_on_sole_occurrence = true },
         config = function(_, opts)
             local hop = require('hop')
             hop.setup(opts)
             vim.keymap.set('', '<M-c>', function() require("hop").hint_words() end,
-                { remap = true })
+                { noremap = true })
             vim.api.nvim_set_hl(0, "HopNextKey", { fg = "#242424", bg = "#7daea3" })
             vim.api.nvim_set_hl(0, "HopNextKey1", { fg = "#242424", bg = "#7daea3" })
             vim.api.nvim_set_hl(0, "HopNextKey2", { fg = "#242424", bg = "#D8A657" })
@@ -194,6 +191,13 @@ return {
             highlight = {
                 enable = false,
                 additional_vim_regex_highlighting = false,
+            },
+            incremental_selection = {
+                enable = true,
+                keymaps = {
+                    node_incremental = '<TAB>',
+                    node_decremental = '<S-TAB>',
+                },
             },
             textobjects = {
                 select = {
@@ -215,7 +219,7 @@ return {
                 },
             },
             ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "cpp", "latex", "css", "go", "python", "bash",
-                "diff", "yaml", "markdown", "ini", "json", "toml", "norg" },
+                "diff", "yaml", "markdown", "ini", "json" },
         },
         config       = function(_, opts)
             require("nvim-treesitter.configs").setup(opts)
@@ -243,9 +247,9 @@ return {
         "NvChad/nvim-colorizer.lua",
         version = false,
         lazy    = true,
-        event   = "VeryLazy",
         ft      = { "css", "yaml", "javascript", "xml", "lua" },
         keys    = " co",
+        event   = "VeryLazy",
         opts    = {
             filetypes = { "css", "yaml", "javascript", "xml", "lua" },
             user_default_options = {
@@ -274,7 +278,7 @@ return {
     {
         "hrsh7th/nvim-cmp",
         version      = false,
-        event        = { "InsertEnter", "CmdlineEnter" },
+        event        = { "InsertEnter" },
         dependencies = {
             'hrsh7th/cmp-buffer',
             'hrsh7th/cmp-nvim-lsp',
@@ -298,10 +302,10 @@ return {
                     end
                 },
                 sources = {
+                    { name = 'path' },
                     { name = 'luasnip', keyword_length = 3 },
                     { name = 'nvim_lsp' },
                     { name = 'buffer',  keyword_length = 2 },
-                    { name = 'path',    keyword_length = 2 },
                 },
                 window = {
                     completion = {
@@ -342,7 +346,7 @@ return {
         "neovim/nvim-lspconfig",
         version = false,
         lazy    = true,
-        event   = { "BufReadPost", "BufNewFile", "BufWritePre" },
+        event   = { "CursorMoved", "BufReadPost", "BufEnter" },
         config  = function()
             local lspconfig = require("lspconfig")
             vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'single' })
@@ -539,7 +543,9 @@ return {
     {
         'numToStr/Navigator.nvim',
         version = false,
-        event   = "VeryLazy",
+        keys    = {
+            "<A-h>", "<A-l>", "<A-k>", "<A-j>"
+        },
         config  = function()
             require('Navigator').setup()
             vim.keymap.set({ 'i', 'n', 't' }, '<A-h>', '<CMD>NavigatorLeft<CR>')
@@ -549,38 +555,6 @@ return {
             -- vim.keymap.set({ 'n', 't' }, '<A-p>', '<CMD>NavigatorPrevious<CR>')
         end
     },
-    -- {
-    --     "folke/flash.nvim",
-    --     version = false,
-    --     lazy    = true,
-    --     keys    = { 'd', 'v', 'f', 'F', 't', 'T', ';', ',' },
-    --     keys    = {
-    --         { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-    --     },
-    --     opts    = {
-    --         labels  = "acdefjklrsvw",
-    --         forward = false,
-    --         label   = {
-    --             uppercase = false,
-    --         },
-    --         modes   = {
-    --             char = {
-    --                 enabled = true,
-    --                 highlight = { backdrop = false },
-    --             },
-    --             search = {
-    --                 enabled = false,
-    --             }
-    --         }
-    --     },
-    --     config  = function(_, opts)
-    --         local flash = require('flash')
-    --         flash.setup(opts)
-    --         vim.api.nvim_set_hl(0, "FlashLabel", { fg = "#242424", bg = "#D8A657" })
-    --         vim.api.nvim_set_hl(0, "FlashCursor", { fg = "#D8A657", bg = "#242424" })
-    --         vim.api.nvim_set_hl(0, "FlashCurrent", { fg = "#242424", bg = "#7DAEA3" })
-    --     end,
-    -- },
     {
         "backdround/improved-ft.nvim",
         version = false,
@@ -593,6 +567,25 @@ return {
         config  = function(_, opts)
             local ft = require("improved-ft")
             ft.setup(opts)
+        end,
+    },
+    {
+        'glacambre/firenvim',
+        lazy = not vim.g.started_by_firenvim,
+        build = function()
+            vim.fn["firenvim#install"](0)
+        end
+    },
+    {
+        "monkoose/matchparen.nvim",
+        version = false,
+        lazy    = true,
+        event   = "VeryLazy",
+        opts    = {
+            debounce_time = 10,
+        },
+        config  = function(_, opts)
+            require('matchparen').setup(opts)
         end,
     },
 }

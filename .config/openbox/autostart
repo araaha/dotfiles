@@ -5,4 +5,6 @@ picom -b &
 xset s off -dpms &
 udiskie -N &
 unclutter -idle 10 -root &
+setxkbmap -option caps:ctrl_modifier &
+xmodmap -e "keycode 37 = " &
 dbus-update-activation-environment --systemd DISPLAY XDG_CURRENT_DESKTOP=openbox 

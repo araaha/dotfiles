@@ -1,6 +1,9 @@
 setopt PROMPT_SUBST
-setopt globdots
-
-setopt hist_ignore_all_dups hist_find_no_dups hist_save_no_dups hist_ignore_space
-setopt share_history
-setopt inc_append_history
+setopt GLOBDOTS
+setopt HIST_IGNORE_SPACE
+setopt HIST_IGNORE_ALL_DUPS 
+setopt HIST_IGNORE_DUPS
+setopt HIST_SAVE_NO_DUPS 
+setopt SHARE_HISTORY
+setopt INC_APPEND_HISTORY
+setopt HIST_EXPIRE_DUPS_FIRST

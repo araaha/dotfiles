@@ -15,30 +15,39 @@ require("lazy").setup({
     spec = {
         { import = "plugins" },
     },
-    checker = { enabled = false },         -- automatically check for plugin updates
-    change_detection = { notify = false }, -- automatically check for plugin updates
+    checker = { enabled = false },
+    change_detection = { notify = false },
     performance = {
+        cache = {
+            enabled = true
+        },
         rtp = {
+            reset = true,
             disabled_plugins = {
                 "gzip",
+                "matchit",
+                "matchparen",
                 "netrwPlugin",
                 "tarPlugin",
-                "zipPlugin",
                 "tohtml",
                 "tutor",
-                "man",
-                "spellfile",
+                "filetype",
                 "health",
+                "man",
+                "shada",
+                "spellfile",
+                "rplugin",
+                "zipPlugin",
                 "editorconfig",
             },
         },
     },
 })
 
-require("autocmds")
+require("core.autocmds")
+require("statusline")
 vim.defer_fn(function()
-    require("keymaps")
     require("options")
-    require("statusline")
+    require("keymaps")
     require("lsploc")
 end, 0)

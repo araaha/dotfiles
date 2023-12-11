@@ -1,0 +1,45 @@
+#compdef webtorrent
+
+# zsh completions for 'webtorrent'
+# automatically generated with http://github.com/RobSis/zsh-completion-generator
+local arguments
+
+arguments=(
+  '--airplay[apple TV  \[boolean\]]'
+  '--chromecast[google Chromecast  \[default: all\]]'
+  '--dlna[DLNA  \[boolean\]]'
+  '--mplayer[MPlayer  \[boolean\]]'
+  '--mpv[MPV  \[boolean\]]'
+  '--omx[OMX  \[default: hdmi\]]'
+  '--vlc[VLC  \[boolean\]]'
+  '--iina[IINA  \[boolean\]]'
+  '--smplayer[SMPlayer  \[boolean\]]'
+  '--xbmc[XBMC  \[boolean\]]'
+  '--stdout[standard out (implies --quiet)  \[boolean\]]'
+  {-o,--out}'[set download destination  \[string\]]'
+  {-s,--select}'[select specific file in torrent  \[default: List files\]]'
+  {-i,--interactive-select}'[interactively select specific file in torrent  \[boolean\]]'
+  {-t,--subtitles}'[load subtitles file  \[string\]]'
+  {-h,--help}'[show help information  \[boolean\]]'
+  {-v,--version}'[show version information  \[boolean\]]'
+  {-p,--port}'[change the http server port  \[number\] \[default: 8000\]]'
+  {-b,--blocklist}'[load blocklist file/url  \[string\]]'
+  {-a,--announce}'[tracker URL to announce to  \[string\]]'
+  {-q,--quiet}'[dont show UI on stdout  \[boolean\]]'
+  {-d,--download-limit}'[maximum download speed in kB/s  \[number\] \[default: unlimited\]]'
+  {-u,--upload-limit}'[maximum upload speed in kB/s  \[number\] \[default: unlimited\]]'
+  '--pip[enter Picture-in-Picture if supported by the player  \[boolean\]]'
+  '--verbose[show torrent protocol details  \[boolean\]]'
+  '--playlist[open files in a playlist if supported by the player  \[boolean\]]'
+  '--player-args[add player specific arguments (see example)  \[string\]]'
+  '--torrent-port[change the torrent seeding port  \[number\] \[default: random\]]'
+  '--dht-port[change the dht port  \[number\] \[default: random\]]'
+  '--not-on-top[dont set "always on top" option in player  \[boolean\]]'
+  '--keep-seeding[dont quit when done downloading  \[boolean\]]'
+  '--no-quit[dont quit when player exits  \[boolean\]]'
+  '--on-done[run script after torrent download is done  \[string\]]'
+  '--on-exit[run script before program exit  \[string\]]'
+  '*:filename:_files'
+)
+
+_arguments -s $arguments

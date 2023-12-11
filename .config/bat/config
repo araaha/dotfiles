@@ -27,4 +27,4 @@
 --map-syntax='*.Rtex:LaTeX' 
 --map-syntax='*.conf:INI'
 # --pager="less +g -Pm'?PB%PB\%'"
---pager="moar -no-linenumbers -no-statusbar -style gruvbox"
+--pager="moar -no-linenumbers -no-statusbar -wrap -style algol_nu"

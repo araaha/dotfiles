@@ -65,6 +65,7 @@ pulseaudio
 pulseaudio-bluetooth
 pyright
 python-pip
+python-pipx
 python-pyxdg
 qpdf
 r
