@@ -13,17 +13,6 @@ rga_fzf() {
 	xdg-open "$file"
 }
 
-lfcd() {
-    tmp="$(mktemp)"
-    lf-ueberzug -last-dir-path="$tmp" "$@"
-    [ -f "$tmp" ] && {
-        dir="$(cat "$tmp")"
-        rm -f "$tmp"
-        [ -d "$dir" ] && [ "$dir" != "$PWD" ] && cd "$dir"
-    }
-}
-
-
 ofzf() {
   tmpfzf() {
     sel="$(rg --color=never --files --hidden  --follow --no-messages -g "!**.mp3" -g "!**.pdf" -g "!**.sqlite" -g "!**.sqlite" -g "!**.png" -g "!**.jpg" -g "!**.jpeg" -g "!**.epub" | fzf-tmux -p 60%,80% --bind 'ctrl-l:become(lf {})' --layout=reverse  --preview-window 'up,50%' --preview "bat --style=plain --color=always --line-range :500 {}")"
@@ -53,17 +42,5 @@ ofzf1() {
   }
   tmpfzf
   sed -i "/ofzf/d" ~/.local/share/zsh/history
-}
-
-
-
-url_finder() {
-    curl --silent -I -L $1 | rg location  | tail -n 1 | cut -d ' ' -f2 | tr -d '\n'
-}
-
-bluetooth_bat() {
-    bluetoothctl disconnect 40:C1:F6:2A:8C:DD
-    bluetooth_battery 40:C1:F6:2A:8C:DD 
-    bluetoothctl connect 40:C1:F6:2A:8C:DD
 }
 

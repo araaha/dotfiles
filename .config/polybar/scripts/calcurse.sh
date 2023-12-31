@@ -1,3 +1,3 @@
 #!/bin/sh
 
-kitty -e calcurse
+st -e calcurse

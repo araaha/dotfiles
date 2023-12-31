@@ -46,8 +46,9 @@ require("lazy").setup({
 
 require("core.autocmds")
 require("statusline")
+require("ft")
+require("options")
 vim.defer_fn(function()
-    require("options")
     require("keymaps")
     require("lsploc")
 end, 0)

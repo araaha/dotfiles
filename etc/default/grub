@@ -1,3 +1,3 @@
-GRUB_CMDLINE_LINUX="rootfstype=ext4 quiet splash atkbd.softrepeat=1 vt.cur_default=0x200011 vt.color=3 vt.global_cursor_default=0 cpufreq.scaling_min_freq=2500000 cpufreq.default_governor=powersave amd_pstate=guided"
+GRUB_CMDLINE_LINUX="rootfstype=ext4 quiet splash atkbd.softrepeat=1 vt.cur_default=0x200011 vt.color=3 vt.global_cursor_default=0"
 
 GRUB_BACKGROUND="/boot/grub/Pacman.png"

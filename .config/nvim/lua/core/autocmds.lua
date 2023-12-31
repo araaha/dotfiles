@@ -19,24 +19,9 @@ au({ 'BufReadPost' }, {
     end,
 })
 
-au('BufWritePre', {
-    buffer = vim.api.nvim_get_current_buf(),
-    callback = function()
-        vim.lsp.buf.format()
-    end
-})
-
 au({ 'BufEnter', 'BufWinEnter' }, {
     buffer = vim.api.nvim_get_current_buf(),
     callback = function()
         vim.cmd("norm! zz")
     end,
-})
-
-au({ 'BufEnter' }, {
-    pattern  = "*.conf",
-    callback = function()
-        vim.opt.filetype = "toml"
-        vim.opt.syntax = "toml"
-    end
 })

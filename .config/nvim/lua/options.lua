@@ -27,6 +27,7 @@ vim.o.wildoptions             = "pum,fuzzy"
 vim.o.splitright              = true
 vim.o.splitbelow              = true
 vim.o.pumheight               = 12
+vim.o.shortmess               = "I"
 
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_node_provider    = 0

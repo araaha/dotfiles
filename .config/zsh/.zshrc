@@ -1,4 +1,9 @@
 export ZSH="$HOME/.config/zsh"
+
+if [ -z $DISPLAY ]; then
+    source "$ZSH/configs/tty.zsh"
+fi
+
 source "$ZSH/plugins/zsh-defer/zsh-defer.plugin.zsh"
 
 #zvm must be above zsh-vi-mode
@@ -15,7 +20,7 @@ source "$ZSH/configs/history.zsh"
 
 zsh-defer source "$ZSH/configs/exports.zsh"
 zsh-defer source "$ZSH/configs/aliases.zsh"
-zsh-defer source "$ZSH/configs/tty.zsh"
+
 zsh-defer source "$ZSH/configs/zoxide.zsh"
 zsh-defer source "$ZSH/configs/compinit.zsh"
 zsh-defer source "$ZSH/configs/zstyle.zsh"

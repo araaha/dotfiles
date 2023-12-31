@@ -25,7 +25,6 @@ gnome-keyring
 gnu-free-fonts
 go
 gopls
-gparted
 grep
 groff
 grub

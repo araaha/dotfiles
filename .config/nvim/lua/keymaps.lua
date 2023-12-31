@@ -16,9 +16,8 @@ vim.keymap.set('n', ' q', 'q', { silent = true })
 vim.keymap.set('n', '<C-PageDown>', ':m .+1<CR>', { silent = true })
 vim.keymap.set('n', '<C-PageUp>', ':m .-2<CR>', { silent = true })
 vim.keymap.set('n', '<space>x', ':bdelete<CR>', { silent = true })
-vim.keymap.set({ 'n' }, '<C-s>', ':w<CR>', { silent = true, noremap = true })
-vim.keymap.set({ 'i' }, '<C-s>', '<Esc>:w<CR>i', { silent = true, noremap = true })
-
+vim.keymap.set({ 'i' }, '<C-s>', '<C-o>:w<CR>', { silent = true })
+vim.keymap.set({ 'n' }, '<C-s>', ':w<CR>', { silent = true })
 
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")

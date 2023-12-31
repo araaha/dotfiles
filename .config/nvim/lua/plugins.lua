@@ -167,13 +167,13 @@ return {
         'smoka7/hop.nvim',
         version = false,
         lazy = true,
-        keys = { "<C-q>", "v", "V", "d", "<M-c>" },
+        keys = { "<C-q>", "v", "V", "d",
+            { "<M-c>", "<cmd>HopWord<cr>", mode = "" }
+        },
         opts = { keys = 'werasdfcvjlk', quit_key = '<C-c>', jump_on_sole_occurrence = true },
         config = function(_, opts)
             local hop = require('hop')
             hop.setup(opts)
-            vim.keymap.set('', '<M-c>', function() require("hop").hint_words() end,
-                { noremap = true })
             vim.api.nvim_set_hl(0, "HopNextKey", { fg = "#242424", bg = "#7daea3" })
             vim.api.nvim_set_hl(0, "HopNextKey1", { fg = "#242424", bg = "#7daea3" })
             vim.api.nvim_set_hl(0, "HopNextKey2", { fg = "#242424", bg = "#D8A657" })
@@ -206,8 +206,9 @@ return {
                     keymaps = {
                         ["af"] = "@function.outer",
                         ["if"] = "@function.inner",
-                        ["ic"] = "@call.inner",
-                        ["ac"] = "@call.inner",
+                        ["ac"] = "@call.outer",
+                        ["ic"] = { query = "@call.inner", desc = "Select inner part of a function call" },
+                        ["as"] = { query = "@scope", query_group = "locals", desc = "Select language scope" },
                     }
                 },
                 move = {
@@ -215,13 +216,37 @@ return {
                     set_jumps = true, -- whether to set jumps in the jumplist
                     goto_next_start = {
                         ["]m"] = "@function.outer",
+                        ["]]"] = { query = "@class.outer", desc = "Next class start" },
                     },
+                    goto_next_end = {
+                        ["]M"] = "@function.outer",
+                        ["]["] = "@class.outer",
+                    },
+                    goto_previous_start = {
+                        ["[m"] = "@function.outer",
+                        ["[["] = "@class.outer",
+                    },
+                    goto_previous_end = {
+                        ["[M"] = "@function.outer",
+                        ["[]"] = "@class.outer",
+                    },
+                    -- Below will go to either the start or the end, whichever is closer.
+                    -- Use if you want more granular movements
+                    -- Make it even more gradual by adding multiple queries and regex.
+                    goto_next = {
+                        ["]d"] = "@conditional.outer",
+                    },
+                    goto_previous = {
+                        ["[d"] = "@conditional.outer",
+                    }
+
                 },
             },
             ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "cpp", "latex", "css", "go", "python", "bash",
                 "diff", "yaml", "markdown", "ini", "json" },
         },
         config       = function(_, opts)
+            local ts_repeat_move = require "nvim-treesitter.textobjects.repeatable_move"
             require("nvim-treesitter.configs").setup(opts)
             vim.treesitter.language.register("bash", "zsh")
             vim.cmd("TSEnable highlight")
@@ -248,22 +273,18 @@ return {
         version = false,
         lazy    = true,
         ft      = { "css", "yaml", "javascript", "xml", "lua" },
-        keys    = " co",
         event   = "VeryLazy",
+        keys    = { { " co", "<cmd>ColorizerAttachToBuffer<cr>", mode = "n" } },
         opts    = {
             filetypes = { "css", "yaml", "javascript", "xml", "lua" },
             user_default_options = {
                 names = false,
+                rgb_fn = true
             },
         },
         config  = function(_, opts)
             local c = require("colorizer")
             c.setup(opts)
-            vim.keymap.set("n", " co", ":ColorizerAttachToBuffer<CR>")
-            local bufnr = vim.api.nvim_get_current_buf()
-            if bufnr and not c.is_buffer_attached(bufnr) then
-                c.attach_to_buffer(bufnr)
-            end
         end,
     },
     {
@@ -380,8 +401,13 @@ return {
                     vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
                     vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
 
-                    vim.keymap.set('n', '<space>f', function()
-                        vim.lsp.buf.format { async = true }
+                    vim.keymap.set('n', '<C-s>', function()
+                        if vim.bo.filetype == "sh" then
+                            vim.cmd('w')
+                        else
+                            vim.lsp.buf.format()
+                            vim.cmd('w')
+                        end
                     end, opts)
                 end,
             })
@@ -435,7 +461,8 @@ return {
                     return true
                 end
             })
-            lspconfig.bashls.setup({})
+            lspconfig.bashls.setup({
+            })
             lspconfig.eslint.setup({
                 on_attach = function(client, bufnr)
                     vim.api.nvim_create_autocmd("BufWritePre", {
@@ -524,12 +551,10 @@ return {
         end,
     },
     {
-        "github/copilot.vim",
-        version = false,
-        lazy    = true,
-        cmd     = "Copilot",
-        config  = function()
-            require("Copilot").setup()
+        'github/copilot.vim',
+        keys = " cp",
+        init = function()
+            vim.g.copilot_assume_mapped = true
         end,
     },
     {
@@ -570,13 +595,6 @@ return {
         end,
     },
     {
-        'glacambre/firenvim',
-        lazy = not vim.g.started_by_firenvim,
-        build = function()
-            vim.fn["firenvim#install"](0)
-        end
-    },
-    {
         "monkoose/matchparen.nvim",
         version = false,
         lazy    = true,
@@ -587,5 +605,12 @@ return {
         config  = function(_, opts)
             require('matchparen').setup(opts)
         end,
+    },
+    {
+        'glacambre/firenvim',
+        lazy = not vim.g.started_by_firenvim,
+        build = function()
+            vim.fn["firenvim#install"](0)
+        end
     },
 }

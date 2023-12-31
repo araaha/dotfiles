@@ -3,6 +3,6 @@ Type=Application
 Name=Sioyek
 Icon=sioyek-icon-linux
 Terminal=false
-Exec=sioyek --geometry 1920x1080 %F
+Exec=sioyek %F
 Categories=ConsoleOnly;System;FileTools;FileManager
 MimeType=inode/directory;
