@@ -39,28 +39,28 @@ end
 -- you can of course pick whatever colour you want, I picked these colours
 -- because I use Gruvbox and I like them
 local highlights = {
-    { 'StatuslineAccent',         { bg = "#7DAEA3", fg = "#242424" } },
-    { 'StatuslineInsertAccent',   { bg = "#9DC365", fg = "#242424" } },
-    { 'StatuslineVisualAccent',   { bg = "#D8A657", fg = "#242424" } },
-    { 'StatuslineReplaceAccent',  { bg = "#D3869B", fg = "#242424" } },
-    { 'StatuslineCmdLineAccent',  { bg = "#FE8019", fg = "#242424" } },
-    { 'StatuslineTerminalAccent', { bg = "#E6DBAF", fg = "#242424" } },
-}
+    { 'StatuslineAccent',          { bg = "#7DAEA3", fg = "#242424" } },
+    { 'StatuslineInsertAccent',    { bg = "#9DC365", fg = "#242424" } },
+    { 'StatuslineVisualAccent',    { bg = "#D8A657", fg = "#242424" } },
+    { 'StatuslineReplaceAccent',   { bg = "#D3869B", fg = "#242424" } },
+    { 'StatuslineCmdLineAccent',   { bg = "#FE8019", fg = "#242424" } },
+    { 'StatuslineTerminalAccent',  { bg = "#E6DBAF", fg = "#242424" } },
 
-for _, highlight in ipairs(highlights) do
-    set_hl(highlight[1], highlight[2])
-end
-
-local highlights_foreground = {
     { 'StatuslineAccentF',         { bg = "#242424", fg = "#7DAEA3" } },
     { 'StatuslineInsertAccentF',   { bg = "#242424", fg = "#9DC365" } },
     { 'StatuslineVisualAccentF',   { bg = "#242424", fg = "#D8A657" } },
     { 'StatuslineReplaceAccentF',  { bg = "#242424", fg = "#D3869B" } },
     { 'StatuslineCmdLineAccentF',  { bg = "#242424", fg = "#FE8019" } },
     { 'StatuslineTerminalAccentF', { bg = "#242424", fg = "#E6DBAF" } },
+
+    { 'LspDiagnosticError',        { bg = "#fb4934", fg = "#242424" } },
+    { 'LspDiagnosticWarn',         { bg = "#fabd2f", fg = "#242424" } },
+    { 'LspDiagnosticInfo',         { bg = "#83a598", fg = "#242424" } },
+    { 'LspDiagnosticHint',         { bg = "#8ec07c", fg = "#242424" } },
+    { 'LspClient',                 { fg = "#83a598", bg = "#242424" } },
 }
 
-for _, highlight in ipairs(highlights_foreground) do
+for _, highlight in ipairs(highlights) do
     set_hl(highlight[1], highlight[2])
 end
 
@@ -108,33 +108,95 @@ local function filepath()
         return ""
     end
 
-    return string.format("%s", fpath)
+    return string.format(" %s", fpath)
 end
 
 local function lineinfo()
     if vim.bo.filetype == "alpha" then
         return ""
     end
-    return " %=%P %l:%c"
+    return " %P %l:%c"
 end
 
 local function modified()
-    return " %{&modified?\"[+]\":\"\"}"
+    return " %{&modified?\"\":\"\"}"
+end
+
+local function lsp()
+    local count = {}
+    local levels = {
+        errors = "Error",
+        warnings = "Warn",
+        info = "Info",
+    }
+
+    for k, level in pairs(levels) do
+        count[k] = vim.tbl_count(vim.diagnostic.get(0, { severity = level }))
+    end
+
+    local errors = ""
+    local warnings = ""
+    local info = ""
+
+    if count["errors"] ~= 0 then
+        errors = string.format(' %s %d', "%#LspDiagnosticError# ", count["errors"])
+    end
+    if count["warnings"] ~= 0 then
+        warnings = string.format(' %s %d', "%#LspDiagnosticWarn# ", count["warnings"])
+    end
+    if count["info"] ~= 0 then
+        info = string.format(' %s %d', "%#LspDiagnosticInfo# ", count["info"])
+    end
+
+    return string.format('%s%s%s ', errors, warnings, info)
+end
+
+local fmt = string.format
+
+local function get_diagnostic(prefix, severity)
+    local count
+    if vim.fn.has('nvim-0.6') == 0 then
+        count = vim.lsp.diagnostic.get_count(0, severity)
+    else
+        local severities = {
+            ['Warning'] = vim.diagnostic.severity.WARN,
+            ['Error'] = vim.diagnostic.severity.ERROR,
+        }
+        count = #vim.diagnostic.get(0, { severity = severities[severity] })
+    end
+    if count < 1 then
+        return ''
+    end
+    return fmt('%s:%d', prefix, count)
+end
+
+
+local function get_lsp_clients()
+    local clients = vim.lsp.buf_get_clients()
+    if next(clients) == nil then
+        return ""
+    end
+
+    local c = {}
+    for _, client in pairs(clients) do
+        table.insert(c, client.name)
+    end
+    return "%#LspDiagnosticInfo#" .. string.format(' %s ', table.concat(c, "|"))
 end
 
 Statusline = {}
 
 Statusline.active = function()
     return table.concat {
-        "%#StatusLine#",
         update_mode_colors(),
         mode(),
         "",
-        "%#StatuslineFilepath# ",
         update_mode_colors_foreground(),
         filepath(),
         modified(),
-        "%#StatuslineLine#",
+        "%=",
+        lsp(),
+        get_lsp_clients(),
         update_mode_colors_foreground(),
         lineinfo(),
     }
