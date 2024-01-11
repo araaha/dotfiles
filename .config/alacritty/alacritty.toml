@@ -1,26 +1,26 @@
 [colors.bright]
-black = "#928374"
-blue = "#83a598"
-cyan = "#8ec07c"
-green = "#b8bb26"
+black   = "#928374"
+blue    = "#83a598"
+cyan    = "#8ec07c"
+green   = "#b8bb26"
 magenta = "#d3869b"
-red = "#fb4934"
-white = "#ebdbb2"
-yellow = "#fabd2f"
+red     = "#fb4934"
+white   = "#ebdbb2"
+yellow  = "#fabd2f"
 
 [colors.cursor]
 cursor = "#9cd365"
-text = "CellBackground"
+text   = "CellBackground"
 
 [colors.dim]
-black = "#32302f"
-blue = "#076678"
-cyan = "#427b58"
-green = "#79740e"
+black   = "#32302f"
+blue    = "#076678"
+cyan    = "#427b58"
+green   = "#79740e"
 magenta = "#8f3f71"
-red = "#9d0006"
-white = "#928374"
-yellow = "#b57614"
+red     = "#9d0006"
+white   = "#928374"
+yellow  = "#b57614"
 
 [colors.hints.end]
 background = "#D8A657"
@@ -31,28 +31,28 @@ background = "#7daea3"
 foreground = "#242424"
 
 [colors.normal]
-black = "#242424"
-blue = "#458588"
-cyan = "#689d6a"
-green = "#9cd365"
+black   = "#242424"
+blue    = "#458588"
+cyan    = "#689d6a"
+green   = "#9cd365"
 magenta = "#b16286"
-red = "#cc241d"
-white = "#a89984"
-yellow = "#d79921"
+red     = "#cc241d"
+white   = "#a89984"
+yellow  = "#d79921"
 
 [colors.primary]
-background = "#242424"
+background        = "#242424"
 bright_foreground = "#fbf1c7"
-dim_foreground = "#a89984"
-foreground = "#ebdbb2"
+dim_foreground    = "#a89984"
+foreground        = "#ebdbb2"
 
 [colors.selection]
 background = "CellForeground"
-text = "CellBackground"
+text       = "CellBackground"
 
 [colors.vi_mode_cursor]
 cursor = "CellForeground"
-text = "CellBackground"
+text   = "CellBackground"
 
 [font]
 size = 10
@@ -64,107 +64,107 @@ family = "MesloLGS NF"
 alphabet = "werasdfcvjlk"
 
 [[hints.enabled]]
-command = "xdg-open"
-hyperlinks = true
+command         = "xdg-open"
+hyperlinks      = true
 post_processing = true
-regex = "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)[^\u0000-\u001F\u007F-<>\"\\s{-}\\^⟨⟩`]+"
+regex           = "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)[^\u0000-\u001F\u007F-<>\"\\s{-}\\^⟨⟩`]+"
 
 [hints.enabled.binding]
-key = "N"
+key  = "N"
 mods = "Alt"
 
 [[hints.enabled]]
-action = "Copy"
+action          = "Copy"
 post_processing = false
-regex = '(?P<match>([.\w\-@$~\[\]]+)?(/[.\w\-@$\[\]]+)+)'
+regex           = '(?P<match>([.\w\-@$~\[\]]+)?(/[.\w\-@$\[\]]+)+)'
 
 [hints.enabled.binding]
-key = "O"
+key  = "O"
 mods = "Alt"
 
 [[hints.enabled]]
-action = "MoveViModeCursor"
+action          = "MoveViModeCursor"
 post_processing = false
-regex = '[^\s]+'
+regex           = '[^\s]+'
 
 [hints.enabled.binding]
-key = "M"
+key  = "M"
 mods = "Alt"
 
 [[keyboard.bindings]]
 action = "Paste"
-key = "V"
-mods = "Control"
+key    = "V"
+mods   = "Control"
 
 [[keyboard.bindings]]
 chars = "\u001Bh"
-key = "M"
-mods = "Control"
+key   = "M"
+mods  = "Control"
 
 [[keyboard.bindings]]
 chars = "\u0017"
-key = "Back"
-mods = "Control"
+key   = "Back"
+mods  = "Control"
 
 [[keyboard.bindings]]
 chars = "\u001B[13;2u"
-key = "Return"
-mods = "Shift"
+key   = "Return"
+mods  = "Shift"
 
 [[keyboard.bindings]]
 chars = "\u001B[13;5u"
-key = "Return"
-mods = "Control"
+key   = "Return"
+mods  = "Control"
 
 [[keyboard.bindings]]
 action = "ClearSelection"
-key = "Escape"
-mode = "Vi|~Search"
+key    = "Escape"
+mode   = "Vi|~Search"
 
 [[keyboard.bindings]]
 action = "ToggleViMode"
-key = "C"
-mode = "Vi|~Search"
-mods = "Control"
+key    = "C"
+mode   = "Vi|~Search"
+mods   = "Control"
 
 [[keyboard.bindings]]
 action = "Up"
-key = "Up"
-mode = "Vi|~Search"
-mods = "Control"
+key    = "Up"
+mode   = "Vi|~Search"
+mods   = "Control"
 
 [[keyboard.bindings]]
 action = "Down"
-key = "Down"
-mode = "Vi|~Search"
-mods = "Control"
+key    = "Down"
+mode   = "Vi|~Search"
+mods   = "Control"
 
 [[keyboard.bindings]]
 action = "SemanticLeft"
-key = "Left"
-mode = "Vi|~Search"
-mods = "Control"
+key    = "Left"
+mode   = "Vi|~Search"
+mods   = "Control"
 
 [[keyboard.bindings]]
 action = "SemanticRight"
-key = "Right"
-mode = "Vi|~Search"
-mods = "Control"
+key    = "Right"
+mode   = "Vi|~Search"
+mods   = "Control"
 
 [[keyboard.bindings]]
 action = "SemanticLeft"
-key = "Left"
-mode = "Vi|~Search"
-mods = "Control|Shift"
+key    = "Left"
+mode   = "Vi|~Search"
+mods   = "Control|Shift"
 
 [[keyboard.bindings]]
 action = "SemanticRightEnd"
-key = "Right"
-mode = "Vi|~Search"
-mods = "Control|Shift"
+key    = "Right"
+mode   = "Vi|~Search"
+mods   = "Control|Shift"
 
 [selection]
-save_to_clipboard = true
+save_to_clipboard     = true
 semantic_escape_chars = "-,│`|:\"' ()_[]{}<>\t"
 
 [window]

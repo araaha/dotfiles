@@ -250,7 +250,7 @@
     </keybind>
     <keybind key="C-A-a">
       <action name="Execute">
-        <command>alacritty --option=window.startup_mode=Maximized --option=window.opacity=1.0 -e tmux</command>
+        <command>alacritty -o 'window.startup_mode="Maximized"' -o 'window.opacity=1' -e tmux</command>
       </action>
     </keybind>
     <keybind key="C-A-h">
