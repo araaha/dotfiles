@@ -57,7 +57,7 @@ local highlights = {
     { 'LspDiagnosticWarn',         { bg = "#fabd2f", fg = "#242424" } },
     { 'LspDiagnosticInfo',         { bg = "#83a598", fg = "#242424" } },
     { 'LspDiagnosticHint',         { bg = "#8ec07c", fg = "#242424" } },
-    { 'LspClient',                 { fg = "#83a598", bg = "#242424" } },
+    { 'LspClient',                 { bg = "#9DC365", fg = "#242424" } },
 }
 
 for _, highlight in ipairs(highlights) do
@@ -181,7 +181,7 @@ local function get_lsp_clients()
     for _, client in pairs(clients) do
         table.insert(c, client.name)
     end
-    return "%#LspDiagnosticInfo#" .. string.format(' %s ', table.concat(c, "|"))
+    return "%#LspClient#" .. string.format(' %s ', table.concat(c, "|"))
 end
 
 Statusline = {}

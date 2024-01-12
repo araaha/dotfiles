@@ -1,6 +1,8 @@
 local o                   = vim.opt
 local g                   = vim.g
 
+o.report                  = 100
+o.cmdheight               = 1
 o.hlsearch                = true
 o.undofile                = true
 o.updatetime              = 1000
