@@ -14,7 +14,7 @@ local opts = {
         },
     },
     ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "cpp", "latex", "css", "go", "python", "bash",
-        "diff", "yaml", "markdown", "ini", "json" },
+        "diff", "yaml", "markdown", "ini", "json", "html" },
 }
 
 return {

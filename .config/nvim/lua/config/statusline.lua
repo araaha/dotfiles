@@ -23,9 +23,11 @@ local modes = {
     ["niI"] = "(INSERT)",
 }
 
+local sep_icon = ""
+
 local function mode()
     local current_mode = vim.api.nvim_get_mode().mode
-    return string.format(" %s ", modes[current_mode]):upper()
+    return string.format(" %s %s", modes[current_mode], sep_icon)
 end
 
 local set_hl = function(group, options)
@@ -39,30 +41,41 @@ end
 -- you can of course pick whatever colour you want, I picked these colours
 -- because I use Gruvbox and I like them
 local highlights = {
-    { 'StatuslineAccent',          { bg = "#7DAEA3", fg = "#242424" } },
-    { 'StatuslineInsertAccent',    { bg = "#9DC365", fg = "#242424" } },
-    { 'StatuslineVisualAccent',    { bg = "#D8A657", fg = "#242424" } },
-    { 'StatuslineReplaceAccent',   { bg = "#D3869B", fg = "#242424" } },
-    { 'StatuslineCmdLineAccent',   { bg = "#FE8019", fg = "#242424" } },
-    { 'StatuslineTerminalAccent',  { bg = "#E6DBAF", fg = "#242424" } },
+    { 'StatuslineAccent',           { bg = "#7DAEA3", fg = "#242424" } },
+    { 'StatuslineInsertAccent',     { bg = "#9DC365", fg = "#242424" } },
+    { 'StatuslineVisualAccent',     { bg = "#D8A657", fg = "#242424" } },
+    { 'StatuslineReplaceAccent',    { bg = "#D3869B", fg = "#242424" } },
+    { 'StatuslineCmdLineAccent',    { bg = "#FE8019", fg = "#242424" } },
+    { 'StatuslineTerminalAccent',   { bg = "#E6DBAF", fg = "#242424" } },
 
-    { 'StatuslineAccentF',         { bg = "#242424", fg = "#7DAEA3" } },
-    { 'StatuslineInsertAccentF',   { bg = "#242424", fg = "#9DC365" } },
-    { 'StatuslineVisualAccentF',   { bg = "#242424", fg = "#D8A657" } },
-    { 'StatuslineReplaceAccentF',  { bg = "#242424", fg = "#D3869B" } },
-    { 'StatuslineCmdLineAccentF',  { bg = "#242424", fg = "#FE8019" } },
-    { 'StatuslineTerminalAccentF', { bg = "#242424", fg = "#E6DBAF" } },
+    { 'StatuslineAccentF',          { bg = "#242424", fg = "#7DAEA3" } },
+    { 'StatuslineInsertAccentF',    { bg = "#242424", fg = "#9DC365" } },
+    { 'StatuslineVisualAccentF',    { bg = "#242424", fg = "#D8A657" } },
+    { 'StatuslineReplaceAccentF',   { bg = "#242424", fg = "#D3869B" } },
+    { 'StatuslineCmdLineAccentF',   { bg = "#242424", fg = "#FE8019" } },
+    { 'StatuslineTerminalAccentF',  { bg = "#242424", fg = "#E6DBAF" } },
 
-    { 'LspDiagnosticError',        { bg = "#fb4934", fg = "#242424" } },
-    { 'LspDiagnosticWarn',         { bg = "#fabd2f", fg = "#242424" } },
-    { 'LspDiagnosticInfo',         { bg = "#83a598", fg = "#242424" } },
-    { 'LspDiagnosticHint',         { bg = "#8ec07c", fg = "#242424" } },
-    { 'LspClient',                 { bg = "#9DC365", fg = "#242424" } },
+    { 'StatuslineAccentFp',         { bg = "#2d3139", fg = "#7DAEA3" } },
+    { 'StatuslineInsertAccentFp',   { bg = "#2d3139", fg = "#9DC365" } },
+    { 'StatuslineVisualAccentFp',   { bg = "#2d3139", fg = "#D8A657" } },
+    { 'StatuslineReplaceAccentFp',  { bg = "#2d3139", fg = "#D3869B" } },
+    { 'StatuslineCmdLineAccentFp',  { bg = "#2d3139", fg = "#FE8019" } },
+    { 'StatuslineTerminalAccentFp', { bg = "#2d3139", fg = "#E6DBAF" } },
+
+
+    { 'LspDiagnosticError',         { bg = "#fb4934", fg = "#242424" } },
+    { 'LspDiagnosticWarn',          { bg = "#fabd2f", fg = "#242424" } },
+    { 'LspDiagnosticInfo',          { bg = "#83a598", fg = "#242424" } },
+    { 'LspDiagnosticHint',          { bg = "#8ec07c", fg = "#242424" } },
+    { 'LspClient',                  { bg = "#8ec07c", fg = "#242424" } },
+
+    { 'SepIcon',                    { bg = "#8ec07c", fg = "#ffffff" } },
 }
 
 for _, highlight in ipairs(highlights) do
     set_hl(highlight[1], highlight[2])
 end
+
 
 local function update_mode_colors_foreground()
     local current_mode = vim.api.nvim_get_mode().mode
@@ -108,6 +121,10 @@ local function filepath()
         return ""
     end
 
+    if vim.o.columns < 50 then
+        return string.format(" %s", vim.fn.expand("%:t"))
+    end
+
     return string.format(" %s", fpath)
 end
 
@@ -115,7 +132,10 @@ local function lineinfo()
     if vim.bo.filetype == "alpha" then
         return ""
     end
-    return " %P %l:%c"
+    if vim.o.columns < 50 then
+        return "%#StatuslineAccent#" .. " %P "
+    end
+    return "%#StatuslineAccent#" .. " %P %l:%c "
 end
 
 local function modified()
@@ -151,29 +171,13 @@ local function lsp()
     return string.format('%s%s%s ', errors, warnings, info)
 end
 
-local fmt = string.format
-
-local function get_diagnostic(prefix, severity)
-    local count
-    if vim.fn.has('nvim-0.6') == 0 then
-        count = vim.lsp.diagnostic.get_count(0, severity)
-    else
-        local severities = {
-            ['Warning'] = vim.diagnostic.severity.WARN,
-            ['Error'] = vim.diagnostic.severity.ERROR,
-        }
-        count = #vim.diagnostic.get(0, { severity = severities[severity] })
-    end
-    if count < 1 then
-        return ''
-    end
-    return fmt('%s:%d', prefix, count)
-end
-
-
 local function get_lsp_clients()
     local clients = vim.lsp.buf_get_clients()
     if next(clients) == nil then
+        return ""
+    end
+
+    if vim.o.columns < 50 then
         return ""
     end
 
@@ -190,20 +194,19 @@ Statusline.active = function()
     return table.concat {
         update_mode_colors(),
         mode(),
-        "",
         update_mode_colors_foreground(),
         filepath(),
         modified(),
         "%=",
         lsp(),
         get_lsp_clients(),
-        update_mode_colors_foreground(),
+        update_mode_colors(),
         lineinfo(),
     }
 end
 
-function Statusline.inactive()
-    return " %F"
+Statusline.inactive = function()
+    return string.format("%s%s", update_mode_colors_foreground(), vim.fn.expand("%"))
 end
 
 local ag = vim.api.nvim_create_augroup

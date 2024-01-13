@@ -95,7 +95,5 @@ return {
         })
         lspconfig.bashls.setup({
         })
-        lspconfig.clangd.setup({
-        })
     end,
 }
