@@ -27,8 +27,8 @@ map({ "n", "v" }, "{", "{(zz")
 map({ "n", "v" }, "}", "})zz")
 map("n", "<C-o>", "<C-o>zz")
 map("n", "<C-i>", "<C-i>zz")
-map("n", "u", ":silent undo<CR> | :echo 'undo'<CR>", { silent = true })
-map("n", "<C-r>", ":silent redo<CR> | :echo 'redo'<CR>", { silent = true })
+map("n", "u", "u:echo 'undo'<CR>", { silent = true })
+map("n", "<C-r>", "<C-r>:echo 'redo'<CR>", { silent = true })
 
 local toggle_ll = function()
     for _, info in ipairs(vim.fn.getwininfo()) do
