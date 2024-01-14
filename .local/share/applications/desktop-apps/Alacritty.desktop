@@ -2,7 +2,7 @@
 [Desktop Entry]
 Type=Application
 TryExec=alacritty
-Exec=alacritty -o 'window.startup_mode="Maximized"' -o 'window.opacity="1.0"' -e tmux
+Exec=alacritty -o 'window.startup_mode="Maximized"' -o 'window.opacity=1' -e tmux
 Icon=Alacritty
 Terminal=false
 Categories=System;TerminalEmulator;
