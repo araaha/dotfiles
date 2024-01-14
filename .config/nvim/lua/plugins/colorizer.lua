@@ -11,7 +11,6 @@ return {
     version = false,
     lazy    = true,
     ft      = { "css", "yaml", "javascript", "xml", "lua", "toml" },
-    event   = "VeryLazy",
     keys    = { { " co", "<cmd>ColorizerAttachToBuffer<cr>", mode = "n" } },
     config  = function()
         local c = require("colorizer")

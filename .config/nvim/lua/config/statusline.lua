@@ -52,7 +52,7 @@ local highlights = {
     { 'LspDiagnosticWarn',         { bg = "#fabd2f", fg = "#242424" } },
     { 'LspDiagnosticInfo',         { bg = "#83a598", fg = "#242424" } },
     { 'LspDiagnosticHint',         { bg = "#8ec07c", fg = "#242424" } },
-    { 'LspClient',                 { bg = "#8ec07c", fg = "#242424" } },
+    { 'LspClient',                 { bg = "#FE8019", fg = "#242424" } },
 
     { 'SepIcon',                   { bg = "#8ec07c", fg = "#ffffff" } },
 }
@@ -60,7 +60,6 @@ local highlights = {
 for _, highlight in ipairs(highlights) do
     set_hl(highlight[1], highlight[2])
 end
-
 
 local function update_mode_colors_foreground()
     local current_mode = vim.api.nvim_get_mode().mode
@@ -106,10 +105,10 @@ local function mode()
     local current_mode = vim.api.nvim_get_mode().mode
 
     if vim.o.columns < 50 then
-        return string.format(" %s %s", current_mode:upper(), sep_icon)
+        return string.format(" %s %s%s", current_mode:upper(), sep_icon, update_mode_colors_foreground())
     end
 
-    return string.format(" %s %s", modes[current_mode], sep_icon)
+    return string.format(" %s %s%s", modes[current_mode], sep_icon, update_mode_colors_foreground())
 end
 
 local function filetype()
@@ -130,7 +129,7 @@ local function filepath()
         return string.format(" %s", vim.fn.expand("%:t"))
     end
 
-    return string.format(" %s", fpath)
+    return string.format("%s %s", update_mode_colors_foreground(), fpath)
 end
 
 local function lineinfo()
@@ -153,6 +152,7 @@ local function lsp()
         errors = "Error",
         warnings = "Warn",
         info = "Info",
+        hints = "Hint",
     }
 
     for k, level in pairs(levels) do
@@ -161,6 +161,7 @@ local function lsp()
 
     local errors = ""
     local warnings = ""
+    local hints = ""
     local info = ""
 
     if count["errors"] ~= 0 then
@@ -169,11 +170,14 @@ local function lsp()
     if count["warnings"] ~= 0 then
         warnings = string.format(' %s %d', "%#LspDiagnosticWarn# ", count["warnings"])
     end
+    if count["hints"] ~= 0 then
+        hints = string.format(' %s %d', "%#LspDiagnosticHint# ", count["hints"])
+    end
     if count["info"] ~= 0 then
         info = string.format(' %s %d', "%#LspDiagnosticInfo# ", count["info"])
     end
 
-    return string.format('%s%s%s ', errors, warnings, info)
+    return string.format('%s%s%s%s ', errors, warnings, hints, info)
 end
 
 local function get_lsp_clients()
@@ -199,7 +203,6 @@ Statusline.active = function()
     return table.concat {
         update_mode_colors(),
         mode(),
-        update_mode_colors_foreground(),
         filepath(),
         modified(),
         "%=",

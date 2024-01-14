@@ -17,7 +17,9 @@ local opts = {
     palette_overrides = {
         bright_green = "#9dc365",
         neutral_green = "#9dc365",
-        dark2 = "#7c6f64"
+        dark2 = "#7c6f64",
+        dark0 = "#242424",
+
     },
     overrides = {
         Search = { bg = '#7DAEA3', fg = "#242424" },

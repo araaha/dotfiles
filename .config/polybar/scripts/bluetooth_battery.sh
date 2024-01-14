@@ -16,7 +16,7 @@ if dbus-send \
     string:"org.bluez.Battery1" \
     string:"Percentage" | tr -d -c 0-9)
 
-    echo "$str%"
+    echo "$str"
 else 
     echo "0"
     exit
