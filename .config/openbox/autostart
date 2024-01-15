@@ -8,4 +8,5 @@ unclutter -idle 10 -root &
 xset r rate 150 50 &
 setxkbmap -option caps:ctrl_modifier &
 xmodmap -e "keycode 37 = " &
+ntfd &
 dbus-update-activation-environment --systemd DISPLAY XDG_CURRENT_DESKTOP=openbox 

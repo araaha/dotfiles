@@ -55,9 +55,9 @@ cursor = "CellForeground"
 text   = "CellBackground"
 
 [font]
-size = 10
-offset = { x = 1, y = 1 }
-glyph_offset = { x = 1, y = 0 }
+size = 10.25
+offset = { x = 0, y = 0 }
+glyph_offset = { x = 0, y = 0 }
 
 [font.normal]
 family = "MesloLGS NF"
@@ -171,7 +171,7 @@ semantic_escape_chars = "-,│`|:\"' ()_[]{}<>\t"
 
 [window]
 opacity = 0.55
-dynamic_padding = true
+dynamic_padding = false
 decorations = "None"
 
 [scrolling]
