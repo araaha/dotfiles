@@ -177,6 +177,9 @@ local function lsp()
         info = string.format(' %s %d', "%#LspDiagnosticInfo# ", count["info"])
     end
 
+    if vim.o.columns < 50 then
+        return ""
+    end
     return string.format('%s%s%s%s ', errors, warnings, hints, info)
 end
 

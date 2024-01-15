@@ -4,7 +4,7 @@ return {
     'smoka7/hop.nvim',
     version = false,
     lazy = true,
-    keys = { "<C-q>", "v", "V", "d",
+    keys = {
         { "<M-c>", "<cmd>HopWord<cr>", mode = "" }
     },
     opts = opts,

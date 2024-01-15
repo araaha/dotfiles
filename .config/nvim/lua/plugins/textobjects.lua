@@ -46,7 +46,15 @@ local opts = {
 return {
     "nvim-treesitter/nvim-treesitter-textobjects",
     version = false,
-    keys    = { "v", "V", "<C-q>", "]", "[" },
+    keys    = {
+        "]",
+        "[",
+        { "af", "<cmd>TStextobjectSelect @function.outer<cr>",                            mode = "v" },
+        { "if", "<cmd>TStextobjectSelect @function.inner<cr>",                            mode = "v" },
+        { "ac", "<cmd>TStextobjectSelect @call.outer<cr>",                                mode = "v" },
+        { "ic", "<cmd>TStextobjectSelect { query = @call.inner }<cr>",                    mode = "v" },
+        { "as", "<cmd>TStextobjectSelect { query = @scope, query_group = 'locals' }<cr>", mode = "v" },
+    },
     lazy    = true,
     config  = function()
         require("nvim-treesitter.configs").setup(opts)

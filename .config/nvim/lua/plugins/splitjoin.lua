@@ -3,5 +3,7 @@ return {
     version = false,
     lazy = true,
     keys = "gS",
-    config = function() require("mini.splitjoin").setup({}) end
+    config = function()
+        require("mini.splitjoin").setup({})
+    end
 }

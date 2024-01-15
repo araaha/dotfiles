@@ -27,8 +27,8 @@ local plug = s(
         lazy    = {},
         event   = {},
         opts    = {{}},
-        config  = function(_, opts)
-            require('{}').setup(opts)
+        config  = function()
+            require("{}").setup(opts)
         end,
     }},
 ]], {
@@ -36,7 +36,7 @@ local plug = s(
         i(2, "false"),
         i(3, "true"),
         i(4, "\"VeryLazy\""),
-        i(5, "plug"),
+        i(5, ""),
     }))
 table.insert(snippets, plug)
 

@@ -25,26 +25,35 @@ local opts = {
         Search = { bg = '#7DAEA3', fg = "#242424" },
         IncSearch = { bg = '#D8A657', fg = "#242424" },
         Visual = { bg = '#3f3f3f', fg = 'None' },
-        ["@namespace"] = { fg = '#fb4934' },
-        ["@variable"] = { fg = '#7DAEA3' },
+
         Pmenu = { fg = "None", bg = "None" },
         PmenuSel = { fg = "#e6dbaf", bg = "#7c6f64" },
         PmenuSbar = { fg = "None", bg = "None" },
         PmenuThumb = { fg = "None", bg = "None" },
+
         ["@constant.bash"] = { fg = "#7DAEA3" },
         ["@function.builtin.bash"] = { fg = "#fb4934" },
+        ["@namespace"] = { fg = '#fb4934' },
+        ["@variable"] = { fg = '#7DAEA3' },
+
         StatusLine = { bg = "#242424", fg = "None" },
         StatusLineNC = { bg = "#242424", fg = "#e6dbaf" },
-        QuickFixLine = { bg = "#242424", fg = "None" },
+
+        QuickFixLine = { bg = "None", fg = "None" },
         FloatBorder = { fg = "#87afaf" },
-        FzfLuaBufLineNr = { fg = "#87afaf" },
-        SpecialKey = { fg = "#7c6f64" },
         NonText = { fg = "#7c6f64" },
+        SpecialKey = { fg = "#7c6f64" },
         SpecialChar = { fg = "#fb4934" },
+
+        FzfLuaBufLineNr = { fg = "#87afaf" },
+
         NvimSurroundHighlight = { bg = "#fe8019", fg = "#242424" },
+
         HopNextKey = { fg = "#242424", bg = "#7daea3" },
         HopNextKey1 = { fg = "#242424", bg = "#7daea3" },
-        HopNextKey2 = { fg = "#242424", bg = "#D8A657" }
+        HopNextKey2 = { fg = "#242424", bg = "#D8A657" },
+
+        BqfSign = { fg = "#9dc365", bg = "None" }
     },
     dim_inactive = false,
     transparent_mode = true,

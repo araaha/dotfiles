@@ -32,7 +32,7 @@ o.wildoptions             = "pum,fuzzy"
 o.splitright              = true
 o.splitbelow              = true
 o.pumheight               = 12
-o.shortmess               = "aI"
+o.shortmess               = "aIF"
 
 g.loaded_python3_provider = 0
 g.loaded_node_provider    = 0
