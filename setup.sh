@@ -1,8 +1,10 @@
 #!/bin/bash
+set -e
+
 shopt -s extglob
 
-echo "Make sure you run this script with bash instead of ./"
-echo "Sleeping for 3 seconds"
-sleep 3
+dots="$(pwd)"
 
-./misc/installer-scripts/copy-symlink.sh && ./misc/installer-scripts/install.sh && ./misc/installer-scripts/cleanup.sh && ./misc/installer-scripts/enable-services.sh
+./"$dots/install/bootstrap.sh"
+./"$dots/install/yay.sh"
+./"$dots/install/after.sh"
