@@ -51,6 +51,7 @@ neovim
 networkmanager
 ninja
 noto-fonts-emoji
+ntfd-bin
 openbox
 openssl-1.1
 ouch
