@@ -40,3 +40,6 @@ sudo cp -v "$dots/misc/binaries/st-0.8.5/st" /usr/bin/
 
 #/etc/
 sudo cp -rv ~/dotfiles/etc/!(default) /etc/
+
+#/usr/
+sudo ln -s ~/dotfiles/scripts/xset-keyboard-repeat.sh /usr/lib/systemd/system-sleep/
