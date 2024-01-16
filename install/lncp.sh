@@ -20,7 +20,7 @@ mkdir -p "$HOME/.local/share/icons"
 
 ln -s "$dots/scripts/" "$HOME/"
 ln -srf "$dots/.config/*" "$HOME/.config/"
-ln -s "$dots/.local/share/!(themes|icons)"  "$HOME/.local/share/"
+ln -s "$dots/.local/share/"!(themes|icons)  "$HOME/.local/share/"
 
 cp -v "$HOME/dotfiles/.local/share/.gnupg/gpg-agent.conf" "$HOME/.local/share/.gnupg"
 
@@ -44,7 +44,4 @@ sudo cp -v "$dots/misc/binaries/nsxiv/nsxiv" /usr/bin/
 sudo cp -v "$dots/misc/binaries/st-0.8.5/st" /usr/bin/
 
 #/etc/
-sudo cp -v "$dots/etc/" /etc/
-
-#set up applications
-yay -Y --gendb
+sudo cp -v "$dots/etc/*" /etc/

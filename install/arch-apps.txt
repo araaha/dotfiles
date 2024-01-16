@@ -83,8 +83,6 @@ tickrs
 tmux
 ttf-dejavu
 ttf-liberation
-ttf-ms-fonts
-ttf-weather-icons
 typst
 udiskie
 ueberzug

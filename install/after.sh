@@ -62,4 +62,6 @@ ticker \
 ttf-arphic-uming \
 ttf-gowun-batang \
 webtorrent-cli \
-xdg-desktop-portal-termfilechooser-git
+xdg-desktop-portal-termfilechooser-git \
+ttf-ms-fonts \
+ttf-weather-icons
