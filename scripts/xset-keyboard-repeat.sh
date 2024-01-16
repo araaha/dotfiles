@@ -4,6 +4,6 @@ case "$1" in
     pre)
         ;;
     post)
-        xset r rate 150 50
+        DISPLAY=:0 xset r rate 150 50
         ;;
 esac
