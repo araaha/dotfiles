@@ -1,10 +1,10 @@
 #!/bin/bash
-set -e
-
 shopt -s extglob
 
-dots="$(pwd)"
+echo "run shopt -s extglob first, followed by changing your dir to ~/dotfiles"
+sleep 3
 
-./"$dots/install/bootstrap.sh"
-./"$dots/install/yay.sh"
-./"$dots/install/after.sh"
+./install/bootstrap.sh
+./install/yay.sh
+./install/yay.sh
+./install/after.sh

@@ -45,3 +45,21 @@ systemctl enable --now --user redshift
 
 #set keyboard repeat
 sudo ln -s ~/dotfiles/scripts/xset-keyboard-repeat.sh /usr/lib/systemd/system-sleep/
+
+#install compiled/zipped apps
+yay -S cyme-bin \
+djvu2pdf \
+dragon-drop \
+edir \
+epy-ereader-git \
+gdu-bin \
+pulseaudio-ctl \
+rofi-greenclip \
+shellcheck-bin \
+sioyek \
+tdrop \
+ticker \
+ttf-arphic-uming \
+ttf-gowun-batang \
+webtorrent-cli \
+xdg-desktop-portal-termfilechooser-git

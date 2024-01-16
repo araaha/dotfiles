@@ -8,7 +8,7 @@ local snippets = {
         "bash",
         fmt(
             [[
-#!/bin/sh
+#!/bin/bash
 
 {}
     ]],
