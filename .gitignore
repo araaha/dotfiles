@@ -3,7 +3,7 @@
 **.fls
 **.aux
 **.synctex.gz
-**/feels_like.sh
+**/weather.sh
 **/cron-test.txt
 **/lazy-lock.json
 **/.zcompdump

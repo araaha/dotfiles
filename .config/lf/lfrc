@@ -279,7 +279,7 @@ cmap <down> cmd-history-next
 
 
 cmd link %{{
-    set -- $(cat ~/.local/share/lf/files)
+    set -- $(cat ~/dotfiles-private/.local/share/lf/files)
     mode="copy"
     shift
     if [ "$#" -lt 1 ]; then
