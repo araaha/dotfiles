@@ -16,11 +16,17 @@ require("lazy").setup({
         { import = "plugins" },
     },
     checker = { enabled = false },
-    change_detection = { notify = false },
+    change_detection = {
+        enabled = false
+    },
+    ui = {
+        border = { '┏', '━', '┓', '┃', '┛', '━', '┗', '┃' }
+    },
     performance = {
         cache = {
-            enabled = true
+            enabled = true,
         },
+        reset_packpath = true,
         rtp = {
             reset = true,
             disabled_plugins = {

@@ -44,6 +44,10 @@ return {
                         vim.cmd('silent w')
                     end
                 end, opts)
+
+                vim.diagnostic.config({
+                    virtual_text = true,
+                })
             end,
         })
         lspconfig.gopls.setup({

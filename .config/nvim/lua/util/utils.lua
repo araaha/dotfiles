@@ -7,11 +7,10 @@ M.load_configs = function()
     require("config.lazy")
 end
 
-M.get_config_modules = function(exclude_map)
-    exclude_map = exclude_map or {
+M.get_config_modules = function()
+    local exclude_map = {
         "lazy",
         "init",
-        "statuscol",
     }
     local files = {}
     for _, file in ipairs(vim.fn.glob(vim.fn.stdpath("config") .. "/lua/config/*.lua", true, true)) do

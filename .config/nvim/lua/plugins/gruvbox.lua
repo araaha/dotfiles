@@ -53,7 +53,8 @@ local opts = {
         HopNextKey1 = { fg = "#242424", bg = "#7daea3" },
         HopNextKey2 = { fg = "#242424", bg = "#D8A657" },
 
-        BqfSign = { fg = "#9dc365", bg = "None" }
+        BqfSign = { fg = "#9dc365", bg = "None" },
+        IndentLine = { fg = "#fabd2f" }
     },
     dim_inactive = false,
     transparent_mode = true,
@@ -66,6 +67,6 @@ return {
     opts = opts,
     config = function()
         require("gruvbox").setup(opts)
-        vim.cmd.colorscheme('gruvbox')
+        vim.cmd.colorscheme("gruvbox")
     end
 }

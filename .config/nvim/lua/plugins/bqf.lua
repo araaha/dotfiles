@@ -1,11 +1,14 @@
 local opts = {
     auto_enable = true,
     auto_resize_height = true, -- highly recommended enable
+    magic_window = false,
     preview = {
+        auto_preview = false,
         show_scroll_bar = false,
         winblend = 0,
-        win_height = 5,
+        win_height = 3,
         delay_syntax = 80,
+        wrap = true,
         border = { '┏', '━', '┓', '┃', '┛', '━', '┗', '┃' },
         show_title = false,
         should_preview_cb = function(bufnr)

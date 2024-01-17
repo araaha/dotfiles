@@ -1,11 +1,11 @@
 vim.filetype.add({
     extension = {
-        conf = 'toml'
+        conf = "toml"
     }
 })
 
 vim.filetype.add({
     extension = {
-        typ = 'typst'
+        typ = "typst"
     }
 })

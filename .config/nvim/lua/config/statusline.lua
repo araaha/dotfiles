@@ -146,6 +146,34 @@ local function modified()
     return " %{&modified?\"\":\"\"}"
 end
 
+local function lsp_progress()
+    if not rawget(vim, "lsp") or vim.lsp.status then
+        return ""
+    end
+
+    local Lsp = vim.lsp.util.get_progress_messages()[1]
+
+    if vim.o.columns < 70 or not Lsp or vim.bo.filetype == "go" then
+        return ""
+    end
+
+    if Lsp.done then
+        vim.defer_fn(function()
+            vim.cmd.redrawstatus()
+        end, 1000)
+    end
+
+    local msg = Lsp.message or ""
+    local percentage = Lsp.percentage or 0
+    local title = Lsp.title or ""
+    local spinners = { "", "󰪞", "󰪟", "󰪠", "󰪢", "󰪣", "󰪤", "󰪥" }
+    local ms = vim.loop.hrtime() / 1000000
+    local frame = math.floor(ms / 120) % #spinners
+    local content = string.format(" %%<%s %s %s (%s%%%%) ", spinners[frame + 1], title, msg, percentage)
+
+    return ("%#StatuslineAccentF#" .. content) or ""
+end
+
 local function lsp()
     local count = {}
     local levels = {
@@ -209,6 +237,7 @@ Statusline.active = function()
         filepath(),
         modified(),
         "%=",
+        lsp_progress(),
         lsp(),
         get_lsp_clients(),
         filetype(),
