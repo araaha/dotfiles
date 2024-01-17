@@ -180,7 +180,9 @@ cmd parent-dir ${{
     mv -- $fx "$newd"
 }}
 cmd open-with $"$@" $fx
-map <c-o> push :open-with<space>
+map o
+map o push :open-with<space>
+map <c-o> :find_fzf
 
 cmd garbage_clear ${{
   garbage empty --all  
