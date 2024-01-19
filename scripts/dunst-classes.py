@@ -2,9 +2,7 @@
 
 import subprocess
 
-proc = subprocess.Popen("echo $(calcurse -n)",
-                        shell=True,
-                        stdout=subprocess.PIPE)
+proc = subprocess.Popen("echo $(calcurse -n)",shell=True,stdout=subprocess.PIPE)
 
 
 event = proc.communicate()[0].decode('ascii')

@@ -25,6 +25,6 @@ zsh-defer source "$ZSH/configs/zoxide.zsh"
 zsh-defer source "$ZSH/configs/compinit.zsh"
 zsh-defer source "$ZSH/configs/zstyle.zsh"
 
-zsh-defer source "$ZSH/plugins/functions"
+zsh-defer source "$ZSH/plugins/functions.zsh"
 zsh-defer source "$ZSH/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 zsh-defer source "$ZSH/plugins/fast-syntax-highlighting/fast-syntax-highlighting.zsh"

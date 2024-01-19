@@ -308,7 +308,6 @@ map P :link
 map r
 map rm delete2
 map t
-# map T tag-toggle
 
 map i
 map i $bat --paging=always "$f"
@@ -331,6 +330,7 @@ cmd ff %{{
     ff -- "$*"
     lf -remote "send $id select \"$*\""
 }}
+
 map ff push :ff<space>
 
 cmd edit-config ${{

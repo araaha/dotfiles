@@ -27,12 +27,12 @@
 [urgency_low]
     background = "#242424"
     foreground = "#ebdbb2"
-    frame_color = "#d8a657"
     timeout = 3
 
 [urgency_normal]
     background = "#242424"
     foreground = "#ebdbb2"
+    frame_color = "#d8a657"
     timeout = 3
 
 [urgency_critical]
