@@ -3,11 +3,14 @@ local opts = {
         enable = true,
         additional_vim_regex_highlighting = false,
         disable = function(lang, bufnr) -- Disable in large C++ buffers
-            return lang == "cpp" and vim.api.nvim_buf_line_count(bufnr) > 50000
+            return lang == "cpp" and vim.api.nvim_buf_line_count(bufnr) > 11000
         end,
     },
     incremental_selection = {
         enable = true,
+        disable = function(lang, bufnr) -- Disable in large C++ buffers
+            return lang == "cpp" and vim.api.nvim_buf_line_count(bufnr) > 11000
+        end,
         keymaps = {
             node_incremental = '<TAB>',
             node_decremental = '<S-TAB>',
@@ -24,6 +27,6 @@ return {
     event   = "VeryLazy",
     config  = function()
         require("nvim-treesitter.configs").setup(opts)
-        vim.treesitter.language.register("bash", "zsh")
+        vim.cmd('syntax on')
     end,
 }

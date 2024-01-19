@@ -2,6 +2,7 @@ alias \$=''
 alias alu="apt list --upgradable"
 alias bbat="bluetooth_battery"
 alias bctl="bluetoothctl"
+alias cat="bat -pp"
 alias copy="xclip -r -sel clip"
 alias cp='cp -v'
 alias cpugetavail='cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_available_governors'
@@ -24,7 +25,7 @@ alias mega-cmd='env HOME=/home/araaha/.local/share/ mega-cmd'
 alias ncdu="gdu -c"
 alias nerdfetch="nitch"
 alias nsxiv="nsxiv -g 800x600+560+240 -b -a -sf"
-alias nv="nvim"
+alias nv="nvim -u NONE -S ~/.config/nvim/init.lua"
 alias packages="bat --paging=never --color=never --decorations=never /var/log/pacman.log | rg -a installed"
 alias p="ipython --TerminalInteractiveShell.highlighting_style=gruvbox"
 alias sai="sudo apt install"

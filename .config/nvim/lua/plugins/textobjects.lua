@@ -2,6 +2,9 @@ local opts = {
     textobjects = {
         select = {
             enable = true,
+            disable = function(lang, bufnr) -- Disable in large C++ buffers
+                return lang == "cpp" and vim.api.nvim_buf_line_count(bufnr) > 11000
+            end,
             lookahead = true,
             keymaps = {
                 ["af"] = "@function.outer",

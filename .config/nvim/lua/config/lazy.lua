@@ -28,7 +28,6 @@ require("lazy").setup({
         },
         reset_packpath = true,
         rtp = {
-            reset = true,
             disabled_plugins = {
                 "gzip",
                 "matchit",
@@ -41,6 +40,7 @@ require("lazy").setup({
                 "health",
                 "man",
                 "shada",
+                "nvim",
                 "spellfile",
                 "rplugin",
                 "zipPlugin",

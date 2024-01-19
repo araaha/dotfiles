@@ -97,7 +97,8 @@ return {
                 return true
             end
         })
-        lspconfig.bashls.setup({
-        })
+        lspconfig.bashls.setup({})
+        vim.api.nvim_command("LspStart")
+        vim.api.nvim_create_autocmd("BufReadPost", { command = "LspStart" })
     end,
 }

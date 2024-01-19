@@ -106,12 +106,12 @@ end
 
 local function setup(opt)
     mini = vim.tbl_extend('force', {
-        char = '│',
+        char = "│",
         exclude = default_exclude(),
     }, opt or {})
 
     local group = api.nvim_create_augroup('IndentMini', { clear = true })
-    nvim_create_autocmd('BufEnter', {
+    nvim_create_autocmd({ 'BufReadPost', 'WinEnter' }, {
         group = group,
         callback = function()
             indentline()
@@ -119,6 +119,7 @@ local function setup(opt)
     })
 end
 
+indentline()
 setup()
 
 return {
