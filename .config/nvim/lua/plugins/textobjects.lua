@@ -52,13 +52,15 @@ return {
     keys    = {
         "]",
         "[",
-        { "af", "<cmd>TStextobjectSelect @function.outer<cr>",                            mode = "v" },
-        { "if", "<cmd>TStextobjectSelect @function.inner<cr>",                            mode = "v" },
-        { "ac", "<cmd>TStextobjectSelect @call.outer<cr>",                                mode = "v" },
-        { "ic", "<cmd>TStextobjectSelect { query = @call.inner }<cr>",                    mode = "v" },
-        { "as", "<cmd>TStextobjectSelect { query = @scope, query_group = 'locals' }<cr>", mode = "v" },
+        { "af", "<cmd>TSTextobjectSelect @function.outer<cr>",                            mode = "v" },
+        { "if", "<cmd>TSTextobjectSelect @function.inner<cr>",                            mode = "v" },
+        { "ao", "<cmd>TSTextobjectSelect @block.outer<cr>",                               mode = "v" },
+        { "io", "<cmd>TSTextobjectSelect @block.inner<cr>",                               mode = "v" },
+        { "ac", "<cmd>TSTextobjectSelect @call.outer<cr>",                                mode = "v" },
+        { "ic", "<cmd>TSTextobjectSelect { query = @call.inner }<cr>",                    mode = "v" },
+        { "as", "<cmd>TSTextobjectSelect { query = @scope, query_group = 'locals' }<cr>", mode = "v" },
     },
-    lazy    = true,
+    event   = "VeryLazy",
     config  = function()
         require("nvim-treesitter.configs").setup(opts)
     end,

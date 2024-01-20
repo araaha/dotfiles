@@ -17,8 +17,9 @@ local remember = function()
     end
 end
 
-remember()
-
+vim.defer_fn(function()
+    remember()
+end, 2)
 
 au({ 'BufReadPost' }, {
     callback = function(args)
@@ -31,13 +32,21 @@ au({ 'BufReadPost' }, {
     end,
 })
 
-au('Filetype', {
-    pattern = "help",
+au({ 'BufEnter' }, {
     callback = function()
-        if vim.fn.winheight(0) < 16 then
-            vim.cmd("resize 7.5")
-        else
-            vim.cmd("resize 15")
+        vim.cmd("norm! zz")
+    end
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+    callback = function()
+        if vim.bo.filetype == "help" then
+            -- close the original window
+            local original_win = vim.fn.win_getid(vim.fn.winnr('#'))
+            local help_win = vim.api.nvim_get_current_win()
+            if original_win ~= help_win then
+                vim.api.nvim_win_close(original_win, false)
+            end
         end
     end,
 })

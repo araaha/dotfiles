@@ -11,18 +11,20 @@ map('n', 'D', 'dd')
 map({ 'n', 'v' }, 'H', '_')
 map({ 'n', 'v' }, 'L', '$')
 map({ 'n', 'v' }, 'M', 'D')
-map('n', 'j', 'gj')
-map('n', 'k', 'gk')
+map('n', 'j', 'gjzz')
+map('n', 'k', 'gkzz')
+map('n', 'G', 'Gzz')
+map('n', 'gg', 'ggzz')
 map('', '<C-h>', '<C-w>h')
 map('', '<C-j>', '<C-w>j')
 map('', '<C-k>', '<C-w>k')
 map('', '<C-l>', '<C-w>l')
-map('n', 'gt', ':bnext<CR>', { silent = true })
-map('n', 'gT', ':bprev<CR>', { silent = true })
+map('n', 'gt', ':bnext<CR>zz', { silent = true })
+map('n', 'gT', ':bprev<CR>zz', { silent = true })
 map('n', ' q', 'q', { silent = true })
-map('n', '<C-PageDown>', ':m .+1<CR>', { silent = true })
-map('n', '<C-PageUp>', ':m .-2<CR>', { silent = true })
-map('n', '<space>x', ':bdelete!<CR>', { silent = true })
+map('n', '<C-PageDown>', ':m .+1<CR>zz', { silent = true })
+map('n', '<C-PageUp>', ':m .-2<CR>zz', { silent = true })
+map('n', '<space>x', ':bdelete!<CR>zz', { silent = true })
 map({ 'i' }, '<C-s>', '<C-o>:silent! w<CR>', { silent = true })
 map({ 'n' }, '<C-s>', ':silent! w<CR>', { silent = true })
 
@@ -35,42 +37,33 @@ map("n", "<C-i>", "<C-i>zz")
 map("n", "u", "u:echo 'undo'<CR>", { silent = true })
 map("n", "<C-r>", "<C-r>:echo 'redo'<CR>", { silent = true })
 
+map('n', '=l', function()
+    local win = vim.api.nvim_get_current_win()
+    local qf_winid = vim.fn.getloclist(win, { winid = 0 }).winid
+    local action = qf_winid > 0 and 'lclose' or 'silent! lopen'
+    vim.cmd(action)
+end, { silent = true })
 
-local toggle_ll = function()
-    if next(vim.fn.getloclist(0)) == nil then
-        vim.diagnostic.setloclist()
+map('n', '=q', function()
+    local qf_winid = vim.fn.getqflist({ winid = 0 }).winid
+    local action = qf_winid > 0 and 'cclose' or 'copen'
+    vim.cmd(action)
+end, { silent = true })
+
+map('n', '=f', function()
+    local win = vim.api.nvim_get_current_win()
+    local qf_winid = vim.fn.getqflist({ winid = 0 }).winid
+    local lf_winid = vim.fn.getloclist(win, { winid = 0 }).winid
+    if qf_winid > 0 then
+        vim.cmd("copen")
+    elseif lf_winid > 0 then
+        vim.cmd("lopen")
+    else
         return
     end
-    for _, info in ipairs(vim.fn.getwininfo()) do
-        if info.loclist == 1 then
-            vim.cmd("lclose")
-            return
-        end
-    end
-    vim.diagnostic.setloclist()
-    vim.cmd("lopen")
-end
+end)
 
-local toggle_ql = function()
-    if vim.fn.getqflist() == 0 then
-        vim.diagnostic.setqflist()
-        return
-    end
-    for _, info in ipairs(vim.fn.getwininfo()) do
-        if info.quickfix == 1 then
-            vim.cmd("cclose")
-            return
-        end
-    end
-    vim.diagnostic.setqflist()
-    vim.cmd("copen")
-end
-
-map('n', ' ll', function() toggle_ll() end, {})
-map('n', ' lf', ':silent! lopen<CR>', { silent = true })
 map('n', ' lp', ':silent! Lazy profile<CR>', { silent = true })
-map('n', ' ql', function() toggle_ql() end, {})
-map('n', ' qf', ':silent! copen<CR>', { silent = true })
 map('n', '<M-PageDown>', ':silent! cnext<CR>', { silent = true })
 map('n', '<M-PageUp>', ':silent! cprevious<CR>', { silent = true })
 map('n', '<PageDown>', ':silent! lnext<CR>', { silent = true })

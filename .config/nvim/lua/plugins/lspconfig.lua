@@ -98,6 +98,12 @@ return {
         })
         lspconfig.bashls.setup({})
 
+        vim.api.nvim_create_autocmd('DiagnosticChanged', {
+            callback = function()
+                vim.diagnostic.setloclist({ open = false })
+            end
+        })
+
         vim.cmd("LspStart")
         vim.api.nvim_create_autocmd("BufReadPost", { command = "LspStart" })
     end,

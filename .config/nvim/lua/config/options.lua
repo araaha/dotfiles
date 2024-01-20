@@ -24,7 +24,6 @@ local options = {
     splitbelow  = true,
     pumheight   = 12,
     shortmess   = "aIF",
-    scrolloff   = 400,
 }
 
 for key, val in pairs(options) do
