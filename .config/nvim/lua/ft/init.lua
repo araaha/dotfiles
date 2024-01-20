@@ -2,6 +2,14 @@ local extension_tbl = {
     ["toml"] = "toml",
     ["conf"] = "toml",
     ["typ"] = "typst",
+    ["ini"] = "ini",
+    ["json"] = "json",
+    ["md"] = "markdown",
+    ["yaml"] = "yaml",
+    ["diff"] = "diff",
+    ["tex"] = "latex",
+    ["vimdoc"] = "vimdoc",
+    ["vim"] = "vim",
     ["lua"] = "lua",
     ["c"] = "c",
     ["cpp"] = "cpp",
@@ -11,28 +19,32 @@ local extension_tbl = {
     ["html"] = "html",
     ["txt"] = "text",
     ["css"] = "css",
-    ["rs"] = "rust",
-    ["zig"] = "zig",
+    ["scss"] = "css",
     ["ts"] = "typescript",
     ["js"] = "javascript",
     ["sh"] = "sh",
     ["zsh"] = "sh",
     ["go"] = "go",
+
 }
 
 local function ft_detect()
     local file_ext = vim.fn.expand("%:e")
     local filetype = extension_tbl[file_ext] or "text"
 
-    vim.bo.ft = filetype
-
-    -- vim.defer_fn(function()
-    --     pcall(api.nvim_command, "luafile ~/.config/nvim/lua/ft/" .. filetype .. "/init.lua")
-    -- end, 100)
+    if vim.bo.buftype == "quickfix" then
+        vim.bo.ft = "qf"
+    else
+        vim.bo.ft = filetype
+    end
 end
 
 ft_detect()
 
-vim.api.nvim_create_autocmd("BufReadPost", {
+vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
     callback = ft_detect
 })
+
+vim.defer_fn(function()
+    ft_detect()
+end, 0)

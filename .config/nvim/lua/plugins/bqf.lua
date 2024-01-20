@@ -1,12 +1,12 @@
 local opts = {
     auto_enable = true,
-    auto_resize_height = true, -- highly recommended enable
+    auto_resize_height = false, -- highly recommended enable
     magic_window = false,
     preview = {
+        win_height = 3,
         auto_preview = false,
         show_scroll_bar = false,
         winblend = 0,
-        win_height = 3,
         delay_syntax = 80,
         wrap = true,
         border = { '┏', '━', '┓', '┃', '┛', '━', '┗', '┃' },
@@ -28,11 +28,12 @@ local opts = {
 }
 
 return {
-    'kevinhwang91/nvim-bqf',
+    "kevinhwang91/nvim-bqf",
     version = false,
-    ft = 'qf',
+    ft = "qf",
     opts = opts,
     config = function()
-        require("bqf").setup(opts)
+        local bqf = require("bqf")
+        bqf.setup(opts)
     end
 }

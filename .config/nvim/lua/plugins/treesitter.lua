@@ -23,10 +23,8 @@ local opts = {
 return {
     "nvim-treesitter/nvim-treesitter",
     version = false,
-    lazy    = true,
     event   = "VeryLazy",
     config  = function()
         require("nvim-treesitter.configs").setup(opts)
-        vim.cmd('syntax on')
     end,
 }

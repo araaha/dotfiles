@@ -54,7 +54,7 @@ map o :open $fx
 cmd open ${{
     test -L $f && f=$(readlink -f $f)
     case $(file --mime-type $f -b) in
-        text/*) $EDITOR $(echo "$fx");;
+        text/*) nvim $(echo "$fx");;
         image/*) 
            nsxiv -g 800x600+560+240 -b -a -sf $(echo "$fx") & disown;;  
         video/*)

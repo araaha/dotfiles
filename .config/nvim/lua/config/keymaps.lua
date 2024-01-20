@@ -35,31 +35,32 @@ map("n", "<C-i>", "<C-i>zz")
 map("n", "u", "u:echo 'undo'<CR>", { silent = true })
 map("n", "<C-r>", "<C-r>:echo 'redo'<CR>", { silent = true })
 
+
 local toggle_ll = function()
+    if next(vim.fn.getloclist(0)) == nil then
+        vim.diagnostic.setloclist()
+        return
+    end
     for _, info in ipairs(vim.fn.getwininfo()) do
         if info.loclist == 1 then
             vim.cmd("lclose")
             return
         end
     end
-    if next(vim.fn.getloclist(0)) == nil then
-        vim.diagnostic.setloclist()
-        return
-    end
     vim.diagnostic.setloclist()
     vim.cmd("lopen")
 end
 
 local toggle_ql = function()
+    if vim.fn.getqflist() == 0 then
+        vim.diagnostic.setqflist()
+        return
+    end
     for _, info in ipairs(vim.fn.getwininfo()) do
         if info.quickfix == 1 then
             vim.cmd("cclose")
             return
         end
-    end
-    if vim.fn.getqflist() == 0 then
-        vim.diagnostic.setqflist()
-        return
     end
     vim.diagnostic.setqflist()
     vim.cmd("copen")
@@ -74,15 +75,13 @@ map('n', '<M-PageDown>', ':silent! cnext<CR>', { silent = true })
 map('n', '<M-PageUp>', ':silent! cprevious<CR>', { silent = true })
 map('n', '<PageDown>', ':silent! lnext<CR>', { silent = true })
 map('n', '<PageUp>', ':silent! lprevious<CR>', { silent = true })
-map("n", "i", function()
+map('n', 'i', function()
     if #vim.fn.getline(".") == 0 then
         return [["_cc]]
     else
         return "i"
     end
 end, { expr = true, desc = "properly indent on empty line when insert" })
-
-
 
 map('n', '<CR>', function()
     if vim.o.buftype == "quickfix" then

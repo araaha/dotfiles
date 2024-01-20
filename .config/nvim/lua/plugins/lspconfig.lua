@@ -1,8 +1,7 @@
 return {
     "neovim/nvim-lspconfig",
     version = false,
-    lazy    = true,
-    event   = { "CursorMoved", "BufReadPost", "BufEnter" },
+    event   = { "VeryLazy" },
     config  = function()
         local lspconfig = require("lspconfig")
         vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'single' })
@@ -98,7 +97,8 @@ return {
             end
         })
         lspconfig.bashls.setup({})
-        vim.api.nvim_command("LspStart")
+
+        vim.cmd("LspStart")
         vim.api.nvim_create_autocmd("BufReadPost", { command = "LspStart" })
     end,
 }

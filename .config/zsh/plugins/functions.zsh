@@ -18,7 +18,7 @@ ofzf() {
         sel="$(rg --color=never --files --hidden  --follow --no-messages -g "!**.mp3" -g "!**.pdf" -g "!**.sqlite" -g "!**.sqlite" -g "!**.png" -g "!**.jpg" -g "!**.jpeg" -g "!**.epub" | fzf-tmux -p 60%,80% --bind 'ctrl-l:become(lf {})' --layout=reverse  --preview-window 'up,50%' --preview "bat --style=plain --color=always --line-range :500 {}")"
             if [ -n "$sel" ]; then
                 files=$(echo $sel | tr '\n' ' ')
-                    nvim -u NONE -S ~/.config/nvim/init.lua $(echo "$files")
+                    nvim $(echo "$files")
                     echo -n "$files\n"
                     print -s "nv $files"
             else

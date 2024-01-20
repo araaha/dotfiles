@@ -10,8 +10,8 @@ return {
     "NvChad/nvim-colorizer.lua",
     version = false,
     lazy    = true,
+    keys    = { { " co", "<cmd>ColorizerToggle<cr>", mode = "n" } },
     ft      = { "css", "yaml", "javascript", "xml", "lua", "toml" },
-    keys    = { { " co", "<cmd>ColorizerAttachToBuffer<cr>", mode = "n" } },
     config  = function()
         local c = require("colorizer")
         c.setup(opts)

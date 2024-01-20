@@ -25,7 +25,7 @@ alias mega-cmd='env HOME=/home/araaha/.local/share/ mega-cmd'
 alias ncdu="gdu -c"
 alias nerdfetch="nitch"
 alias nsxiv="nsxiv -g 800x600+560+240 -b -a -sf"
-alias nv="nvim -u NONE -S ~/.config/nvim/init.lua"
+alias nv="nvim"
 alias packages="bat --paging=never --color=never --decorations=never /var/log/pacman.log | rg -a installed"
 alias p="ipython --TerminalInteractiveShell.highlighting_style=gruvbox"
 alias sai="sudo apt install"

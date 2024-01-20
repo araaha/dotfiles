@@ -1,8 +1,8 @@
 local options = {
     report      = 100,
     cmdheight   = 1,
-    hlsearch    = true,
     undofile    = true,
+    undolevels  = 200,
     updatetime  = 1000,
     ignorecase  = true,
     lazyredraw  = true,

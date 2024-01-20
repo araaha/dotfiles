@@ -268,4 +268,5 @@ au({ 'WinLeave', 'BufLeave' },
         callback = function()
             vim.opt_local.statusline = '%!v:lua.Statusline.inactive()'
         end
+
     })
