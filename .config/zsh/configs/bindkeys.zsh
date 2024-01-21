@@ -11,6 +11,7 @@ zle -N ofzf1
 bindkey -s '^O' '\C-k ofzf\n'
 bindkey -M vicmd '^O' 'ofzf1'
 bindkey -M vicmd 'D' kill-whole-line
+bindkey -M vicmd 'M' kill-line
 bindkey -M vicmd 'H' beginning-of-line
 bindkey -M vicmd 'L' end-of-line
 
