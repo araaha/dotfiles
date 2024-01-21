@@ -1,4 +1,4 @@
--- require("ft")
+require("ft")
 
 require("ui")
 

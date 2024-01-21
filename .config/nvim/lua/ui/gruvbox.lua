@@ -908,6 +908,7 @@ Gruvbox.config = {
         ["@variable"] = { fg = '#7DAEA3' },
         ["@tag.xml"] = { link = "GruvboxBlue" },
         ["@tag.delimiter.xml"] = { link = "GruvboxBlue" },
+        ["@module"] = { fg = "#7DAEA3" },
 
         StatusLine = { bg = "#242424", fg = "None" },
         StatusLineNC = { bg = "#242424", fg = "#e6dbaf" },
