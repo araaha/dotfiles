@@ -116,14 +116,19 @@ cmd fzf_jump ${{
     lf -remote "send $id $cmd \"$res\""
 }}
 
-cmd find_fzf ${{
-    res="$(rg --color=never --files --hidden --follow --no-messages ~/| fzf --reverse)"
-    nvim $res
+cmd fzf_jump_abs ${{
+    res="$(rg --color=never --files --hidden --follow --no-messages --no-ignore ~/ | fzf --reverse --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
+    if [ -d "$res" ]; then
+        cmd="cd"
+    else 
+        cmd="select"                                                       
+    fi
+    lf -remote "send $id $cmd \"$res\""
 }}
 
 map f
 map fi find
-map fd :find_fzf
+map fd :fzf_jump_abs
 map <c-t> :fzf_jump
 
 map <c-s> $$SHELL
