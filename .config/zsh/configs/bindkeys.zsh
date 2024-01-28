@@ -14,6 +14,7 @@ bindkey -M vicmd 'D' kill-whole-line
 bindkey -M vicmd 'M' kill-line
 bindkey -M vicmd 'H' beginning-of-line
 bindkey -M vicmd 'L' end-of-line
+bindkey -M vicmd '^D' exit
 
 bindkey "^[[A" history-search-backward
 bindkey "^[[B" history-search-forward
