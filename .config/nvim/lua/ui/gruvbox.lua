@@ -878,6 +878,7 @@ Gruvbox.config = {
         comments = true,
         operators = false,
         folds = false,
+        emphasis = false,
     },
     strikethrough = false,
     invert_selection = false,
@@ -886,42 +887,42 @@ Gruvbox.config = {
     invert_intend_guides = false,
     inverse = false, -- invert background for search, diffs, statuslines and errors
     palette_overrides = {
-        bright_green = "#9dc365",
-        neutral_green = "#9dc365",
-        dark2 = "#7c6f64",
+        bright_green = "#9DC365",
+        neutral_green = "#9DC365",
+        dark2 = "#7C6F64",
         dark0 = "#242424",
 
     },
     overrides = {
         Search = { bg = '#7DAEA3', fg = "#242424" },
         IncSearch = { bg = '#D8A657', fg = "#242424" },
-        Visual = { bg = '#3f3f3f', fg = 'None' },
+        Visual = { bg = '#3F3F3F', fg = 'None' },
 
         Pmenu = { fg = "None", bg = "None" },
-        PmenuSel = { fg = "#e6dbaf", bg = "#7c6f64" },
+        PmenuSel = { fg = "#E6DBAF", bg = "#7C6F64" },
         PmenuSbar = { fg = "None", bg = "None" },
         PmenuThumb = { fg = "None", bg = "None" },
 
         ["@constant.bash"] = { fg = "#7DAEA3" },
-        ["@function.builtin.bash"] = { fg = "#fb4934" },
-        ["@namespace"] = { fg = '#fb4934' },
+        ["@function.builtin.bash"] = { fg = "#FB4934" },
+        ["@namespace"] = { fg = '#FB4934' },
         ["@variable"] = { fg = '#7DAEA3' },
         ["@tag.xml"] = { link = "GruvboxBlue" },
         ["@tag.delimiter.xml"] = { link = "GruvboxBlue" },
         ["@module"] = { fg = "#7DAEA3" },
 
         StatusLine = { bg = "#242424", fg = "None" },
-        StatusLineNC = { bg = "#242424", fg = "#e6dbaf" },
+        StatusLineNC = { bg = "#242424", fg = "#E6DBAF" },
 
         QuickFixLine = { bg = "None", fg = "None" },
         FloatBorder = { fg = "#87afaf" },
-        NonText = { fg = "#7c6f64" },
-        SpecialKey = { fg = "#7c6f64" },
-        SpecialChar = { fg = "#fb4934" },
+        NonText = { fg = "#7C6F64" },
+        SpecialKey = { fg = "#7C6F64" },
+        SpecialChar = { fg = "#FB4934" },
 
         FzfLuaBufLineNr = { fg = "#87afaf" },
 
-        NvimSurroundHighlight = { bg = "#fe8019", fg = "#242424" },
+        NvimSurroundHighlight = { bg = "#FE8019", fg = "#242424" },
 
         HopNextKey = { fg = "#242424", bg = "#7daea3" },
         HopNextKey1 = { fg = "#242424", bg = "#7daea3" },

@@ -9,6 +9,9 @@ local config = function()
                 types.cmp.TriggerEvent.TextChanged
             }
         },
+        performance = {
+            max_view_entries = 4
+        },
         snippet = {
             expand = function(args)
                 require("luasnip").lsp_expand(args.body)

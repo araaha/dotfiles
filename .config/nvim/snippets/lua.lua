@@ -30,7 +30,7 @@ local plug = s(
         config  = function()
             require("{}").setup(opts)
         end,
-    }},
+    }}
 ]], {
         i(1, ""),
         i(2, "false"),

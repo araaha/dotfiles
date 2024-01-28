@@ -9,25 +9,25 @@ au('TextYankPost',
 )
 
 local remember = function()
-    local valid_line = vim.fn.line([['"]]) >= 1 and vim.fn.line([['"]]) < vim.fn.line('$')
+    local valid_line = vim.fn.line([['"]]) >= 1 and vim.fn.line([['"]]) <= vim.fn.line('$')
     local not_commit = vim.b[0].filetype ~= 'commit'
 
     if valid_line and not_commit then
-        vim.cmd([[normal! g`"]])
+        vim.cmd([[normal! g`"zz]])
     end
 end
 
 vim.defer_fn(function()
     remember()
-end, 2)
+end, 10)
 
 au({ 'BufReadPost' }, {
     callback = function(args)
-        local valid_line = vim.fn.line([['"]]) >= 1 and vim.fn.line([['"]]) < vim.fn.line('$')
+        local valid_line = vim.fn.line([['"]]) >= 1 and vim.fn.line([['"]]) <= vim.fn.line('$')
         local not_commit = vim.b[args.buf].filetype ~= 'commit'
 
         if valid_line and not_commit then
-            vim.cmd([[normal! g`"]])
+            vim.cmd([[normal! g`"zz]])
         end
     end,
 })
@@ -41,12 +41,8 @@ au({ 'BufEnter' }, {
 vim.api.nvim_create_autocmd("BufEnter", {
     callback = function()
         if vim.bo.filetype == "help" then
-            -- close the original window
-            local original_win = vim.fn.win_getid(vim.fn.winnr('#'))
-            local help_win = vim.api.nvim_get_current_win()
-            if original_win ~= help_win then
-                vim.api.nvim_win_close(original_win, false)
-            end
+            vim.cmd.only()
+            vim.bo.buflisted = true
         end
     end,
 })

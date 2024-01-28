@@ -6,7 +6,7 @@ return {
     event   = "InsertEnter",
     config  = function()
         local ls = require("luasnip")
-        ls.setup(opts)
+        ls.setup()
         require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/snippets/" })
         ls.config.set_config({
             history = true,

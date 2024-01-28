@@ -36,7 +36,7 @@ return {
                 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
 
                 vim.keymap.set('n', '<C-s>', function()
-                    if vim.bo.filetype == "sh" then
+                    if vim.bo.filetype == "sh" or vim.bo.filetype == "" then
                         vim.cmd('silent w')
                     else
                         vim.lsp.buf.format()

@@ -20,7 +20,7 @@ return {
         )
 
         npairs.add_rules({
-            Rule("<", ">")
+            Rule("<", ">", "-sh")
                 :with_move(cond.done())
         })
 

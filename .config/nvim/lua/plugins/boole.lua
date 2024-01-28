@@ -3,6 +3,9 @@ local opts = {
         increment = "<C-a>",
         decrement = "<C-x>"
     },
+    additions = {
+        { "sh", "bash", "zsh" }
+    }
 }
 return {
     "nat-418/boole.nvim",
