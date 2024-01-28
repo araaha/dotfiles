@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 bright="$(light -G)"
 if (( $(echo "13 > $bright" | bc -l) ));
 then

@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/bash
 output='/home/araaha/Screenshots/%Y-%m-%d-%T-screenshot.png'
 
 options=$(printf "Select\nWindow" | rofi -dmenu -i -p "Select screenshot mode")

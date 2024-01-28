@@ -6,19 +6,19 @@ PDF viewers.
 This is basically a script that can either add a bookmark or a highlight to a page based on the command line arguments.
 Here is the `prefs_user.config` that I used:
 
-	execute_command_b python path/to/embedded_annotations.py bookmark "%1" %{mouse_pos_document} "%5"
-	execute_command_h python path/to/embedded_annotations.py highlight "%1" "%4" "%3"
+    execute_command_b python path/to/embedded_annotations.py bookmark "%1" %{mouse_pos_document} "%5"
+    execute_command_h python path/to/embedded_annotations.py highlight "%1" "%4" "%3"
 
 And here is a `keys_user.config` file that can be used:
 
-	execute_command_b b
-	execute_command_h;add_highlight h
+    execute_command_b b
+    execute_command_h;add_highlight h
 
 which basically adds both sioyek and embedded highlights and bookmarks (if `ADD_BOOKMARKS_TO_SIOYEK` is True). Alternatively, you can use
 a different keybinding for embedded annotations so you have control over what happens. Now you can use alt+b or alt+h to bookmark/highlight.
 
-	execute_command_b <A-b>
-	execute_command_h <A-h>
+    execute_command_b <A-b>
+    execute_command_h <A-h>
 '''
 
 import sys
