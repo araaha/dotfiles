@@ -43,7 +43,7 @@ systemctl enable --now ly
 systemctl enable --now --user greenclip
 systemctl enable --now --user redshift
 
-#set keyboard repeat
+#set sleep scripts
 sudo ln -s ~/dotfiles/scripts/xset-keyboard-repeat.sh /usr/lib/systemd/system-sleep/
 
 #install compiled/zipped apps
