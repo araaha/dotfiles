@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 bright=$(light -G)
 compare="$(echo $bright'<'100 | bc -l)"
 single="$(echo $bright'<'10 | bc -l)"

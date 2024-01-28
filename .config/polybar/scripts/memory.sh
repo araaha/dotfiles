@@ -1,10 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 
-case "$1" in
-    --popup)
-        notify-send "Memory (%)" "$(ps axch -o cmd:10,pmem k -pmem | head | awk '$0=$0"%"' )"
-        ;;
-    *)
-        echo "$(free -h --si | awk '/^Mem:/ {print $3 "/" $2}')"
-        ;;
-esac
+total=$(free -t -m | awk '{print $2}' | tail -1)
+res_tot=$(echo "scale=1; $total / 1024" | bc)
+
+used=$(free -t -m | awk '{print $3}' | tail -1)
+res_used=$(echo "scale=1; $used / 1024" | bc)
+
+if (( $(echo "$used < 1000" | bc -l) )); then
+    echo 0"$res_used"G/"$res_tot"G
+else
+    echo "$res_used"G/"$res_tot"G
+fi
