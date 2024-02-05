@@ -1,12 +1,10 @@
 #!/bin/bash
+
 bright="$(light -G)"
+
 if (( $(echo "13 > $bright" | bc -l) ));
 then
-	light -A 1
+    light -A 1
 else
-	light -A 2
+    light -A 2
 fi
-
-
-
-

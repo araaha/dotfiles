@@ -1,5 +1,5 @@
 governor="${1}"
-case ${governor} in 
+case ${governor} in
     performance)
         echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
         ;;

@@ -4,6 +4,7 @@
 # - cats a file, but if any line contains N hex colors, it appends the colors
 #   (rendered as ansi escape sequences) to the end of the line.
 # - input can be stdin, a file, or a hex color in plain text
+
 if [[ "$#" -eq 1 && ! -f "$1" ]]; then
   echo "$1"
 else
