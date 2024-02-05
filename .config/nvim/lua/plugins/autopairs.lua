@@ -20,8 +20,9 @@ return {
         )
 
         npairs.add_rules({
-            Rule("<", ">", "-sh")
+            Rule("<", ">")
                 :with_move(cond.done())
+                :with_pair(cond.not_filetypes({ "sh", "go" }))
         })
 
         local brackets = { { '(', ')' }, { '[', ']' }, { '{', '}' }, { '<', '>' } }

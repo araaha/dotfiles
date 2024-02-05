@@ -13,7 +13,7 @@ local options = {
     signcolumn    = "no",
     matchpairs    = "(:),{:},[:],<:>",
     cursorline    = true,
-    list          = false,
+    list          = true,
     fillchars     = 'eob: ',
     foldexpr      = "v:lua.vim.treesitter.foldexpr()",
     foldtext      = "v:lua.vim.treesitter.foldtext()",
@@ -23,7 +23,7 @@ local options = {
     splitbelow    = true,
     pumheight     = 12,
     shortmess     = "aIF",
-    commentstring = "#%s"
+    commentstring = "#%s",
 }
 
 for key, val in pairs(options) do
@@ -35,10 +35,11 @@ vim.g.loaded_node_provider    = 0
 vim.g.loaded_ruby_provider    = 0
 vim.g.loaded_perl_provider    = 0
 
--- listchars   = {
--- 	eol = '↵',
--- 	trail = '·',
--- 	nbsp = '.',
--- 	multispace = '···⬝',
--- 	leadmultispace = '▎',
--- },
+vim.opt.listchars             = {
+    eol = '│',
+    tab = '··',
+}
+
+vim.defer_fn(function()
+    vim.opt.formatoptions:remove({ 'o', 'r' })
+end, 50)

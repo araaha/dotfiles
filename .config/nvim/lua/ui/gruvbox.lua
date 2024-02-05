@@ -254,13 +254,13 @@ local function get_groups()
             or { fg = colors.aqua, bg = colors.bg1, reverse = config.invert_signs },
         GruvboxOrangeSign = config.transparent_mode and { fg = colors.orange, reverse = config.invert_signs }
             or { fg = colors.orange, bg = colors.bg1, reverse = config.invert_signs },
-        GruvboxRedUnderline = { undercurl = config.undercurl, sp = colors.red },
-        GruvboxGreenUnderline = { undercurl = config.undercurl, sp = colors.green },
-        GruvboxYellowUnderline = { undercurl = config.undercurl, sp = colors.yellow },
-        GruvboxBlueUnderline = { undercurl = config.undercurl, sp = colors.blue },
-        GruvboxPurpleUnderline = { undercurl = config.undercurl, sp = colors.purple },
-        GruvboxAquaUnderline = { undercurl = config.undercurl, sp = colors.aqua },
-        GruvboxOrangeUnderline = { undercurl = config.undercurl, sp = colors.orange },
+        GruvboxRedUnderline = { underline = config.underline, sp = colors.red },
+        GruvboxGreenUnderline = { underline = config.underline, sp = colors.green },
+        GruvboxYellowUnderline = { underline = config.underline, sp = colors.yellow },
+        GruvboxBlueUnderline = { underline = config.underline, sp = colors.blue },
+        GruvboxPurpleUnderline = { underline = config.underline, sp = colors.purple },
+        GruvboxAquaUnderline = { underline = config.underline, sp = colors.aqua },
+        GruvboxOrangeUnderline = { underline = config.underline, sp = colors.orange },
         Normal = config.transparent_mode and { fg = colors.fg1, bg = nil } or { fg = colors.fg1, bg = colors.bg0 },
         NormalFloat = config.transparent_mode and { fg = colors.fg1, bg = nil } or { fg = colors.fg1, bg = colors.bg1 },
         NormalNC = config.dim_inactive and { fg = colors.fg0, bg = colors.bg1 } or { link = "Normal" },
@@ -872,7 +872,7 @@ end
 Gruvbox.config = {
     undercurl = false,
     underline = false,
-    bold = false,
+    bold = true,
     italic = {
         strings = false,
         comments = true,
@@ -911,6 +911,7 @@ Gruvbox.config = {
         ["@tag.delimiter.xml"] = { link = "GruvboxBlue" },
         ["@module"] = { fg = "#7DAEA3" },
 
+        TermCursor = { bg = "#9cd365", fg = "None" },
         StatusLine = { bg = "#242424", fg = "None" },
         StatusLineNC = { bg = "#242424", fg = "#E6DBAF" },
 
@@ -929,7 +930,7 @@ Gruvbox.config = {
         HopNextKey2 = { fg = "#242424", bg = "#D8A657" },
 
         BqfSign = { fg = "#9dc365", bg = "None" },
-        IndentLine = { fg = "#fabd2f" }
+        IndentLine = { fg = "#fabd2f" },
     },
     dim_inactive = false,
     transparent_mode = true,

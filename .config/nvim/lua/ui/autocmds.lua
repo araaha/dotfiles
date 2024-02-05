@@ -46,3 +46,23 @@ vim.api.nvim_create_autocmd("BufEnter", {
         end
     end,
 })
+
+vim.api.nvim_create_autocmd("Filetype", {
+    pattern = "go",
+    callback = function()
+        vim.opt_local.list = false
+    end
+})
+
+vim.api.nvim_create_autocmd("Filetype", {
+    pattern = "qf",
+    callback = function()
+        vim.opt_local.wrap = true
+    end
+})
+
+vim.api.nvim_create_autocmd("TermOpen", {
+    callback = function()
+        vim.cmd("startinsert")
+    end
+})
