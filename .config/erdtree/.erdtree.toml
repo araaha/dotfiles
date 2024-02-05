@@ -10,3 +10,6 @@ layout        = "iflat"
 level         = 1
 human         = true
 icons         = true
+no-ignore     = true
+no-git        = false
+hidden        = true
