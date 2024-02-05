@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 image() {
     if [ -n "$DISPLAY" ] && [ -z "$WAYLAND_DISPLAY" ]; then
@@ -9,7 +9,7 @@ image() {
     fi
 }
 
-CACHE="$HOME/.cache/lf/thumbnail.$(stat --printf '%n\0%i\0%F\0%s\0%W\0%Y' -- "$(readlink -f "$1")" | basha256sum | awk '{print $1}'))"
+CACHE="$HOME/.cache/lf/thumbnail.$(stat --printf '%n\0%i\0%F\0%s\0%W\0%Y' -- "$(readlink -f "$1")" | sha256sum | awk '{print $1}')"
 
 case "$(printf "%s\n" "$(readlink -f "$1")" | awk '{print tolower($0)}')" in
     *.tgz|*.tar.gz) tar tzf "$1" ;;
@@ -46,7 +46,7 @@ case "$(printf "%s\n" "$(readlink -f "$1")" | awk '{print tolower($0)}')" in
         image "$CACHE" "$2" "$3" "$4" "$5"
         ;;
     *.html)
-        [ ! -f "$CACHE" ] && \ 
+        [ ! -f "$CACHE" ] && \
             w3m "$1" "$CACHE" 
         image "${CACHE}.jpg" "$2" "$3" "$4" "$5"
         ;;
