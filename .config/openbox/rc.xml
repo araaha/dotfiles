@@ -233,16 +233,6 @@
         <command>rofi -no-show-icons -kb-accept-entry "Control+c,Return" -kb-secondary-copy "" -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'</command>
       </action>
     </keybind>
-    <keybind key="W-A-c">
-      <action name="Execute">
-        <command>warpd --hint --click 1</command>
-      </action>
-    </keybind>
-    <keybind key="W-A-m">
-      <action name="Execute">
-        <command>warpd --hint</command>
-      </action>
-    </keybind>
     <keybind key="C-A-t">
       <action name="Execute">
         <command>tdrop -A -y 540 -h 540 -s tmux alacritty --title=Dropdown</command>
