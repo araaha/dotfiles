@@ -20,6 +20,7 @@ foomatic-db-gutenprint-ppds
 fx
 fzf
 git
+git-lfs
 gnome-epub-thumbnailer
 gnome-keyring
 gnu-free-fonts
