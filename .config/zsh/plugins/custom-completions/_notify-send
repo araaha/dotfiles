@@ -1,0 +1,23 @@
+#compdef notify-send
+
+# zsh completions for 'notify-send'
+# automatically generated with http://github.com/RobSis/zsh-completion-generator
+local arguments
+
+arguments=(
+  {-u,--urgency}'[specifies the urgency level (low, normal, critical).]'
+  {-t,--expire-time}'[specifies the timeout in milliseconds at which to expire the notification.]'
+  {-a,--app-name}'[specifies the app name for the icon]'
+  {-i,--icon}'[specifies an icon filename or stock icon to display.]'
+  {-c,--category}'[TYPE...\]     Specifies the notification category.]'
+  {-e,--transient}'[create a transient notification]'
+  {-h,--hint}'[specifies basic extra data to pass. Valid types are boolean, int, double, string, byte and variant.]'
+  {-p,--print-id}'[print the notification ID.]'
+  {-r,--replace-id}'[the ID of the notification to replace.]'
+  {-w,--wait}'[wait for the notification to be closed before exiting.]'
+  {-A,--action}'[\]Text...       Specifies the actions to display to the user. Implies --wait to wait for user input. May be set multiple times. The name of the action is output to stdout. If NAME is not specified, the numerical index of the option is used (starting with 0).]'
+  {-v,--version}'[version of the package.]'
+  '*:filename:_files'
+)
+
+_arguments -s $arguments

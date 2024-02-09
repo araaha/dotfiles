@@ -6,3 +6,4 @@ zstyle ':completion:*' matcher-list '' \
 zstyle ':completion:*' completer _complete _match
 zstyle ':completion:*' menu yes select
 zstyle ':completion:*' ignored-patterns '_*'
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'

@@ -43,6 +43,9 @@ vim.api.nvim_create_autocmd("BufEnter", {
         if vim.bo.filetype == "help" then
             vim.cmd.only()
             vim.bo.buflisted = true
+            vim.defer_fn(function()
+                vim.cmd("norm! zz")
+            end, 20)
         end
     end,
 })

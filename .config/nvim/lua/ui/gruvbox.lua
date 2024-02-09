@@ -894,9 +894,9 @@ Gruvbox.config = {
 
     },
     overrides = {
-        Search = { bg = '#7DAEA3', fg = "#242424" },
-        IncSearch = { bg = '#D8A657', fg = "#242424" },
-        Visual = { bg = '#3F3F3F', fg = 'None' },
+        Search = { bg = "#7DAEA3", fg = "#242424" },
+        IncSearch = { bg = "#D8A657", fg = "#242424" },
+        Visual = { bg = "#3F3F3F", fg = "None" },
 
         Pmenu = { fg = "None", bg = "None" },
         PmenuSel = { fg = "#E6DBAF", bg = "#7C6F64" },
