@@ -27,7 +27,7 @@ background = "#D8A657"
 foreground = "#242424"
 
 [colors.hints.start]
-background = "#7daea3"
+background = "#83A598"
 foreground = "#242424"
 
 [colors.normal]
@@ -154,16 +154,16 @@ mode   = "Vi|~Search"
 mods   = "Control"
 
 [[keyboard.bindings]]
-action = "SemanticLeft"
-key    = "Left"
+action = "First"
+key    = "H"
 mode   = "Vi|~Search"
-mods   = "Control|Shift"
+mods   = "Shift"
 
 [[keyboard.bindings]]
-action = "SemanticRightEnd"
-key    = "Right"
+action = "Last"
+key    = "L"
 mode   = "Vi|~Search"
-mods   = "Control|Shift"
+mods   = "Shift"
 
 [selection]
 save_to_clipboard     = true
