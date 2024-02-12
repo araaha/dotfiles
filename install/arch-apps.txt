@@ -68,7 +68,6 @@ python-pip
 python-pipx
 python-pyxdg
 qpdf
-r
 redshift
 ripgrep
 ripgrep-all
