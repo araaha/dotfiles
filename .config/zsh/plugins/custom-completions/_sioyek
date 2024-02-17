@@ -1,0 +1,32 @@
+#compdef sioyek
+
+# zsh completions for 'sioyek'
+# automatically generated with http://github.com/RobSis/zsh-completion-generator
+local arguments
+
+arguments=(
+  '--new-window'
+  '--reuse-window'
+  '--nofocus'
+  '--version'
+  '--page'
+  '--focus-text'
+  '--focus-text-page'
+  '--inverse-search'
+  '--execute-command'
+  '--execute-command-data'
+  '--forward-search-file'
+  '--forward-search-line'
+  '--forward-search-line'
+  '--forward-search-file'
+  '--forward-search-column'
+  '--zoom'
+  '--xloc'
+  '--yloc'
+  '--shared-database-path'
+  {-h,--help}''
+  '--help-all'
+  '*:filename:_files'
+)
+
+_arguments -s $arguments
