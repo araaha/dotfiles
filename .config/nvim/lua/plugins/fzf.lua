@@ -66,16 +66,16 @@ return {
                 },
                 buffers = {
                     ["default"] = actions.buf_edit,
-                    ["ctrl-s"] = actions.buf_split,
-                    ["ctrl-x"] = actions.buf_vsplit,
-                    ["ctrl-t"] = false,
+                    ["ctrl-s"]  = actions.buf_split,
+                    ["ctrl-x"]  = actions.buf_vsplit,
+                    ["ctrl-t"]  = false,
                 }
             },
         })
 
         vim.keymap.set("n", " fl", fzf.blines, {})
         vim.keymap.set("n", " ff", function()
-            fzf.files({ cwd = '~/' })
+            fzf.files({ cwd_prompt = false })
         end, {})
         vim.keymap.set("n", "<C-t>", function()
             fzf.fzf_exec(os.getenv("FZF_DEFAULT_COMMAND"), {
@@ -91,22 +91,13 @@ return {
             })
         end, {})
 
-        local au = vim.api.nvim_create_autocmd
-
-        local function augroup(name, fnc)
-            fnc(vim.api.nvim_create_augroup(name, { clear = true }))
-        end
-
-        augroup("FzfLuaCtrlC", function(g)
-            au("FileType",
-                {
-                    group = g,
-                    pattern = "fzf",
-                    callback = function(e)
-                        vim.keymap.set("t", "<C-c>", "<C-c>", { buffer = e.buf, silent = true })
-                    end,
-                })
-        end)
+        vim.api.nvim_create_autocmd("FileType",
+            {
+                pattern = "fzf",
+                callback = function(e)
+                    vim.keymap.set("t", "<C-c>", "<C-c>", { buffer = e.buf, silent = true })
+                end,
+            })
     end,
 
 }
