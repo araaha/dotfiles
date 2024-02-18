@@ -252,13 +252,13 @@ end
 local ag = vim.api.nvim_create_augroup
 local au = vim.api.nvim_create_autocmd
 
-vim.opt_local.statusline = '%!v:lua.Statusline.active()'
+vim.opt_local.statusline = '%{%v:lua.Statusline.active()%}'
 
-au({ 'WinEnter', 'BufEnter', 'CursorMoved' },
+au({ 'WinEnter', 'BufEnter' },
     {
         group = ag('StatusLine', { clear = false }),
         callback = function()
-            vim.opt_local.statusline = '%!v:lua.Statusline.active()'
+            vim.opt_local.statusline = '%{%v:lua.Statusline.active()%}'
         end
     })
 
@@ -266,7 +266,7 @@ au({ 'WinLeave', 'BufLeave' },
     {
         group = ag('StatusLine', { clear = false }),
         callback = function()
-            vim.opt_local.statusline = '%!v:lua.Statusline.inactive()'
+            vim.opt_local.statusline = '%{%v:lua.Statusline.inactive()%}'
         end
 
     })
