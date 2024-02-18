@@ -75,7 +75,7 @@ return {
 
         vim.keymap.set("n", " fl", fzf.blines, {})
         vim.keymap.set("n", " ff", function()
-            fzf.files({ cwd_prompt = false })
+            fzf.files({ cwd_prompt = false, cwd = "~" })
         end, {})
         vim.keymap.set("n", "<C-t>", function()
             fzf.fzf_exec(os.getenv("FZF_DEFAULT_COMMAND"), {
