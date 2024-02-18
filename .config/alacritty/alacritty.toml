@@ -87,7 +87,7 @@ mods = "Alt"
 [[hints.enabled]]
 action          = "MoveViModeCursor"
 post_processing = false
-regex           = '[^\s]+'
+regex           = '\w+'
 
 [hints.enabled.binding]
 key  = "M"
