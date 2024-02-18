@@ -14,7 +14,6 @@ export WORDCHARS="_*?[]~&;!#$%^(){<>=."
 
 export VISUAL=/usr/bin/nvim
 export EDITOR=/usr/bin/nvim
-export BROWSER=/usr/bin/google-chrome-stable
 
 export BAT_THEME="gruvbox-modified"
 export PAGER="bat"
