@@ -1,4 +1,4 @@
-*/10 * * * * /home/araaha/scripts/dunst-classes.sh
+*/10 * * * * /home/araaha/scripts/notify-event.sh
 */5 * * * * /home/araaha/scripts/bluetooth-battery.sh
 */5 * * * * /home/araaha/scripts/battery.sh
 * */12 * * * crontab -l > /home/araaha/dotfiles/misc/crontab/crontabs
