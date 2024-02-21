@@ -175,4 +175,4 @@ dynamic_padding = false
 decorations = "None"
 
 [scrolling]
-history = 1000
+history = 50
