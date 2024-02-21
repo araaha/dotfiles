@@ -9,10 +9,11 @@ TIME_START=10
 TIME_END=60
 
 if [[ "$EVENT" ]]; then
-    TIME=$(calcurse -n | sed 1d | rg --color=never "\d+:(\d+)" -or "\$1")
+    TIME=$(calcurse -n | sed 1d | rg --color=never "(\d+):(\d+)" -or "\$1 * 60 + \$2" | bc)
 else
     exit
 fi
+echo "$TIME"
 
 if (( TIME_START <= TIME && TIME <= TIME_END )); then
     DISPLAY=:0 notify-send -t 3500 "$EVENT"
