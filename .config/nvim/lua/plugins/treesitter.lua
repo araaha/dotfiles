@@ -16,12 +16,12 @@ local opts = {
             return ok and stats and stats.size > max_filesize
         end,
         keymaps = {
-            node_incremental = '<TAB>',
-            node_decremental = '<S-TAB>',
+            node_incremental = "<TAB>",
+            node_decremental = "<S-TAB>",
         },
     },
     ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "cpp", "latex", "css", "go", "python", "bash",
-        "diff", "yaml", "xml", "markdown", "ini", "json", "html" },
+        "diff", "yaml", "xml", "markdown", "ini", "json", "html", "typst" },
 }
 
 return {
@@ -31,5 +31,6 @@ return {
     config  = function()
         require("nvim-treesitter.configs").setup(opts)
         vim.treesitter.language.register("bash", "zsh")
+        vim.cmd("syntax on")
     end,
 }
