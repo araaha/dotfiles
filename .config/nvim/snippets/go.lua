@@ -17,9 +17,9 @@ local snippets = {}
 
 local main = s(
     {
-        trig = 'main',
+        trig = "main",
         regTrig = false,
-        snippetType = 'snippet',
+        snippetType = "snippet",
         hidden = false,
     }, fmta("package main \n\nfunc main() {\n\t<>\n}", ls.i(0)))
 table.insert(snippets, main)

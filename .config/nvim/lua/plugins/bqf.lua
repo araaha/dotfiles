@@ -9,7 +9,7 @@ local opts = {
         winblend = 0,
         delay_syntax = 80,
         wrap = true,
-        border = { '┏', '━', '┓', '┃', '┛', '━', '┗', '┃' },
+        border = { "┏", "━", "┓", "┃", "┛", "━", "┗", "┃" },
         show_title = false,
         should_preview_cb = function(bufnr)
             local ret = true
@@ -18,7 +18,7 @@ local opts = {
             if fsize > 100 * 1024 then
                 -- skip file size greater than 100k
                 ret = false
-            elseif bufname:match('^fugitive://') then
+            elseif bufname:match("^fugitive://") then
                 -- skip fugitive buffer
                 ret = false
             end

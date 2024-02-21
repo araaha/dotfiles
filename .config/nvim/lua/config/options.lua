@@ -14,7 +14,7 @@ local options = {
     matchpairs    = "(:),{:},[:],<:>",
     cursorline    = true,
     list          = true,
-    fillchars     = 'eob: ',
+    fillchars     = "eob: ",
     foldexpr      = "v:lua.vim.treesitter.foldexpr()",
     foldtext      = "v:lua.vim.treesitter.foldtext()",
     guicursor     = "",
@@ -36,10 +36,9 @@ vim.g.loaded_ruby_provider    = 0
 vim.g.loaded_perl_provider    = 0
 
 vim.opt.listchars             = {
-    eol = '│',
-    tab = '··',
+    tab = "··",
 }
 
 vim.defer_fn(function()
-    vim.opt.formatoptions:remove({ 'o', 'r' })
+    vim.opt.formatoptions:remove({ "o", "r" })
 end, 50)

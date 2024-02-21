@@ -17,9 +17,9 @@ local snippets = {}
 
 local su = s(
     {
-        trig = 'su',
+        trig = "su",
         regTrig = false,
-        snippetType = 'autosnippet',
+        snippetType = "autosnippet",
         hidden = false,
     }, fmt([[sum_({})_({}) ]], {
         i(1, ""),

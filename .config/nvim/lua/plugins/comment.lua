@@ -2,8 +2,11 @@ return {
     "numToStr/Comment.nvim",
     version = false,
     lazy    = true,
-    keys    = { 'V', 'v', 'gc' },
+    keys    = {
+        { "gc", mode = { "n", "v", "o" } },
+        { "gb", mode = { "n", "v", "o" } }
+    },
     config  = function()
-        require('Comment').setup()
+        require("Comment").setup()
     end,
 }

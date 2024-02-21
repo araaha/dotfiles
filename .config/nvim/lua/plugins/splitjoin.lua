@@ -1,5 +1,5 @@
 return {
-    'echasnovski/mini.splitjoin',
+    "echasnovski/mini.splitjoin",
     version = false,
     lazy = true,
     keys = "gS",

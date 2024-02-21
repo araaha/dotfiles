@@ -3,10 +3,10 @@ return {
     version      = false,
     event        = { "InsertEnter" },
     dependencies = {
-        'hrsh7th/cmp-buffer',
-        'hrsh7th/cmp-nvim-lsp',
-        'hrsh7th/cmp-path',
-        'saadparwaiz1/cmp_luasnip',
+        "hrsh7th/cmp-buffer",
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-path",
+        "saadparwaiz1/cmp_luasnip",
     },
     config       = function()
         local luasnip = require("luasnip")
@@ -14,9 +14,9 @@ return {
         local types = require("cmp.types")
 
         local default_cmp_sources = cmp.config.sources({
-            { name = 'path' },
-            { name = 'luasnip', keyword_length = 3 },
-            { name = 'nvim_lsp' },
+            { name = "path" },
+            { name = "luasnip", keyword_length = 3 },
+            { name = "nvim_lsp" },
         })
 
         local bufIsBig = function(bufnr)
@@ -32,7 +32,7 @@ return {
         local buffer_sources = function()
             local sources = default_cmp_sources
             if not bufIsBig(0) then
-                sources[#sources + 1] = { name = 'buffer', group_index = 4 }
+                sources[#sources + 1] = { name = "buffer", group_index = 4 }
             end
             cmp.setup.buffer {
                 sources = sources
@@ -58,16 +58,16 @@ return {
             },
             window = {
                 completion = {
-                    border = 'single',
+                    border = "single",
                     winhighlight = "FloatBorder:FloatBorder,CursorLine:PmenuSel",
                     scrollbar = false,
                 },
             },
             mapping = {
-                ['<C-p>'] = cmp.mapping.select_prev_item(select_opts),
-                ['<C-n>'] = cmp.mapping.select_next_item(select_opts),
-                ['<C-Space>'] = cmp.mapping.complete(),
-                ['<CR>'] = cmp.mapping.abort(),
+                ["<C-p>"] = cmp.mapping.select_prev_item(select_opts),
+                ["<C-n>"] = cmp.mapping.select_next_item(select_opts),
+                ["<C-Space>"] = cmp.mapping.complete(),
+                ["<CR>"] = cmp.mapping.abort(),
                 ["<Tab>"] = cmp.mapping(function(fallback)
                     if cmp.visible() then
                         cmp.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true })

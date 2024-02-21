@@ -16,12 +16,12 @@ local snippets = {}
 
 local plug = s(
     {
-        trig = 'plug',
+        trig = "plug",
         regTrig = false,
-        snippetType = 'autosnippet',
+        snippetType = "autosnippet",
         hidden = true,
     }, fmt([[
-    {{
+    return {{
         "{}",
         version = {},
         lazy    = {},

@@ -2,11 +2,10 @@ return {
     "kylechui/nvim-surround",
     version = false,
     keys    = {
-        'v',
-        'V',
-        'ys',
-        'cs',
-        'ds'
+        { "S", mode = "v" },
+        "ys",
+        "cs",
+        "ds"
     },
     opts    = {},
     config  = function(opts)

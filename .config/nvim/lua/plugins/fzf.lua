@@ -1,5 +1,5 @@
 return {
-    'ibhagwan/fzf-lua',
+    "ibhagwan/fzf-lua",
     version = false,
     lazy    = true,
     cmd     = "FzfLua",
@@ -16,16 +16,16 @@ return {
                 },
             },
             fzf_opts   = {
-                ['--border']         = 'none',
-                ['--padding']        = '0%',
-                ['--margin']         = '0%',
-                ['--no-separator']   = '',
-                ['--preview-window'] = 'up,50%',
-                ['--info']           = 'default',
+                ["--border"]         = "none",
+                ["--padding"]        = "0%",
+                ["--margin"]         = "0%",
+                ["--no-separator"]   = "",
+                ["--preview-window"] = "up,50%",
+                ["--info"]           = "default",
             },
             fzf_colors = {
-                ['gutter'] = '-1',
-                ['bg'] = '-1',
+                ["gutter"] = "-1",
+                ["bg"] = "-1",
             },
             blines     = {
                 rg_opts = "--line-number --colors=line:none",
@@ -37,10 +37,10 @@ return {
                     scrollbar = false,
                     delay = 1,
                 },
-                win_border = { '┏', '━', '┓', '┃', '┛', '━', '┗', '┃' },
+                win_border = { "┏", "━", "┓", "┃", "┛", "━", "┗", "┃" },
                 hl = { border = "FloatBorder", },
-                height = '0.8',
-                width = '0.60',
+                height = "0.8",
+                width = "0.60",
                 col = 0.48,
             },
             previewers = {
@@ -78,7 +78,7 @@ return {
             fzf.files({ cwd_prompt = false, cwd = "~" })
         end, {})
         vim.keymap.set("n", "<C-t>", function()
-            fzf.fzf_exec(os.getenv("FZF_DEFAULT_COMMAND"), {
+            fzf.files({
                 preview = "bat --wrap=auto --style=plain --color=always --line-range=1:25 {} ",
                 actions = {
                     ["default"] = actions.file_edit_or_qf,

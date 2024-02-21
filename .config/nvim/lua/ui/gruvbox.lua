@@ -84,6 +84,8 @@ Gruvbox.config = {
         ["@tag.xml"] = { link = "GruvboxBlue" },
         ["@tag.delimiter.xml"] = { link = "GruvboxBlue" },
         ["@module"] = { link = "GruvboxBlue" },
+        ["@function.builtin.lua"] = { link = "GruvboxGreenBold" },
+        ["@lsp.type.comment.lua"] = { link = None },
 
         zshVariableDef = { link = "GruvboxBlue" },
 
@@ -107,6 +109,12 @@ Gruvbox.config = {
 
         BqfSign = { fg = "#9DC365", bg = "None" },
         IndentLine = { fg = "#FABD2F" },
+
+        MiniHipatternsFixme = { link = "ErrorMsg" },
+        MiniHipatternsTodo = { link = "Todo" },
+        MiniHipatternsNote = { bg = "#FE8019", fg = "#242424", bold = true },
+        MiniHipatternsHack = { bg = "#83a598", fg = "#242424", bold = true },
+
     },
     dim_inactive = false,
     transparent_mode = true,

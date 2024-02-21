@@ -2,7 +2,7 @@ local api = vim.api
 local nvim_create_autocmd, nvim_buf_set_extmark = api.nvim_create_autocmd, api.nvim_buf_set_extmark
 local mini = {}
 
-local ns = api.nvim_create_namespace('IndentLine')
+local ns = api.nvim_create_namespace("IndentLine")
 
 local function col_in_screen(col)
     local leftcol = vim.fn.winsaveview().leftcol
@@ -10,13 +10,13 @@ local function col_in_screen(col)
 end
 
 local function hl_group()
-    return 'IndentLine'
+    return "IndentLine"
 end
 
 local function indent_step(bufnr)
-    if vim.fn.exists('*shiftwidth') == 1 then
+    if vim.fn.exists("*shiftwidth") == 1 then
         return vim.fn.shiftwidth()
-    elseif vim.fn.exists('&shiftwidth') == 1 then
+    elseif vim.fn.exists("&shiftwidth") == 1 then
         -- implementation of shiftwidth builtin
         if vim.bo[bufnr].shiftwidth ~= 0 then
             return vim.bo[bufnr].shiftwidth
@@ -56,16 +56,16 @@ local function indentline()
                 if #text == 0 and i - 1 > 0 then
                     param = {
                         virt_text = { { mini.char, hi_name } },
-                        virt_text_pos = 'overlay',
+                        virt_text_pos = "overlay",
                         virt_text_win_col = i - 1,
-                        hl_mode = 'combine',
+                        hl_mode = "combine",
                         ephemeral = true,
                     }
                 else
                     param = {
                         virt_text = { { mini.char, hi_name } },
-                        virt_text_pos = 'overlay',
-                        hl_mode = 'combine',
+                        virt_text_pos = "overlay",
+                        hl_mode = "combine",
                         ephemeral = true,
                     }
                     col = i - 1
@@ -82,7 +82,7 @@ local function indentline()
 
     local function on_start(_, _)
         local bufnr = api.nvim_get_current_buf()
-        local exclude_buftype = { 'nofile', 'terminal' }
+        local exclude_buftype = { "nofile", "terminal" }
         if
             vim.tbl_contains(exclude_buftype, vim.bo[bufnr].buftype)
             or not vim.bo[bufnr].expandtab
@@ -101,17 +101,17 @@ local function indentline()
 end
 
 local function default_exclude()
-    return { 'go', 'dashboard', 'lazy', 'help', 'markdown' }
+    return { "go", "dashboard", "lazy", "help", "markdown" }
 end
 
 local function setup(opt)
-    mini = vim.tbl_extend('force', {
+    mini = vim.tbl_extend("force", {
         char = "│",
         exclude = default_exclude(),
     }, opt or {})
 
-    local group = api.nvim_create_augroup('IndentMini', { clear = true })
-    nvim_create_autocmd({ 'BufReadPost', 'WinEnter' }, {
+    local group = api.nvim_create_augroup("IndentMini", { clear = true })
+    nvim_create_autocmd({ "BufReadPost", "WinEnter" }, {
         group = group,
         callback = function()
             indentline()

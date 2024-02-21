@@ -8,6 +8,6 @@ return {
     lazy    = true,
     event   = "InsertEnter",
     config  = function()
-        require('matchparen').setup(opts)
+        require("matchparen").setup(opts)
     end,
 }
