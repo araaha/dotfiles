@@ -23,7 +23,7 @@ map("n", " q", "q", { silent = true })
 map({ "n", "v" }, "<C-PageDown>", ":m .+1<CR>", { silent = true })
 map({ "n", "v" }, "<C-PageUp>", ":m .-2<CR>", { silent = true })
 map("n", "X", ":bdelete!<CR>", { silent = true })
-map({ "i" }, "<C-s>", "<C-o>:silent! w", { silent = true })
+map({ "i" }, "<C-s>", "<C-o>:silent! w<CR>", { silent = true })
 map({ "n" }, "<C-s>", ":silent! w<CR>", { silent = true })
 
 map({ "n", "v" }, "{", "{(")
