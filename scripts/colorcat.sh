@@ -16,11 +16,11 @@ fi | while read -r line; do
       hex=${BASH_REMATCH[1]}
       r=$((16#${hex:0:2}))
       g=$((16#${hex:2:2}))
-      b=$((16#${hex:4:2})) 
+      b=$((16#${hex:4:2}))
       truecolor="\033[48;2;${r};${g};${b}m"
       reset="\033[0m"
       colors="${colors}${truecolor}  ${reset} "
     fi
   done
-    echo -e "$line $colors" 
+    echo -e "$line $colors"
 done
