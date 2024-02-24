@@ -6,6 +6,6 @@ require("config")
 
 vim.filetype.add({
     extension = {
-        conf = "toml"
+        conf = "toml",
     }
 })

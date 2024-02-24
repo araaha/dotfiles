@@ -10,7 +10,8 @@ return {
             p.camel_case,
             p.upper_case,
             p.number,
-            p.hex_color
+            p.hex_color,
+            "\\v\\=+"
         )
 
         vim.keymap.set({ "n", "x", "o" }, "w", hops.forward_start)
