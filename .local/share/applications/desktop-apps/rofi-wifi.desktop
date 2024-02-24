@@ -3,6 +3,6 @@ Type=Application
 Name=Wifi
 Icon=wifi
 Terminal=false
-Exec=rofi-wifi.sh
+Exec=/home/araaha/.local/bin/rofi-wifi.sh
 Categories=ConsoleOnly;System;FileTools;FileManager
 MimeType=inode/directory;

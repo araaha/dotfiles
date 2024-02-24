@@ -3,6 +3,6 @@ Type=Application
 Name=St
 Icon=st
 Terminal=false
-Exec=st
+Exec=/home/araaha/.local/bin/st
 Categories=ConsoleOnly;System;FileTools;FileManager
 MimeType=inode/directory;
