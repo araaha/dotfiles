@@ -30,7 +30,7 @@ export SYSTEMD_PAGERSECURE=true
 
 
 export LESS='--tilde --save-marks --shift 2 -g --ignore-case --incsearch -j.5 -m -R -n --use-color -Dd+b$Du+r$DS-b$DE-r$DP+g'
-export MOAR='-no-linenumbers -no-statusbar -style algol_nu -wrap'
+export MOAR='-no-linenumbers -no-statusbar -style algol_nu -wrap -colors 16M'
 
 export LESSHISTFILE="$HOME/dotfiles/zsh/lesshst"
 export LESSHISTSIZE=1000
