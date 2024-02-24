@@ -15,7 +15,7 @@ mkdir -p "$HOME/.config/"
 mkdir -p "$HOME/Downloads/"
 mkdir -p "$HOME/Books/"
 mkdir -p "$HOME/Screenshots/"
-mkdir -p "$HOME/.local/share/themes" 
+mkdir -p "$HOME/.local/share/themes"
 mkdir -p "$HOME/.local/share/icons"
 
 ln -s "$dots/scripts/" "$HOME/"
@@ -39,9 +39,9 @@ git clone "https://github.com/SylEleuth/gruvbox-plus-icon-pack" ~/.local/share/i
 rm -rf ~/.local/share/icons/!(Gruvbox-Plus-Dark)
 
 #binaries
-sudo cp -rv "$dots/misc/binaries/"!(nsxiv|st-0.8.5) /usr/bin/
-sudo cp -v "$dots/misc/binaries/nsxiv/nsxiv" /usr/bin/
-sudo cp -v "$dots/misc/binaries/st-0.8.5/st" /usr/bin/
+sudo cp -frv "$dots/misc/binaries/"!(nsxiv|st-0.8.5) ~/.local/bin
+sudo cp -fv "$dots/misc/binaries/nsxiv/nsxiv" ~/.local/bin
+sudo cp -fv "$dots/misc/binaries/st-0.8.5/st" ~/.local/bin
 
 #/etc/
 sudo cp -v "$dots/etc/*" /etc/
