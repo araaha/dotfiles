@@ -381,7 +381,7 @@ local function get_groups()
         lCursor = { link = "Cursor" },
         Special = { link = "GruvboxOrange" },
         Comment = { fg = colors.gray, italic = config.italic.comments },
-        Todo = { fg = colors.bg0, bg = colors.yellow, bold = config.bold, italic = config.italic.comments },
+        Todo = { fg = colors.bg0, bg = colors.yellow, bold = config.bold, italic = false },
         Done = { fg = colors.orange, bold = config.bold, italic = config.italic.comments },
         Error = { fg = colors.red, bold = config.bold, reverse = config.inverse },
         Statement = { link = "GruvboxRed" },

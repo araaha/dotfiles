@@ -137,96 +137,96 @@ local function lineinfo()
         return ""
     end
     if vim.o.columns < 50 then
-        return "%#StatuslineAccent#" .. " %P "
+        return "%#StatuslineAccent#" .. " %l/%L "
     end
-    return "%#StatuslineAccent#" .. " %P %l:%c "
+    return "%#StatuslineAccent#" .. " %l/%L "
 end
 
 local function modified()
     return " %{&modified?\"\":\"\"}"
 end
 
--- local function lsp_progress()
---     if not rawget(vim, "lsp") or vim.lsp.status then
---         return ""
---     end
---
---     local Lsp = vim.lsp.util.get_progress_messages()[1]
---
---     if vim.o.columns < 70 or not Lsp or vim.bo.filetype == "go" then
---         return ""
---     end
---
---     if Lsp.done then
---         vim.defer_fn(function()
---             vim.cmd.redrawstatus()
---         end, 1000)
---     end
---
---     local msg = Lsp.message or ""
---     local percentage = Lsp.percentage or 0
---     local title = Lsp.title or ""
---     local spinners = { "", "󰪞", "󰪟", "󰪠", "󰪢", "󰪣", "󰪤", "󰪥" }
---     local ms = vim.loop.hrtime() / 1000000
---     local frame = math.floor(ms / 120) % #spinners
---     local content = string.format(" %%<%s %s %s (%s%%%%) ", spinners[frame + 1], title, msg, percentage)
---
---     return ("%#StatuslineAccentF#" .. content) or ""
--- end
---
--- local function lsp()
---     local count = {}
---     local levels = {
---         errors = "Error",
---         warnings = "Warn",
---         info = "Info",
---         hints = "Hint",
---     }
---
---     for k, level in pairs(levels) do
---         count[k] = vim.tbl_count(vim.diagnostic.get(0, { severity = level }))
---     end
---
---     local errors = ""
---     local warnings = ""
---     local hints = ""
---     local info = ""
---
---     if count["errors"] ~= 0 then
---         errors = string.format(" %s %d", "%#LspDiagnosticError# ", count["errors"])
---     end
---     if count["warnings"] ~= 0 then
---         warnings = string.format(" %s %d", "%#LspDiagnosticWarn# ", count["warnings"])
---     end
---     if count["hints"] ~= 0 then
---         hints = string.format(" %s %d", "%#LspDiagnosticHint# ", count["hints"])
---     end
---     if count["info"] ~= 0 then
---         info = string.format(" %s %d", "%#LspDiagnosticInfo# ", count["info"])
---     end
---
---     if vim.o.columns < 50 then
---         return ""
---     end
---     return string.format("%s%s%s%s ", errors, warnings, hints, info)
--- end
---
--- local function get_lsp_clients()
---     local clients = vim.lsp.buf_get_clients()
---     if next(clients) == nil then
---         return ""
---     end
---
---     if vim.o.columns < 50 then
---         return ""
---     end
---
---     local c = {}
---     for _, client in pairs(clients) do
---         table.insert(c, client.name)
---     end
---     return "%#LspClient#" .. string.format(" %s ", table.concat(c, "|"))
--- end
+local function lsp_progress()
+    if not rawget(vim, "lsp") or vim.lsp.status then
+        return ""
+    end
+
+    local Lsp = vim.lsp.util.get_progress_messages()[1]
+
+    if vim.o.columns < 70 or not Lsp or vim.bo.filetype == "go" then
+        return ""
+    end
+
+    if Lsp.done then
+        vim.defer_fn(function()
+            vim.cmd.redrawstatus()
+        end, 1000)
+    end
+
+    local msg = Lsp.message or ""
+    local percentage = Lsp.percentage or 0
+    local title = Lsp.title or ""
+    local spinners = { "", "󰪞", "󰪟", "󰪠", "󰪢", "󰪣", "󰪤", "󰪥" }
+    local ms = vim.loop.hrtime() / 1000000
+    local frame = math.floor(ms / 120) % #spinners
+    local content = string.format(" %%<%s %s %s (%s%%%%) ", spinners[frame + 1], title, msg, percentage)
+
+    return ("%#StatuslineAccentF#" .. content) or ""
+end
+
+local function lsp()
+    local count = {}
+    local levels = {
+        errors = "Error",
+        warnings = "Warn",
+        info = "Info",
+        hints = "Hint",
+    }
+
+    for k, level in pairs(levels) do
+        count[k] = vim.tbl_count(vim.diagnostic.get(0, { severity = level }))
+    end
+
+    local errors = ""
+    local warnings = ""
+    local hints = ""
+    local info = ""
+
+    if count["errors"] ~= 0 then
+        errors = string.format(" %s %d", "%#LspDiagnosticError# ", count["errors"])
+    end
+    if count["warnings"] ~= 0 then
+        warnings = string.format(" %s %d", "%#LspDiagnosticWarn# ", count["warnings"])
+    end
+    if count["hints"] ~= 0 then
+        hints = string.format(" %s %d", "%#LspDiagnosticHint# ", count["hints"])
+    end
+    if count["info"] ~= 0 then
+        info = string.format(" %s %d", "%#LspDiagnosticInfo# ", count["info"])
+    end
+
+    if vim.o.columns < 50 then
+        return ""
+    end
+    return string.format("%s%s%s%s ", errors, warnings, hints, info)
+end
+
+local function get_lsp_clients()
+    local clients = vim.lsp.buf_get_clients()
+    if next(clients) == nil then
+        return ""
+    end
+
+    if vim.o.columns < 50 then
+        return ""
+    end
+
+    local c = {}
+    for _, client in pairs(clients) do
+        table.insert(c, client.name)
+    end
+    return "%#LspClient#" .. string.format(" %s ", table.concat(c, "|"))
+end
 
 Statusline = {}
 
@@ -237,9 +237,9 @@ Statusline.active = function()
         filepath(),
         modified(),
         "%=",
-        -- lsp_progress(),
-        -- lsp(),
-        -- get_lsp_clients(),
+        lsp_progress(),
+        lsp(),
+        get_lsp_clients(),
         filetype(),
         lineinfo(),
     }

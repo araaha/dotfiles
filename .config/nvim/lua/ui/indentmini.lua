@@ -119,9 +119,4 @@ local function setup(opt)
     })
 end
 
-indentline()
 setup()
-
-return {
-    setup = setup,
-}
