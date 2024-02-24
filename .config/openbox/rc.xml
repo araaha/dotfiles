@@ -369,6 +369,16 @@
         <command>pulseaudio-ctl down 2</command>
       </action>
     </keybind>
+    <keybind key="XF86AudioPlay">
+      <action name="Execute">
+        <command>playerctl play-pause</command>
+      </action>
+    </keybind>
+    <keybind key="XF86AudioPause">
+      <action name="Execute">
+        <command>playerctl play-pause</command>
+      </action>
+    </keybind>
     <keybind key="XF86AudioMute">
       <action name="Execute">
         <command>pulseaudio-ctl mute</command>
