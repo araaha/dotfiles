@@ -3,7 +3,7 @@ Operation = Install
 Operation = Upgrade
 Type = Package
 Target = alacritty
-Target = sioyek
+Target = sioyek*
 Target = rofi*
 
 [Action]
