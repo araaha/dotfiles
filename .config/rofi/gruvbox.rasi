@@ -23,7 +23,7 @@ configuration {
 
 
 * {
-    border-colour:               #87afaf;
+    border-colour:               #83a598;
     handle-colour:               var(selected);
     background-colour:           var(background);
     foreground-colour:           var(foreground);
@@ -49,7 +49,7 @@ window {
     anchor:                      center;
     fullscreen:                  false;
     width:                       700px;
-    height:                      500px;
+    height:                      600px;
     x-offset:                    0px;
     y-offset:                    0px;
 
@@ -57,7 +57,7 @@ window {
     enabled:                     true;
     margin:                      0px;
     padding:                     0px;
-    border:                      5px solid;
+    border:                      0px solid;
     border-radius:               0px;
     border-color:                @border-colour;
     cursor:                      "default";
@@ -67,9 +67,9 @@ window {
 /*****----- Main Box -----*****/
 mainbox {
     enabled:                     true;
-    spacing:                     10px;
+    spacing:                     0px;
     margin:                      0px;
-    padding:                     10px 25px 0px 25px;
+    padding:                     0px 0px 0px 0px;
     border:                      0px solid;
     border-radius:               0px 0px 0px 0px;
     border-color:                @border-colour;
@@ -82,12 +82,12 @@ inputbar {
     enabled:                     true;
     spacing:                     16px;
     margin:                      0px;
-    padding:                     10px 0px 0px 10px;
+    padding:                     15px 0px 15px 15px;
     border:                      0px;
     border-radius:               0px;
     border-color:                @border-colour;
-    background-color:            transparent;
-    text-color:                  @foreground-colour;
+    background-color:            #83a598;
+    text-color:                  #242424;
     children:                    [ "prompt", "entry" ];
 }
 
@@ -120,7 +120,7 @@ entry {
 listview {
     enabled:                     true;
     columns:                     1;
-    lines:                       12;
+    lines:                       5;
     cycle:                       false;
     dynamic:                     true;
     scrollbar:                   false;
@@ -128,13 +128,13 @@ listview {
     reverse:                     false;
     fixed-height:                true;
     fixed-columns:               true;
-    
+
     spacing:                     0px;
     margin:                      0px;
     padding:                     0px 0px 0px 0px;
     border:                      0px solid;
     border-radius:               0px;
-    border-color:                @border-colour;
+    border-color:                #242424;
     background-color:            transparent;
     text-color:                  @foreground-colour;
     cursor:                      "default";
@@ -150,7 +150,7 @@ element {
     enabled:                     true;
     spacing:                     10px;
     margin:                      0px;
-    padding:                     5px;
+    padding:                     0px 10px 0px 10px;
     border:                      0px solid;
     border-radius:               0px;
     border-color:                @border-colour;
@@ -173,13 +173,13 @@ element selected.active {
 element-icon {
     background-color:            transparent;
     text-color:                  inherit;
-    size:                        50px;
+    size:                        107px;
     cursor:                      inherit;
 }
 element-text {
     background-color:            transparent;
     text-color:                  inherit;
-    highlight:                   bold;
+    highlight:                   #83a598;
     cursor:                      inherit;
     vertical-align:              0.5;
     horizontal-align:            0.0;
