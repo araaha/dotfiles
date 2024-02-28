@@ -32,6 +32,7 @@ map({ "n", "o" }, "u", "u:echo 'undo'<CR>", { silent = true })
 map({ "n", "o" }, "<C-r>", "<C-r>:echo 'redo'<CR>", { silent = true })
 
 map("n", "=l", function()
+    vim.diagnostic.setloclist({ open = false })
     local win = vim.api.nvim_get_current_win()
     local qf_winid = vim.fn.getloclist(win, { winid = 0 }).winid
     local action = qf_winid > 0 and "lclose" or "silent! lopen"
