@@ -1,6 +1,6 @@
 #!/bin/sh
 
-LOBSTER_VERSION="4.2.1"
+LOBSTER_VERSION="4.2.2"
 
 config_file="$HOME/.config/lobster/lobster_config.txt"
 lobster_editor=${VISUAL:-${EDITOR}}
@@ -97,7 +97,7 @@ trap cleanup EXIT INT TERM
             command -v "$dep" >/dev/null || exit 1
         done
     }
-    dep_ch "grep" "$sed" "curl" "fzf" "mpv" || true
+    dep_ch "grep" "$sed" "curl" "fzf" || true
     if [ "$use_external_menu" = "1" ]; then
         dep_ch "rofi" || true
     fi
@@ -328,24 +328,19 @@ EOF
         else
             json_key="sources"
             encrypted=$(printf "%s" "$json_data" | tr "{}" "\n" | $sed -nE "s_.*\"${json_key}\":\"([^\"]*)\".*_\1_p")
-
-						enikey=$(curl -s "http://zoro-keys.freeddns.org/keys/e${embed_type}/key.txt" | tr -d ' ' |
-                $sed 's/\[\([0-9]*\),\([0-9]*\)\]/\1-\2/g;s/\[//g;s/\]//g;s/,/ /g')
             encrypted_video_link=$(printf "%s" "$json_data" | tr "{|}" "\n" | $sed -nE "s_.*\"sources\":\"([^\"]*)\".*_\1_p" | head -1)
 
-            final_key=""
-            tmp_encrypted_video_link="$encrypted_video_link"
-            for key in $enikey; do
-                start="${key%-*}"
-                start=$((start + 1))
-                end="${key#*-}"
-                key=$(printf "%s" "$encrypted_video_link" | cut -c"$start-$end")
-                final_key="$final_key$key"
-                tmp_encrypted_video_link=$(printf "%s" "$tmp_encrypted_video_link" | $sed "s@$key@@g")
+            keys="$(curl -s "https://keys4.fun/" | tr -d '\n ' | tr ',' ' ' | sed -nE "s@.*\"rabbitstream\":\{\"keys\":\[([0-9 ]*)\].*@\1@p")"
+
+            keyString=""
+            for key in $keys; do
+                keyString="$keyString$(printf "\\$(printf %o $key)")"
             done
 
+            final_key=$(printf "%s" "$keyString" | base64)
+
             # ty @CoolnsX for helping me with figuring out how to implement aes in openssl
-            video_link=$(printf "%s" "$tmp_encrypted_video_link" | base64 -d |
+            video_link=$(printf "%s" "$encrypted_video_link" | base64 -d |
                 openssl enc -aes-256-cbc -d -md md5 -k "$final_key" 2>/dev/null | $sed -nE "s_.*\"file\":\"([^\"]*)\".*_\1_p")
 
             json_data=$(printf "%s" "$json_data" | $sed -e "s|${encrypted_video_link}|${video_link}|")
@@ -422,20 +417,20 @@ EOF
             vlc)
                 vlc "$video_link" --meta-title "$displayed_title"
                 ;;
-            mpv)
+            mpv|mpv.exe)
                 [ -z "$continue_choice" ] && check_history
                 if [ "$history" = 1 ]; then
                     if [ -n "$subs_links" ]; then
                         if [ -n "$resume_from" ]; then
-                            mpv --start="$resume_from" "$subs_arg"="$subs_links" --force-media-title="$displayed_title" "$video_link" 2>&1 | tee "$tmp_position"
+                            "$player" --start="$resume_from" "$subs_arg"="$subs_links" --force-media-title="$displayed_title" "$video_link" 2>&1 | tee "$tmp_position"
                         else
-                            mpv --sub-file="$subs_links" --force-media-title="$displayed_title" "$video_link" 2>&1 | tee "$tmp_position"
+                            "$player" --sub-file="$subs_links" --force-media-title="$displayed_title" "$video_link" 2>&1 | tee "$tmp_position"
                         fi
                     else
                         if [ -n "$resume_from" ]; then
-                            mpv --start="$resume_from" --force-media-title="$displayed_title" "$video_link" 2>&1 | tee "$tmp_position"
+                            "$player" --start="$resume_from" --force-media-title="$displayed_title" "$video_link" 2>&1 | tee "$tmp_position"
                         else
-                            mpv --force-media-title="$displayed_title" "$video_link" 2>&1 | tee "$tmp_position"
+                            "$player" --force-media-title="$displayed_title" "$video_link" 2>&1 | tee "$tmp_position"
                         fi
                     fi
 
@@ -446,19 +441,19 @@ EOF
                 else
                     if [ -n "$subs_links" ]; then
                         if [ "$quiet_output" = 1 ]; then
-                            [ -z "$resume_from" ] && mpv "$subs_arg"="$subs_links" --force-media-title="$displayed_title" "$video_link" >/dev/null 2>&1
-                            [ -n "$resume_from" ] && mpv "$subs_arg"="$subs_links" --start="$resume_from" --force-media-title="$displayed_title" "$video_link" >/dev/null 2>&1
+                            [ -z "$resume_from" ] && "$player" "$subs_arg"="$subs_links" --force-media-title="$displayed_title" "$video_link" >/dev/null 2>&1
+                            [ -n "$resume_from" ] && "$player" "$subs_arg"="$subs_links" --start="$resume_from" --force-media-title="$displayed_title" "$video_link" >/dev/null 2>&1
                         else
-                            [ -z "$resume_from" ] && mpv "$subs_arg"="$subs_links" --force-media-title="$displayed_title" "$video_link"
-                            [ -n "$resume_from" ] && mpv "$subs_arg"="$subs_links" --start="$resume_from" --force-media-title="$displayed_title" "$video_link"
+                            [ -z "$resume_from" ] && "$player" "$subs_arg"="$subs_links" --force-media-title="$displayed_title" "$video_link"
+                            [ -n "$resume_from" ] && "$player" "$subs_arg"="$subs_links" --start="$resume_from" --force-media-title="$displayed_title" "$video_link"
                         fi
                     else
                         if [ "$quiet_output" = 1 ]; then
-                            [ -z "$resume_from" ] && mpv --force-media-title="$displayed_title" "$video_link" >/dev/null 2>&1
-                            [ -n "$resume_from" ] && mpv --start="$resume_from" --force-media-title="$displayed_title" "$video_link" >/dev/null 2>&1
+                            [ -z "$resume_from" ] && "$player" --force-media-title="$displayed_title" "$video_link" >/dev/null 2>&1
+                            [ -n "$resume_from" ] && "$player" --start="$resume_from" --force-media-title="$displayed_title" "$video_link" >/dev/null 2>&1
                         else
-                            [ -z "$resume_from" ] && mpv --force-media-title="$displayed_title" "$video_link"
-                            [ -n "$resume_from" ] && mpv --start="$resume_from" --force-media-title="$displayed_title" "$video_link"
+                            [ -z "$resume_from" ] && "$player" --force-media-title="$displayed_title" "$video_link"
+                            [ -n "$resume_from" ] && "$player" --start="$resume_from" --force-media-title="$displayed_title" "$video_link"
                         fi
                     fi
                 fi
@@ -522,7 +517,7 @@ EOF
 
     download_video() {
         dir="$(printf "%s/%s" "$3" "$2" | tr -d ':')"
-        ffmpeg -loglevel error -stats -i "$1" -c copy "$dir".mp4
+        ffmpeg -loglevel error -stats -i "$1" -c copy "$dir.mp4"
     }
 
     loop() {
@@ -604,7 +599,7 @@ EOF
             download_thumbnails "$response" "3"
             select_desktop_entry ""
         else
-            [ "$use_external_menu" = "1" ] && choice=$(printf "%s" "$response" | rofi -dmenu -p "" -mesg "Choose a Movie or TV Show" -display-columns 1)
+            [ "$use_external_menu" = "1" ] && choice=$(printf "%s" "$response" | rofi -dmenu -i -p "" -mesg "Choose a Movie or TV Show" -display-columns 1)
             [ "$use_external_menu" = "0" ] && choice=$(printf "%s" "$response" | fzf --reverse --with-nth 1 -d "\t" --header "Choose a Movie or TV Show")
             title=$(printf "%s" "$choice" | $sed -nE "s@(.*) \((movie|tv)\).*@\1@p")
             media_type=$(printf "%s" "$choice" | $sed -nE "s@(.*) \((movie|tv)\).*@\2@p")
@@ -689,6 +684,15 @@ EOF
     }
 
     configuration
+    # Edge case for Windows, just exits with dep_ch's error message if it can't find mpv.exe either
+    if [ "$player" = "mpv" -a -z "$(command -v mpv)" ]; then
+        if [ -n "$(command -v mpv.exe)" ]; then
+            player="mpv.exe"
+        else
+            dep_ch mpv.exe
+        fi
+    fi
+
     [ "$debug" = 1 ] && set -x
     query=""
     while [ $# -gt 0 ]; do
