@@ -9,6 +9,7 @@ bindkey '^[x' accept-and-hold
 zle -N ofzf
 zle -N ofzf1
 bindkey -s '^O' '\C-k ofzf\n'
+
 bindkey -M vicmd '^O' 'ofzf1'
 bindkey -M vicmd 'D' kill-whole-line
 bindkey -M vicmd 'M' kill-line
