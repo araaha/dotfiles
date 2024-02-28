@@ -120,7 +120,7 @@
 
        use obconf if you want to change these without having to log out
        and back in -->
-    <number>6</number>
+    <number>4</number>
     <firstdesk>1</firstdesk>
     <names>
       <!-- set names up here if you want to, like this:
@@ -225,7 +225,7 @@
     </keybind>
     <keybind key="C-A-q">
       <action name="Execute">
-        <command>rofi -show calc -modi calc -no-show-match -no-sort -terse -no-bold -calc-command "echo -n '{result}' | xclip -r -sel clip" -kb-secondary-copy "" -kb-accept-entry "Control+c" -theme-str '#inputbar { spacing: 16px; padding: 0px 0px 0px 0px;}'</command>
+        <command>rofi -no-show-icons -show calc -modi calc -no-show-match -no-sort -terse -no-bold -calc-command "echo -n '{result}' | xclip -r -sel clip" -kb-secondary-copy "" -kb-accept-entry "Control+c" -theme-str '#inputbar { spacing: 16px; padding: 0px 0px 0px 0px;}'</command>
       </action>
     </keybind>
     <keybind key="C-A-c">
