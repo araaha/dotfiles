@@ -72,6 +72,8 @@ Gruvbox.config = {
         IncSearch = { bg = "#D8A657", fg = "#242424" },
         Visual = { bg = "#3F3F3F", fg = "None" },
 
+        CursorLine = { bg = "#242424", fg = "None" },
+
         Pmenu = { fg = "None", bg = "None" },
         PmenuSel = { fg = "#E6DBAF", bg = "#7C6F64" },
         PmenuSbar = { fg = "None", bg = "None" },

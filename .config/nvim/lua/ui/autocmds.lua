@@ -22,23 +22,16 @@ vim.defer_fn(function()
 end, 10)
 
 au({ "BufReadPost" }, {
-    callback = function(args)
-        local valid_line = vim.fn.line([['"]]) >= 1 and vim.fn.line([['"]]) <= vim.fn.line("$")
-        local not_commit = vim.b[args.buf].filetype ~= "commit"
-
-        if valid_line and not_commit then
-            vim.cmd([[normal! g`"zz]])
-        end
-    end,
+    callback = remember,
 })
 
-au({ "BufEnter" }, {
+au({ "CursorMoved" }, {
     callback = function()
         vim.cmd("norm! zz")
     end
 })
 
-vim.api.nvim_create_autocmd("BufEnter", {
+au({ "BufEnter" }, {
     callback = function()
         if vim.bo.filetype == "help" then
             vim.cmd.only()
@@ -50,28 +43,15 @@ vim.api.nvim_create_autocmd("BufEnter", {
     end,
 })
 
-vim.api.nvim_create_autocmd("Filetype", {
-    pattern = "go",
-    callback = function()
-        vim.opt_local.list = false
-    end
-})
-
-vim.api.nvim_create_autocmd("Filetype", {
+au({ "Filetype" }, {
     pattern = "qf",
     callback = function()
         vim.opt_local.wrap = true
     end
 })
 
-vim.api.nvim_create_autocmd("TermOpen", {
+au({ "TermOpen" }, {
     callback = function()
         vim.cmd("startinsert")
-    end
-})
-
-vim.api.nvim_create_autocmd("CursorMoved", {
-    callback = function()
-        vim.cmd("norm! zz")
     end
 })
