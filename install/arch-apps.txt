@@ -33,8 +33,7 @@ gzip
 hyperfine
 ifuse
 imagemagick
-kdeconnect
-kolourpaint
+krita
 lazygit
 lf
 libnotify
