@@ -23,6 +23,7 @@ return {
                 ["g."] = "actions.toggle_hidden",
                 ["g\\"] = "actions.toggle_trash",
             },
+            skip_confirm_for_simple_edits = true,
         })
     end
 }
