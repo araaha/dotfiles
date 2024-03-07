@@ -55,3 +55,15 @@ au({ "TermOpen" }, {
         vim.cmd("startinsert")
     end
 })
+
+au({ "CmdLineEnter" }, {
+    callback = function()
+        vim.opt.smartcase = false
+    end
+})
+
+au({ "CmdLineLeave" }, {
+    callback = function()
+        vim.opt.smartcase = true
+    end
+})
