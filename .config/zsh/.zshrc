@@ -7,11 +7,11 @@ fi
 source "$ZSH/plugins/zsh-defer/zsh-defer.plugin.zsh"
 
 #zvm must be above zsh-vi-mode
-source "$ZSH/configs/zvm.zsh" 
+source "$ZSH/configs/zvm.zsh"
 source "$ZSH/plugins/zsh-vi-mode/zsh-vi-mode.zsh"
 
 zvm_after_init_commands+=('source $ZSH/configs/bindkeys.zsh')
-zvm_after_init_commands+=('source $ZSH/plugins/fzf.zsh') 
+zvm_after_init_commands+=('source $ZSH/plugins/fzf.zsh')
 zvm_after_init_commands+=('[[ -t 0 && $- = *i* ]] && stty -ixon')
 
 source "$ZSH/configs/prompt.zsh"
