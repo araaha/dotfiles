@@ -1,5 +1,5 @@
 local opts = {
-    modes = { insert = true, command = false, terminal = false },
+    modes = { insert = true, command = true, terminal = false },
 
     mappings = {
         ['('] = { action = 'open', pair = '()', neigh_pattern = '[^\\].' },
@@ -13,18 +13,24 @@ local opts = {
         ['>'] = { action = 'close', pair = '<>', neigh_pattern = '[^\\].' },
 
         ['"'] = { action = 'closeopen', pair = '""', neigh_pattern = '[^\\].', register = { cr = true } },
-        ["'"] = { action = 'closeopen', pair = "''", neigh_pattern = '[^%a\\].', register = { cr = false } },
-        ['`'] = { action = 'closeopen', pair = '``', neigh_pattern = '[^\\].', register = { cr = false } },
+        ["'"] = { action = 'closeopen', pair = "''", neigh_pattern = '[^\\].', register = { cr = false } },
     },
 }
 
 return {
     "echasnovski/mini.pairs",
     version = false,
-    lazy    = true,
-    event   = "InsertEnter",
+    keys    = {
+        { "'", mode = 'i' },
+        { '"', mode = 'i' },
+        { '{', mode = 'i' },
+        { '}', mode = 'i' },
+        { '(', mode = 'i' },
+        { ')', mode = 'i' },
+        { '[', mode = 'i' },
+        { ']', mode = 'i' },
+        { '<', mode = 'i' },
+        { '>', mode = 'i' }
+    },
     opts    = opts,
-    config  = function()
-        require("mini.pairs").setup(opts)
-    end,
 }
