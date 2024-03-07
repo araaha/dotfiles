@@ -99,11 +99,6 @@ key    = "V"
 mods   = "Control"
 
 [[keyboard.bindings]]
-chars = "\u001Bh"
-key   = "M"
-mods  = "Control"
-
-[[keyboard.bindings]]
 chars = "\u0017"
 key   = "Back"
 mods  = "Control"
