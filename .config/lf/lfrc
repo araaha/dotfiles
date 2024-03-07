@@ -164,6 +164,14 @@ cmd parent-dir ${{
 cmd open-with $"$@" $fx
 map o
 map o push :open-with<space>
+
+cmd find_fzf ${{
+    res="$(rg --color=never --files --hidden --follow --no-messages | fzf || true)"
+    if [ -n "$res" ]
+    then
+        nvim "$res"
+    fi
+}}
 map <c-o> :find_fzf
 
 cmd garbage_clear ${{
@@ -254,7 +262,7 @@ on-cd
 cmd fzf_z ${{
     sel="$(zoxide query -l | fzf --reverse  +s || true)"
     if [ -d "$sel" ]; then
-        cmd="cd" 
+        cmd="cd"
     else
         cmd="select"
     fi
@@ -290,6 +298,7 @@ map P :link
 
 map r
 map rm delete; reload
+
 map t
 
 map i
