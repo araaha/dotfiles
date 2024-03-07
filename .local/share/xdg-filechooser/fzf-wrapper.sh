@@ -18,6 +18,7 @@
 # The script bashould print the selected paths to the output path (argument #5),
 # one path per line.
 # If nothing is printed, then the operation is assumed to have been canceled.
+export FZF_DEFAULT_OPTS="--no-scrollbar --border=none --no-separator  --tiebreak=length,end,chunk --padding 0% --margin 0% --multi --reverse --preview-window=border-none --color=bg+:-1,spinner:#fb4934,hl:#928374:bold,fg:#8abeb7,header:#928374,info:#8ec07c,pointer:#fb4934,marker:#fb4934,fg+:regular:reverse:#83a598,prompt:#9cd365,hl+:reverse:reverse:#83a598,gutter:-1,query:regular,border:#87afaf --bind home:first --bind end:last --bind ctrl-p:up --bind ctrl-d:half-page-down --bind ctrl-u:half-page-up --bind 'ctrl-l:become(lf {})' --bind 'ctrl-y:offset-up' --bind 'ctrl-e:offset-down' --bind 'ctrl-a:select-all'"
 
 multiple="$1"
 directory="$2"
@@ -28,13 +29,13 @@ out="$5"
 if [ "$save" = "1" ]; then
     cmd="dialog --yesno \"Save to $path ?\" 0 0 && ( printf '%s' \"$path\" > $out ) || ( printf '%s' 'Input path to write to: ' && read input && printf '%s' \"\$input\" > $out)"
 elif [ "$directory" = "1" ]; then
-    cmd="fd -I -a --base-directory=$HOME --exclude='*/Books/*' --exclude='*/ok/*' --exclude='*/WINTER2023/*' --exclude='*/micro/buffers/*' --exclude='*/watch_later/*' --exclude='*/icons/*' | fzf-tmux -p 100%,100% -m --bind ctrl-d:abort --bind ctrl-d:abort --layout=reverse --padding 0% --color=bg+:-1,spinner:#fb4934,hl:#928374:bold,fg:#8abeb7,header:#928374,info:#8ec07c,pointer:#fb4934,marker:#fb4934,fg+:regular:reverse:#83a598,prompt:#9cd365,hl+:reverse:reverse:#83a598,gutter:-1,query:regular,border:#87afaf --margin 0% --border=none --no-separator --prompt 'Select files > ' > $out"
+    cmd="rg --files ~/ | fzf-tmux -p 100%,100% $FZF_DEFAULT_OPTS --prompt 'Select files > ' > $out"
 else
-    cmd="fd -I -a --base-directory=$HOME --exclude='*/Books/*' --exclude='*/Books/*' --exclude='*/ok/*' --exclude='*/WINTER2023/*' --exclude='*/micro/buffers/*' --exclude='*/watch_later/*' --exclude='*/icons/*'| fzf-tmux -p 100%,100% +m --bind ctrl-d:abort --bind ctrl-d:abort --layout=reverse --padding 0% --color=bg+:-1,spinner:#fb4934,hl:#928374:bold,fg:#8abeb7,header:#928374,info:#8ec07c,pointer:#fb4934,marker:#fb4934,fg+:regular:reverse:#83a598,prompt:#9cd365,hl+:reverse:reverse:#83a598,gutter:-1,query:regular,border:#87afaf --margin 0%  --border=none  --no-separator --prompt 'Select file > ' > $out"
+    cmd="rg --files ~/ | fzf-tmux -p 100%,100% +m $FZF_DEFAULT_OPTS --prompt 'Select file > ' > $out"
 fi
 
 
-st -g 100x20+370+300 -e tmux new-session -E "$cmd"
+~/.local/bin/st -T "Filepicker" -g 100x20+370+300 -e bash -ic "$cmd"
 
 
 if ! [ -s "$out" ]; then
