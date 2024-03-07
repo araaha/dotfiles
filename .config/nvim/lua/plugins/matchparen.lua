@@ -7,7 +7,5 @@ return {
     version = false,
     lazy    = true,
     event   = "InsertEnter",
-    config  = function()
-        require("matchparen").setup(opts)
-    end,
+    opts    = opts
 }

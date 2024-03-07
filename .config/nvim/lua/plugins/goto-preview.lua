@@ -25,7 +25,4 @@ return {
         { "X",  "<cmd>lua require('goto-preview').close_all_win()<CR>",           mode = "n" }
     },
     opts    = opts,
-    config  = function()
-        require("goto-preview").setup(opts)
-    end,
 }

@@ -8,8 +8,5 @@ return {
     version = false,
     lazy    = true,
     keys    = { "f", "t", "F", "T", ";", "," },
-    config  = function()
-        local ft = require("improved-ft")
-        ft.setup(opts)
-    end,
+    opts    = opts
 }

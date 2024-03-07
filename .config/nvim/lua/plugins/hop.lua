@@ -16,8 +16,4 @@ return {
         },
     },
     opts = opts,
-    config = function()
-        local hop = require("hop")
-        hop.setup(opts)
-    end,
 }

@@ -8,7 +8,4 @@ return {
         "ds"
     },
     opts    = {},
-    config  = function(opts)
-        require("nvim-surround").setup(opts)
-    end
 }

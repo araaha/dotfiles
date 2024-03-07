@@ -6,7 +6,5 @@ return {
         { "gc", mode = { "n", "v", "o" } },
         { "gb", mode = { "n", "v", "o" } }
     },
-    config  = function()
-        require("Comment").setup()
-    end,
+    opts    = {}
 }

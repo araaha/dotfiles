@@ -32,8 +32,4 @@ return {
     version = false,
     ft = "qf",
     opts = opts,
-    config = function()
-        local bqf = require("bqf")
-        bqf.setup(opts)
-    end
 }

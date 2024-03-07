@@ -12,7 +12,4 @@ return {
     version = false,
     keys    = { "<C-a>", "<C-x>" },
     opts    = opts,
-    config  = function()
-        require("boole").setup(opts)
-    end,
 }
