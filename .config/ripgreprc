@@ -1,18 +1,11 @@
---glob=!**/.git/**
+--glob=!.git
 --glob=!**/google-chrome/**
 --glob=!**/chromium/**
---glob=!**/GIMP/**
 --glob=!**/npm/**
---glob=!**/.cache/**
---glob=!**/.vscode/**
---glob=!**/Code/**
---glob=!**/Cache/**
---glob=!**/CachedData/**
---glob=!**/Service Worker/**
+--glob=!.cache/**
 --glob=!**/logs/**
---glob=!**/site-packages/**
---glob=!**/.local/state/**
---glob=!**/.local/share/themes/**
+--glob=!**/state/**
+--glob=!**/themes/**
 --glob=!**/icons/**
 --glob=!**/ok/**
 --glob=!**.fdb_latexmk
@@ -22,12 +15,10 @@
 --glob=!**.aux
 --glob=!**.gpg
 --glob=!**/.pki/**
---glob=!**/.local/share/.gnupg/**
---glob=!**/bypass-paywalls-**/**
+--glob=!**/.gnupg/**
 --glob=!**/.mozilla/**
 --glob=!**/pkg/mod/**
 --smart-case
 --hidden
 --color=always
 --heading
---colors=path:fg:yellow
