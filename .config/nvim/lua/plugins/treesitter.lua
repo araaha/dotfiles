@@ -31,6 +31,5 @@ return {
     config  = function()
         require("nvim-treesitter.configs").setup(opts)
         vim.treesitter.language.register("bash", "zsh")
-        vim.cmd("syntax on")
     end,
 }
