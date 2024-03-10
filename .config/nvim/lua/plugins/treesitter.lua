@@ -30,6 +30,5 @@ return {
     event   = "VeryLazy",
     config  = function()
         require("nvim-treesitter.configs").setup(opts)
-        vim.treesitter.language.register("bash", "zsh")
     end,
 }
