@@ -29,13 +29,15 @@ out="$5"
 if [ "$save" = "1" ]; then
     cmd="dialog --yesno \"Save to $path ?\" 0 0 && ( printf '%s' \"$path\" > $out ) || ( printf '%s' 'Input path to write to: ' && read input && printf '%s' \"\$input\" > $out)"
 elif [ "$directory" = "1" ]; then
+    cmd="rg --files ~/ | fzf-tmux -p 100%,100% $FZF_DEFAULT_OPTS --prompt 'Select directories > ' > $out"
+elif [ "$multiple" = "1" ]; then
     cmd="rg --files ~/ | fzf-tmux -p 100%,100% $FZF_DEFAULT_OPTS --prompt 'Select files > ' > $out"
 else
     cmd="rg --files ~/ | fzf-tmux -p 100%,100% +m $FZF_DEFAULT_OPTS --prompt 'Select file > ' > $out"
 fi
 
 
-~/.local/bin/st -T "Filepicker" -g 100x20+370+300 -e bash -ic "$cmd"
+~/.local/bin/st -T "Filepicker" -g 100x20+370+300 -e bash -c "$cmd"
 
 
 if ! [ -s "$out" ]; then
