@@ -27,7 +27,7 @@ path="$4"
 out="$5"
 
 if [ "$save" = "1" ]; then
-    cmd="dialog --yesno \"Save to $path ?\" 0 0 && ( printf '%s' \"$path\" > $out ) || ( printf '%s' 'Input path to write to: ' && read input && printf '%s' \"\$input\" > $out)"
+    cmd="dialog --yesno \"Save to $path ?\" 0 0 && ( printf '%s' \"$path\" > $out )"
 elif [ "$directory" = "1" ]; then
     cmd="rg --files ~/ | fzf-tmux -p 100%,100% $FZF_DEFAULT_OPTS --prompt 'Select directories > ' > $out"
 elif [ "$multiple" = "1" ]; then
