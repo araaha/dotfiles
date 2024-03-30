@@ -2,23 +2,23 @@
 
 _arguments \
          '*:file:_files' \
-		{-h,--help}'[.]' \
-		{-i,--ignore-dirs}'[paths to ignore (separated by comma).]' \
-		{-I,--ignore-dirs-pattern}'[ignore (separated by comma).]' \
-		{-X,--ignore-from}'[ignore from file.]' \
-		{-l,--log-file}'[.]' \
-		{-m,--max-cores}'[.]' \
-		{-c,--no-color}'[.]' \
-		{-x,--no-cross}'[boundaries.]' \
-		{-H,--no-hidden}'[(beginning with dot).]' \
-		{-n,--non-interactive}'[interactive mode.]' \
-		{-p,--no-progress}'[non-interactive mode.]' \
-		{-s,--summarize}'[non-interactive mode.]' \
-		{-d,--show-disks}'[.]' \
-		{-a,--show-apparent-size}'[.]' \
-		'--si[instead of binary prefixes (KiB, MiB, GiB).]' \
-		{-f,-input-file}'[If the file is \[dq\]-\[dq\], read from standard input.]' \
-		{-o,-output-file}'[JSON. If the file is \[dq\]-\[dq\], write to standard output.]' \
-		{-g,--const-gc}'[collection during analysis with constant level set by GOGC.]' \
-		'--enable-profiling[and provide it on http://localhost:6060/debug/pprof/.]' \
-		{-v,--version}'[FILE FLAGS.]'
+        {-h,--help}'[.]' \
+        {-i,--ignore-dirs}'[paths to ignore (separated by comma).]' \
+        {-I,--ignore-dirs-pattern}'[ignore (separated by comma).]' \
+        {-X,--ignore-from}'[ignore from file.]' \
+        {-l,--log-file}'[.]' \
+        {-m,--max-cores}'[.]' \
+        {-c,--no-color}'[.]' \
+        {-x,--no-cross}'[boundaries.]' \
+        {-H,--no-hidden}'[(beginning with dot).]' \
+        {-n,--non-interactive}'[interactive mode.]' \
+        {-p,--no-progress}'[non-interactive mode.]' \
+        {-s,--summarize}'[non-interactive mode.]' \
+        {-d,--show-disks}'[.]' \
+        {-a,--show-apparent-size}'[.]' \
+        '--si[instead of binary prefixes (KiB, MiB, GiB).]' \
+        {-f,-input-file}'[If the file is \[dq\]-\[dq\], read from standard input.]' \
+        {-o,-output-file}'[JSON. If the file is \[dq\]-\[dq\], write to standard output.]' \
+        {-g,--const-gc}'[collection during analysis with constant level set by GOGC.]' \
+        '--enable-profiling[and provide it on http://localhost:6060/debug/pprof/.]' \
+        {-v,--version}'[FILE FLAGS.]'

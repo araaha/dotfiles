@@ -2,31 +2,31 @@
 
 _arguments \
          '*:file:_files' \
-		{-w,--width}'[Specify a width for a created window as a number or percentage.]' \
-		{-h,--height}'[Specify a height for a created window as a number or percentage.]' \
-		{-x,--x-offset}'[Specify the x position for a created window as a number or percentage.]' \
-		{-y,--y-offset}'[Specify the y position for a created window as a number or percentage.]' \
-		{-s,--session}'[Specify a tmuxinator, tmuxifier, or tmux session name to start.]' \
-		{-n,--number}'[Specify a number (or any extra text) to differentiate between dropdowns of th…]' \
-		{-c,--pre-create-hook}'[Specify a command to execute before first creating or initializing a dropdown…]' \
-		{-C,--post-create-hook}'[Specify a command to execute after first creating or initializing a dropdown …]' \
-		{-p,--pre-map-hook}'[Specify a command to execute before showing/mapping a dropdown.]' \
-		{-P,--post-map-hook}'[Specify a command to execute after showing/mapping a dropdown.]' \
-		{-u,--pre-unmap-hook}'[Specify a command to execute before hiding/unmapping a dropdown.]' \
-		{-U,--post-unmap-hook}'[Specify a command to execute after hiding/unmapping a dropdown.]' \
-		{-l,--pre-map-float-command}'[Specify a command execute before showing/mapping a dropdown in order to float…]' \
-		{-L,--post-map-float-command}'[Specify a command execute after showing/mapping a dropdown in order to float …]' \
-		{-d,--decoration-fix}'[Specify a window decoration/border size in the form <x decoration size>x<y de…]' \
-		{-S,--no-subtract-when-same}'[This option is a more complicated companion to -d that is also unlikely to be…]' \
-		{-i,--is-floating}'[Specify a command that will determine whether the current window is floating …]' \
-		{-f,--program-flags}'[NOTE: Using this flag is deprecated; it may be removed in the future.]' \
-		{-a,--auto-detect-wm}'[If there are available settings for the detected window manager for the -l, -…]' \
-		{-m,--monitor-aware}'[This option only applies for dropdowns (not auto-hiding and auto-showing).]' \
-		{-t,--pointer-monitor-detection}'[Use mouse pointer location for detecting which monitor is the current one so …]' \
-		{-A,--activate}'[Always activate/show the dropdown if it is not currently focused.]' \
-		'--monitor[Specify the monitor to base geometry calculations on when using -m / --monito…]' \
-		'--wm[Specify the window manager name (which determines the default settings when -…]' \
-		'--class[Providing this option lets tdrop know what the class (or classname) of the wi…]' \
-		'--name[This option only applies for dropdowns (not auto-hiding and auto-showing).]' \
-		'--clear[Used to clear a saved window id for the given program or '"'"'current'"'"' instead of…]' \
-		'--no-cancel[Specifies that manually re-showing an auto-hidden window with tdrop should no…]'
+        {-w,--width}'[Specify a width for a created window as a number or percentage.]' \
+        {-h,--height}'[Specify a height for a created window as a number or percentage.]' \
+        {-x,--x-offset}'[Specify the x position for a created window as a number or percentage.]' \
+        {-y,--y-offset}'[Specify the y position for a created window as a number or percentage.]' \
+        {-s,--session}'[Specify a tmuxinator, tmuxifier, or tmux session name to start.]' \
+        {-n,--number}'[Specify a number (or any extra text) to differentiate between dropdowns of th…]' \
+        {-c,--pre-create-hook}'[Specify a command to execute before first creating or initializing a dropdown…]' \
+        {-C,--post-create-hook}'[Specify a command to execute after first creating or initializing a dropdown …]' \
+        {-p,--pre-map-hook}'[Specify a command to execute before showing/mapping a dropdown.]' \
+        {-P,--post-map-hook}'[Specify a command to execute after showing/mapping a dropdown.]' \
+        {-u,--pre-unmap-hook}'[Specify a command to execute before hiding/unmapping a dropdown.]' \
+        {-U,--post-unmap-hook}'[Specify a command to execute after hiding/unmapping a dropdown.]' \
+        {-l,--pre-map-float-command}'[Specify a command execute before showing/mapping a dropdown in order to float…]' \
+        {-L,--post-map-float-command}'[Specify a command execute after showing/mapping a dropdown in order to float …]' \
+        {-d,--decoration-fix}'[Specify a window decoration/border size in the form <x decoration size>x<y de…]' \
+        {-S,--no-subtract-when-same}'[This option is a more complicated companion to -d that is also unlikely to be…]' \
+        {-i,--is-floating}'[Specify a command that will determine whether the current window is floating …]' \
+        {-f,--program-flags}'[NOTE: Using this flag is deprecated; it may be removed in the future.]' \
+        {-a,--auto-detect-wm}'[If there are available settings for the detected window manager for the -l, -…]' \
+        {-m,--monitor-aware}'[This option only applies for dropdowns (not auto-hiding and auto-showing).]' \
+        {-t,--pointer-monitor-detection}'[Use mouse pointer location for detecting which monitor is the current one so …]' \
+        {-A,--activate}'[Always activate/show the dropdown if it is not currently focused.]' \
+        '--monitor[Specify the monitor to base geometry calculations on when using -m / --monito…]' \
+        '--wm[Specify the window manager name (which determines the default settings when -…]' \
+        '--class[Providing this option lets tdrop know what the class (or classname) of the wi…]' \
+        '--name[This option only applies for dropdowns (not auto-hiding and auto-showing).]' \
+        '--clear[Used to clear a saved window id for the given program or '"'"'current'"'"' instead of…]' \
+        '--no-cancel[Specifies that manually re-showing an auto-hidden window with tdrop should no…]'

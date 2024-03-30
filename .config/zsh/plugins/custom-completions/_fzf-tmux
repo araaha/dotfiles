@@ -2,12 +2,12 @@
 
 _arguments \
          '*:file:_files' \
-		'-p[WIDTH, HEIGHT]' \
-		'-w[WIDTH]' \
-		'-h[HEIGHT]' \
-		'-x[COL]' \
-		'-y[ROW]' \
-		'-u[Split above (up).]' \
-		'-d[Split below (down).]' \
-		'-l[Split left.]' \
-		'-r[Split right.]'
+        '-p[WIDTH, HEIGHT]' \
+        '-w[WIDTH]' \
+        '-h[HEIGHT]' \
+        '-x[COL]' \
+        '-y[ROW]' \
+        '-u[Split above (up).]' \
+        '-d[Split below (down).]' \
+        '-l[Split left.]' \
+        '-r[Split right.]'

@@ -2,28 +2,28 @@
 
 _arguments \
          '*:file:_files' \
-		{-A,--framerate}'[Play animations with a constant frame rate set to R FRAMERATE ]' \
-		{-a,--animate}'[Play animations of multi-frame images]' \
-		{-b,--no-bar}'[Do not show statusbar at the bottom of the window]' \
-		{-c,--clean-cache}'[Remove all orphaned cache files from the thumbnail cache directory and exit]' \
-		{-e,--embed}'[Embed nsxiv'"'"'s window into window whose ID is R WID ]' \
-		{-f,--fullscreen}'[Start in fullscreen mode]' \
-		{-G,--gamma}'[Set image gamma to GAMMA (-32. 32)]' \
-		{-g,--geometry}'[Set window position and size]' \
-		{-h,--help}'[Print brief usage information to standard output and exit]' \
-		{-i,--stdin}'[Read names of files to open from standard input. Also done if FILE is '"'"'-'"'"']' \
-		{-N,--class}'[Set the resource name (WM_CLASS) of nsxiv'"'"'s X window to NAME]' \
-		{-n,--start-at}'[Start at picture number NUM]' \
-		{-o,--stdout}'[Write list of all marked files to standard output when quitting]' \
-		{-p,--private}'[Enable private mode, in which nsxiv does not write any cache or temporary fil…]' \
-		{-q,--quiet}'[Be quiet, and disable warnings to standard error stream]' \
-		{-r,--recursive}'[Search the given directories recursively for images to view]' \
-		{-S,--ss-delay}'[Start in slideshow mode. Set the delay between images to DELAY seconds]' \
-		{-s,--scale-mode}'[Set scale mode according to MODE character]' \
-		{-t,--thumbnail}'[Start in thumbnail mode]' \
-		{-v,--version}'[Print version information to standard output and exit]' \
-		{-Z,--zoom-100}'[The same as '"'"'-z 100'"'"']' \
-		{-z,--zoom}'[Set zoom level to ZOOM percent]' \
-		{-0,--null}'[Use NULL-separator]' \
-		'--anti-alias[Enables anti-aliasing, when given no as an argument, disables it instead]' \
-		'--alpha-layer[Enables checkerboard background for alpha layer, when given no as an argument…]' \
+        {-A,--framerate}'[Play animations with a constant frame rate set to R FRAMERATE ]' \
+        {-a,--animate}'[Play animations of multi-frame images]' \
+        {-b,--no-bar}'[Do not show statusbar at the bottom of the window]' \
+        {-c,--clean-cache}'[Remove all orphaned cache files from the thumbnail cache directory and exit]' \
+        {-e,--embed}'[Embed nsxiv'"'"'s window into window whose ID is R WID ]' \
+        {-f,--fullscreen}'[Start in fullscreen mode]' \
+        {-G,--gamma}'[Set image gamma to GAMMA (-32. 32)]' \
+        {-g,--geometry}'[Set window position and size]' \
+        {-h,--help}'[Print brief usage information to standard output and exit]' \
+        {-i,--stdin}'[Read names of files to open from standard input. Also done if FILE is '"'"'-'"'"']' \
+        {-N,--class}'[Set the resource name (WM_CLASS) of nsxiv'"'"'s X window to NAME]' \
+        {-n,--start-at}'[Start at picture number NUM]' \
+        {-o,--stdout}'[Write list of all marked files to standard output when quitting]' \
+        {-p,--private}'[Enable private mode, in which nsxiv does not write any cache or temporary fil…]' \
+        {-q,--quiet}'[Be quiet, and disable warnings to standard error stream]' \
+        {-r,--recursive}'[Search the given directories recursively for images to view]' \
+        {-S,--ss-delay}'[Start in slideshow mode. Set the delay between images to DELAY seconds]' \
+        {-s,--scale-mode}'[Set scale mode according to MODE character]' \
+        {-t,--thumbnail}'[Start in thumbnail mode]' \
+        {-v,--version}'[Print version information to standard output and exit]' \
+        {-Z,--zoom-100}'[The same as '"'"'-z 100'"'"']' \
+        {-z,--zoom}'[Set zoom level to ZOOM percent]' \
+        {-0,--null}'[Use NULL-separator]' \
+        '--anti-alias[Enables anti-aliasing, when given no as an argument, disables it instead]' \
+        '--alpha-layer[Enables checkerboard background for alpha layer, when given no as an argument…]' \

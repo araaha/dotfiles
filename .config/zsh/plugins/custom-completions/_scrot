@@ -2,27 +2,27 @@
 
 _arguments \
          '*:file:_files' \
-		{-a,--autoselect}'[Non-interactively choose a rectangle starting at position X,Y and of W by H r…]' \
-		{-b,--border}'[When selecting a window, grab the WM'"'"'s border too.]' \
-		{-C,--class}'[NAME is a window class name. Associative with -k.]' \
-		{-c,--count}'[Display a countdown when used with -d.]' \
-		{-D,--display}'[DISPLAY is the display to use; see X(7).]' \
-		{-d,--delay}'[Wait SEC seconds before taking a shot.]' \
-		{-e,--exec}'[Execute CMD on the saved image.]' \
-		{-F,--file}'[File name. See SPECIAL STRINGS.]' \
-		{-f,--freeze}'[Freeze the screen when -s is used.]' \
-		{-h,--help}'[Display help and exit.]' \
-		{-i,--ignorekeyboard}'[Don'"'"'t exit for keyboard input. ESC still exits.]' \
-		{-k,--stack}'[Capture stack/overlapped windows and join them.]' \
-		{-l,--line}'[STYLE indicates the style of the line when the -s option is used; see SELECTI…]' \
-		{-m,--multidisp}'[For multiple heads, screenshot all of them in order.]' \
-		{-n,--note}'[OPTS is a collection of options which specify notes to bake into the image.]' \
-		{-o,--overwrite}'[By default scrot does not overwrite the output FILE, use this option to enabl…]' \
-		{-p,--pointer}'[Capture the mouse pointer.]' \
-		{-q,--quality}'[NUM must be between 1 and 100.]' \
-		{-S,--script}'[CMD is an imlib2 script.]' \
-		{-s,--select}'[Interactively select a window or rectangle with the mouse, use the arrow keys…]' \
-		{-t,--thumb}'[Also generate a thumbnail.]' \
-		{-u,--focused}'[Use the currently focused window.]' \
-		{-v,--version}'[Output version information and exit.]' \
-		{-z,--silent}'[Prevent beeping.]'
+        {-a,--autoselect}'[Non-interactively choose a rectangle starting at position X,Y and of W by H r…]' \
+        {-b,--border}'[When selecting a window, grab the WM'"'"'s border too.]' \
+        {-C,--class}'[NAME is a window class name. Associative with -k.]' \
+        {-c,--count}'[Display a countdown when used with -d.]' \
+        {-D,--display}'[DISPLAY is the display to use; see X(7).]' \
+        {-d,--delay}'[Wait SEC seconds before taking a shot.]' \
+        {-e,--exec}'[Execute CMD on the saved image.]' \
+        {-F,--file}'[File name. See SPECIAL STRINGS.]' \
+        {-f,--freeze}'[Freeze the screen when -s is used.]' \
+        {-h,--help}'[Display help and exit.]' \
+        {-i,--ignorekeyboard}'[Don'"'"'t exit for keyboard input. ESC still exits.]' \
+        {-k,--stack}'[Capture stack/overlapped windows and join them.]' \
+        {-l,--line}'[STYLE indicates the style of the line when the -s option is used; see SELECTI…]' \
+        {-m,--multidisp}'[For multiple heads, screenshot all of them in order.]' \
+        {-n,--note}'[OPTS is a collection of options which specify notes to bake into the image.]' \
+        {-o,--overwrite}'[By default scrot does not overwrite the output FILE, use this option to enabl…]' \
+        {-p,--pointer}'[Capture the mouse pointer.]' \
+        {-q,--quality}'[NUM must be between 1 and 100.]' \
+        {-S,--script}'[CMD is an imlib2 script.]' \
+        {-s,--select}'[Interactively select a window or rectangle with the mouse, use the arrow keys…]' \
+        {-t,--thumb}'[Also generate a thumbnail.]' \
+        {-u,--focused}'[Use the currently focused window.]' \
+        {-v,--version}'[Output version information and exit.]' \
+        {-z,--silent}'[Prevent beeping.]'
