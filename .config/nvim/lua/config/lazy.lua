@@ -20,7 +20,8 @@ require("lazy").setup({
         enabled = false
     },
     ui = {
-        border = { "┏", "━", "┓", "┃", "┛", "━", "┗", "┃" }
+        border = { "┏", "━", "┓", "┃", "┛", "━", "┗", "┃" },
+        backdrop = 100
     },
     performance = {
         cache = {
