@@ -25,7 +25,6 @@ local extension_tbl = {
     ["sh"] = "sh",
     ["zsh"] = "sh",
     ["go"] = "go",
-
 }
 
 local function ft_detect()
