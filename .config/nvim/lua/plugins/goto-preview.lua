@@ -17,6 +17,7 @@ local opts = {
     preview_window_title = { enable = false, position = "left" }, -- Whether to set the preview window title as the filename
 
 }
+
 return {
     "rmagatti/goto-preview",
     version = false,
