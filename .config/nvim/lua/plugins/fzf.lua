@@ -1,10 +1,10 @@
 return {
     "ibhagwan/fzf-lua",
-    version = false,
-    lazy    = true,
-    cmd     = "FzfLua",
-    keys    = { "<C-t>", " fl", " ff" },
-    config  = function()
+    branch = "trace",
+    lazy   = true,
+    cmd    = "FzfLua",
+    keys   = { "<C-t>", " fl", " ff" },
+    config = function()
         local fzf = require("fzf-lua")
         local actions = require("fzf-lua").actions
 
@@ -90,14 +90,5 @@ return {
                 }
             })
         end, {})
-
-        vim.api.nvim_create_autocmd("FileType",
-            {
-                pattern = "fzf",
-                callback = function(e)
-                    vim.keymap.set("t", "<C-c>", "<C-c>", { buffer = e.buf, silent = true })
-                end,
-            })
     end,
-
 }
