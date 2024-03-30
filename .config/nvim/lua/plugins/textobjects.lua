@@ -58,7 +58,7 @@ return {
         { "ao",  "<cmd>TSTextobjectSelect @block.outer<cr>",                                                           mode = { "v", "o" } },
         { "io",  "<cmd>TSTextobjectSelect @block.inner<cr>",                                                           mode = { "v", "o" } },
         { "ac",  "<cmd>TSTextobjectSelect @call.outer<cr>",                                                            mode = { "v", "o" } },
-        { "ic",  "<cmd>TSTextobjectSelect { query = @call.inner }<cr>",                                                mode = { "v", "o" } },
+        { "ic",  "<cmd>TSTextobjectSelect @call.inner<cr>",                                                            mode = { "v", "o" } },
         { "as",  "<cmd>TSTextobjectSelect { query = @scope, query_group = \"locals\" }<cr>",                           mode = { "v", "o" } },
         { "dof", "<cmd>TSTextobjectSelect @function.inner<cr>\"ay\"_d<cmd>TSTextobjectSelect @function.outer<cr>\"aP", mode = { "n" } },
     },
