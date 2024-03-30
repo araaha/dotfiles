@@ -1,4 +1,5 @@
 alias \$=''
+alias \#='sudo'
 alias alu="apt list --upgradable"
 alias bbat="bluetooth_battery"
 alias bctl="bluetoothctl"
@@ -21,22 +22,21 @@ alias gs="git status"
 alias lf="l-ueberzug"
 alias ls="ls --color=always"
 alias lsusb="sudo cyme --hide-buses -b icon -b name -b speed -t"
-alias mega-cmd='env HOME=/home/araaha/.local/share/ mega-cmd'
+alias mega-cmd="env HOME=/home/araaha/.local/share/ mega-cmd"
 alias ncdu="gdu -c"
 alias nerdfetch="nitch"
 alias nsxiv="nsxiv -g 800x600+560+240 -b -a -sf"
 alias nv="nvim"
-alias vi="nvim -u ~/.config/nvim/vi.lua"
 alias packages="bat --paging=never --color=never --decorations=never /var/log/pacman.log | rg -a installed"
 alias p="ipython --TerminalInteractiveShell.highlighting_style=gruvbox"
 alias sai="sudo apt install"
 alias sa="sudo apt"
 alias saup="sudo apt upgrade -y"
 alias sau="sudo apt update -y; sudo apt clean"
-alias \#='sudo'
 alias sxiv="nsxiv -g 800x600+560+240 -b -a -sf"
 alias ticker='ticker --sort=user --config="$HOME/.config/.ticker.yaml"'
 alias tree="tree --noreport -C"
+alias vi="nvim -u ~/.config/nvim/vi.lua"
 alias weather="curl wttr.in"
 alias yay="yay --removemake"
 alias zathura="zathura --fork"
