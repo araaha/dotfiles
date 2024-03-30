@@ -21,7 +21,8 @@ local main = s(
         regTrig = false,
         snippetType = "snippet",
         hidden = false,
-    }, fmta("package main \n\nfunc main() {\n\t<>\n}", ls.i(0)))
+    }, fmta("package main \n\nfunc main() {\n\t<>\n}", ls.i(0))
+)
 table.insert(snippets, main)
 
 return snippets

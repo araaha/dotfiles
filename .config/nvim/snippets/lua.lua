@@ -33,7 +33,9 @@ local plug = s(
         i(2, "false"),
         i(3, "true"),
         i(4, "\"VeryLazy\""),
-    }))
+    })
+)
+
 table.insert(snippets, plug)
 
 

@@ -24,7 +24,8 @@ local su = s(
     }, fmt([[sum_({})_({}) ]], {
         i(1, ""),
         i(2, ""),
-    }))
+    })
+)
 
 table.insert(snippets, su)
 
