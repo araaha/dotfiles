@@ -87,7 +87,7 @@ Gruvbox.config = {
         ["@tag.delimiter.xml"] = { link = "GruvboxBlue" },
         ["@module"] = { link = "GruvboxBlue" },
         ["@function.builtin.lua"] = { link = "GruvboxGreenBold" },
-        ["@lsp.type.comment.lua"] = { link = None },
+        ["@lsp.type.comment.lua"] = { fg = "None", bg = "None" },
 
         zshVariableDef = { link = "GruvboxBlue" },
 
