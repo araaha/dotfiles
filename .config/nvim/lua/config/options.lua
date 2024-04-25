@@ -24,6 +24,8 @@ local options = {
     pumheight     = 12,
     shortmess     = "aIF",
     commentstring = "#%s",
+    grepprg       = "rg --color=auto --vimgrep",
+    grepformat    = "%f:%l:%c:%m"
 }
 
 for key, val in pairs(options) do
@@ -41,4 +43,4 @@ vim.opt.listchars             = {
 
 vim.defer_fn(function()
     vim.opt.formatoptions:remove({ "o", "r" })
-end, 50)
+end, 20)
