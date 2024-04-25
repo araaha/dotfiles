@@ -26,9 +26,12 @@ local opts = {
 
 return {
     "nvim-treesitter/nvim-treesitter",
-    version = false,
-    event   = "VeryLazy",
-    config  = function()
+    version      = false,
+    event        = "VeryLazy",
+    dependencies = {
+        "yorickpeterse/nvim-tree-pairs"
+    },
+    config       = function()
         require("nvim-treesitter.configs").setup(opts)
     end,
 }
