@@ -16,6 +16,7 @@ erdtree
 fd
 ffmpegthumbnailer
 firefox
+flameshot
 foomatic-db-gutenprint-ppds
 fx
 fzf
