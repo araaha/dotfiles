@@ -225,7 +225,7 @@
     </keybind>
     <keybind key="C-A-q">
       <action name="Execute">
-        <command>rofi -no-show-icons -show calc -modi calc -no-show-match -no-sort -terse -no-bold -calc-command "echo -n '{result}' | xclip -r -sel clip" -kb-secondary-copy "" -kb-accept-entry "Control+c" -theme-str '#inputbar { spacing: 16px; padding: 0px 0px 0px 0px;}'</command>
+        <command>rofi -no-show-icons -show calc -modi calc -no-show-match -no-sort -terse -no-bold -calc-command "echo -n '{result}' | xclip -r -sel clip" -kb-secondary-copy "" -kb-accept-entry "Return,Control+c" -theme-str '#inputbar { spacing: 16px; padding: 0px 0px 0px 0px;}'</command>
       </action>
     </keybind>
     <keybind key="C-A-c">
