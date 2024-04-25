@@ -20,7 +20,7 @@ return {
                 ["--padding"]        = "0%",
                 ["--margin"]         = "0%",
                 ["--no-separator"]   = "",
-                ["--preview-window"] = "up,50%",
+                ["--preview-window"] = "up,50%,noborder",
                 ["--info"]           = "default",
             },
             fzf_colors = {
@@ -31,7 +31,6 @@ return {
                 rg_opts = "--line-number --colors=line:none",
             },
             winopts    = {
-                -- split = "belowright new",
                 preview = {
                     default = "bat",
                     scrollbar = false,
