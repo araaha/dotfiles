@@ -1,10 +1,11 @@
 #!/bin/bash
+
 shopt -s extglob
 
-echo "run shopt -s extglob first, followed by changing your dir to ~/dotfiles"
+echo "run shopt -s extglob first"
 sleep 3
 
-./install/lncp.sh
-./install/yay.sh
-./install/yay.sh
-./install/after.sh
+bash -c /home/araaha/dotfiles/install/lncp.sh
+bash -c /home/araaha/dotfiles/install/yay.sh
+bash -c /home/araaha/dotfiles/install/yay.sh
+bash -c /home/araaha/dotfiles/install/after.sh
