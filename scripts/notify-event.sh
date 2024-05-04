@@ -13,7 +13,6 @@ if [[ "$EVENT" ]]; then
 else
     exit
 fi
-echo "$TIME"
 
 if (( TIME_START <= TIME && TIME <= TIME_END )); then
     DISPLAY=:0 notify-send -t 3500 "$EVENT"
