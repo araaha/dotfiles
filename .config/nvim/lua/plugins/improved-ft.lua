@@ -7,6 +7,6 @@ return {
     "backdround/improved-ft.nvim",
     version = false,
     lazy    = true,
-    keys    = { "f", "t", "F", "T", ";", "," },
+    keys    = { { "f", mode = { "n", "v" } }, { "t", mode = { "n", "v" } }, "F", "T", ";", "," },
     opts    = opts
 }
