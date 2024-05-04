@@ -12,6 +12,7 @@ dialog
 difftastic
 duf
 dunst
+edir
 erdtree
 fd
 ffmpegthumbnailer
