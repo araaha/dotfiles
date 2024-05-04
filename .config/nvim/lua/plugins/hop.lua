@@ -1,7 +1,8 @@
 local opts = {
     keys = "werasdfcvjlk",
     quit_key = "<C-c>",
-    jump_on_sole_occurrence = true
+    jump_on_sole_occurrence = true,
+    dim_unmatched = false
 }
 
 return {
