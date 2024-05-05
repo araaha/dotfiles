@@ -107,6 +107,9 @@ return {
             end
         })
 
+        lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_config,
+            { on_attach = function(client) client.server_capabilities.semanticTokensProvider = nil end })
+
         vim.cmd("LspStart")
         vim.api.nvim_create_autocmd("BufReadPost", { command = "LspStart" })
     end,
