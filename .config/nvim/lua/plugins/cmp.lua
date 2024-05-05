@@ -41,6 +41,7 @@ return {
 
         buffer_sources()
 
+
         cmp.setup({
             completion = {
                 autocomplete = {
@@ -59,9 +60,14 @@ return {
             window = {
                 completion = {
                     border = "single",
-                    winhighlight = "FloatBorder:FloatBorder,CursorLine:PmenuSel",
+                    winhighlight = "FloatBorder:FloatBorder,CursorLine:StatusLine",
+                    side_padding = 0,
                     scrollbar = false,
                 },
+                documentation = {
+                    border = "single",
+                    winhighlight = "FloatBorder:FloatBorder,CursorLine:StatusLine",
+                }
             },
             mapping = {
                 ["<C-p>"] = cmp.mapping.select_prev_item(select_opts),
@@ -87,6 +93,40 @@ return {
             },
             experimental = {
                 ghost_text = { inline = true },
+            },
+            formatting = {
+                fields = { "kind", "abbr" },
+                format = function(entry, vim_item)
+                    local kind_icons = {
+                        Text = "󰉿",
+                        Method = "󰆧",
+                        Function = "󰊕",
+                        Constructor = "",
+                        Field = "󰜢",
+                        Variable = "󰀫",
+                        Class = "󰠱",
+                        Interface = "",
+                        Module = "",
+                        Property = "󰜢",
+                        Unit = "",
+                        Value = "󰎠",
+                        Enum = "",
+                        Keyword = "󰌋",
+                        Snippet = "",
+                        Color = "󰏘",
+                        File = "󰈙",
+                        Reference = "",
+                        Folder = "󰉋",
+                        EnumMember = "",
+                        Constant = "󰏿",
+                        Struct = "",
+                        Event = "",
+                        Operator = "󰆕",
+                        TypeParameter = "󰅲",
+                    }
+                    vim_item.kind = string.format(' %s ', kind_icons[vim_item.kind])
+                    return vim_item
+                end
             },
         })
     end
