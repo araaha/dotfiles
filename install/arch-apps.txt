@@ -75,6 +75,7 @@ ripgrep
 ripgrep-all
 rofi
 rofi-calc
+ruff
 scrot
 sshfs
 strace
