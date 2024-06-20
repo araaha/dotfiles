@@ -3,17 +3,18 @@ return {
     branch = "trace",
     lazy   = true,
     cmd    = "FzfLua",
-    keys   = { "<C-t>", " fl", " ff" },
+    keys   = { "<C-t>", " fl", " ff", { "<C-x><C-f>", mode = "i" } },
     config = function()
         local fzf = require("fzf-lua")
         local actions = require("fzf-lua").actions
+
         fzf.setup({
-            keymap     = {
+            keymap        = {
                 fzf = {
                     ["ctrl-u"] = "half-page-up"
                 },
             },
-            fzf_opts   = {
+            fzf_opts      = {
                 ["--border"]         = "none",
                 ["--padding"]        = "0%",
                 ["--margin"]         = "0%",
@@ -21,18 +22,24 @@ return {
                 ["--preview-window"] = "up,50%,noborder",
                 ["--info"]           = "default",
             },
-            fzf_colors = {
+            fzf_colors    = {
                 ["gutter"] = "-1",
                 ["bg"] = "-1",
             },
-            hls        = {
+            hls           = {
                 path_linenr = "GruvboxGreen",
                 buf_name = "FloatBorder"
             },
-            blines     = {
+            complete_file = {
+                cmd = os.getenv("FZF_DEFAULT_COMMAND")
+            },
+            grep          = {
+                multiline = 1,
+            },
+            blines        = {
                 rg_opts = "--line-number --colors=line:none",
             },
-            winopts    = {
+            winopts       = {
                 preview = {
                     default = "bat",
                     scrollbar = false,
@@ -44,19 +51,28 @@ return {
                 width = "0.60",
                 col = 0.48,
             },
-            previewers = {
+            previewers    = {
                 bat = {
                     cmd  = "bat",
                     args = "--style=plain --color=always",
                 },
             },
-            files      = {
-                file_icons = false,
-                git_icons = false,
+            files         = {
+                file_icons  = false,
+                git_icons   = false,
                 color_icons = false,
-                cmd = os.getenv("FZF_DEFAULT_COMMAND"),
+                cmd         = os.getenv("FZF_DEFAULT_COMMAND")
             },
-            actions    = {
+            diagnostics   = {
+                multiline = false,
+                signs = {
+                    ["Error"] = { text = "", texthl = "DiagnosticError" },
+                    ["Warn"]  = { text = "", texthl = "DiagnosticWarn" },
+                    ["Info"]  = { text = "", texthl = "DiagnosticInfo" },
+                    ["Hint"]  = { text = "󰌵", texthl = "DiagnosticHint" },
+                },
+            },
+            actions       = {
                 files = {
                     ["default"] = actions.file_edit_or_qf,
                     ["ctrl-x"] = actions.file_vsplit,
@@ -75,6 +91,7 @@ return {
         })
 
         vim.keymap.set("n", "<C-t>", fzf.files, {})
+        vim.keymap.set("i", "<C-x><C-f>", fzf.complete_file, { silent = true })
         vim.keymap.set("n", " fl", fzf.blines, {})
         vim.keymap.set("n", " ff", function()
             fzf.files({ cwd_prompt = false, cwd = "~" })
