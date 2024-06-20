@@ -27,7 +27,7 @@ case "$(printf "%s\n" "$(readlink -f "$1")" | awk '{print tolower($0)}')" in
     *.doc) catdoc "$1" ;;
     *.docx) docx2txt "$1" - ;;
     *.xls|*.xlsx)
-        ssconvert --export-type=Gnumeric_stf:stf_csv "$1" "fd://1" | bat --color=always --style=plain --pager=never --language=csv "$1"
+        ssconvert --export-type=Gnumeric_stf:stf_csv "$1" "fd://1" | bat --color=always --style=plain --paging=never --language=csv "$1"
         ;;
     *.wav|*.mp3|*.flac|*.m4a|*.wma|*.ape|*.ac3|*.og[agx]|*.spx|*.opus|*.as[fx]|*.mka)
         exiftool "$1"
@@ -55,14 +55,14 @@ case "$(printf "%s\n" "$(readlink -f "$1")" | awk '{print tolower($0)}')" in
         image "$1" "$2" "$3" "$4" "$5"
         ;;
     *.djvu|*.djv)
-        djvutxt "$1" | bat --color=always --style=plain --pager=never
+        djvutxt "$1" | bat --color=always --style=plain --paging=never
         ;;
     *.md)
         bat "$1"
         ;;
     *.ino)
-        bat --color=always --style=plain --pager=never --language=cpp "$1"
+        bat --color=always --style=plain --paging=never --language=cpp "$1"
         ;;
-    *)  bat --color=always --style=plain --pager=never "$1";;
+    *)  bat --color=always --style=plain --paging=never "$1";;
 esac
 exit 0
