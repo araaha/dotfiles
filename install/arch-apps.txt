@@ -10,7 +10,6 @@ cups-pdf
 delve
 dialog
 difftastic
-duf
 dunst
 edir
 erdtree
@@ -64,6 +63,7 @@ perl-image-exiftool
 picom
 polybar
 pulseaudio
+pulseaudio-ctl
 pulseaudio-bluetooth
 pyright
 python-pip
