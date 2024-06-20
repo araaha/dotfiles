@@ -5,7 +5,6 @@ return {
     dependencies = {
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-nvim-lsp",
-        "hrsh7th/cmp-path",
         "saadparwaiz1/cmp_luasnip",
     },
     config       = function()
@@ -14,7 +13,6 @@ return {
         local types = require("cmp.types")
 
         local default_cmp_sources = cmp.config.sources({
-            { name = "path" },
             { name = "luasnip", keyword_length = 3 },
             { name = "nvim_lsp" },
         })
@@ -41,7 +39,6 @@ return {
 
         buffer_sources()
 
-
         cmp.setup({
             completion = {
                 autocomplete = {
@@ -50,7 +47,7 @@ return {
                 }
             },
             performance = {
-                max_view_entries = 4
+                max_view_entries = 5
             },
             snippet = {
                 expand = function(args)
@@ -62,7 +59,7 @@ return {
                     border = "single",
                     winhighlight = "FloatBorder:FloatBorder,CursorLine:StatusLine",
                     side_padding = 0,
-                    scrollbar = false,
+                    scrollbar = false
                 },
                 documentation = {
                     border = "single",
@@ -96,7 +93,7 @@ return {
             },
             formatting = {
                 fields = { "kind", "abbr" },
-                format = function(entry, vim_item)
+                format = function(_, vim_item)
                     local kind_icons = {
                         Text = "󰉿",
                         Method = "󰆧",
