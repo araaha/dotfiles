@@ -86,3 +86,5 @@ map("n", "<S-CR>", function()
         return "mpO<Esc>`p:delm p<CR>"
     end
 end, { expr = true, replace_keycodes = true })
+
+map("n", " tr", [[:%s/\s\+$//e<CR>:w<CR>]], { silent = true })
