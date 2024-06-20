@@ -13,13 +13,15 @@ return {
                 -- Enable completion triggered by <c-x><c-o>
                 vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 
-                -- Buffer local mappings.
-                -- See `:help vim.lsp.*` for documentation on any of the below functions
                 local opts = { buffer = ev.buf }
                 vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
                 -- vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
                 vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
                 -- vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+                vim.keymap.set("n", "<space>ih",
+                    function()
+                        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(opts))
+                    end, opts)
                 vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, opts)
                 vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, opts)
                 vim.keymap.set("n", "<space>wl", function()
@@ -59,6 +61,19 @@ return {
                     },
                 },
             },
+            settings = {
+                gopls = {
+                    hints = {
+                        assignVariableTypes = true,
+                        compositeLiteralFields = true,
+                        compositeLiteralTypes = true,
+                        constantValues = true,
+                        functionTypeParameters = true,
+                        parameterNames = true,
+                        rangeVariableTypes = true,
+                    }
+                },
+            },
             cmd = { "gopls" },
             init_options = {
                 usePlaceholders = true,
@@ -83,13 +98,8 @@ return {
         })
         -- lspconfig.ruff_lsp.setup({
         -- })
-        lspconfig.lua_ls.setup {
+        lspconfig.lua_ls.setup({
             on_init = function(client)
-                local path = client.workspace_folders[1].name
-                if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
-                    return
-                end
-
                 client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
                     runtime = {
                         -- Tell the language server which version of Lua you're using
@@ -100,9 +110,9 @@ return {
                     workspace = {
                         checkThirdParty = false,
                         library = {
-                            vim.env.VIMRUNTIME
+                            vim.env.VIMRUNTIME,
                             -- Depending on the usage, you might want to add additional paths here.
-                            -- "${3rd}/luv/library"
+                            "${3rd}/luv/library"
                             -- "${3rd}/busted/library",
                         }
                         -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
@@ -111,9 +121,11 @@ return {
                 })
             end,
             settings = {
-                Lua = {}
+                Lua = {
+                    hint = { enable = true }
+                }
             }
-        }
+        })
         lspconfig.bashls.setup({})
 
         vim.api.nvim_create_autocmd("DiagnosticChanged", {

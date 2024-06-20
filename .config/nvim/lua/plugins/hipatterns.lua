@@ -12,9 +12,7 @@ return {
                 todo      = { pattern = "%f[%w]()TODO()%f[%W]", group = "MiniHipatternsTodo" },
                 note      = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
 
-                hex_color = hipatterns.gen_highlighter.hex_color({
-                    -- for 10.0: style = "inline"
-                }),
+                hex_color = hipatterns.gen_highlighter.hex_color(),
                 trailing  = {
                     pattern = "%f[%s]%s-$",
                     group = "Todo"
