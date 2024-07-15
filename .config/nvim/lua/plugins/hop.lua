@@ -1,12 +1,13 @@
 local opts = {
     keys = "werasdfcvjlk",
     quit_key = "<C-c>",
+    repeat_key = "<BS>",
     jump_on_sole_occurrence = true,
     dim_unmatched = false
 }
 
 return {
-    "smoka7/hop.nvim",
+    "araaha/hop.nvim",
     version = false,
     lazy = true,
     keys = {
