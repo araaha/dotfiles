@@ -152,7 +152,7 @@ cmd chmod ${{
       files="${files#*;}"
     fi
   done
-  lf -remote 'send reload'; lf -remote 'send unselect'
+  lf -remote "send reload"; lf -remote "send unselect"
 }}
 
 map ch :chmod +x
@@ -268,3 +268,5 @@ cmd edit-config ${{
 }}
 
 map R edit-config
+
+map p :paste; reload
