@@ -1,7 +1,12 @@
 return {
     "backdround/neowords.nvim",
     version = false,
-    keys    = { "w", "e", "b" },
+    keys    = {
+        { "w", mode = { "n", "v", "o" } },
+        { "e", mode = { "n", "v", "o" } },
+        { "b", mode = { "n", "v", "o" } },
+        { "ge", mode = { "n", "v", "o" } },
+    },
     config  = function()
         local neowords = require("neowords")
         local p = neowords.pattern_presets
