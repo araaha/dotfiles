@@ -4,7 +4,7 @@ local au = vim.api.nvim_create_autocmd
 au("TextYankPost",
     {
         group = ag("yank_highlight", {}),
-        callback = function() vim.highlight.on_yank { higroup = "IncSearch", timeout = 450 } end,
+        callback = function() vim.highlight.on_yank({ higroup = "IncSearch", timeout = 450 }) end,
     }
 )
 
