@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = linux*
+
+[Action]
+Description = Deleting desktop applications...
+When = PostTransaction
+Exec = /usr/bin/bash -c "DISPLAY=:0 xset r rate 150 50; setxkbmap -option caps:ctrl_modifier"
