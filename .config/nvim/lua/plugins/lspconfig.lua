@@ -1,7 +1,7 @@
 return {
     "neovim/nvim-lspconfig",
     version = false,
-    event   = { "VeryLazy" },
+    event   = "VeryLazy",
     config  = function()
         local lspconfig = require("lspconfig")
         vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
@@ -14,8 +14,8 @@ return {
                 vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 
                 local opts = { buffer = ev.buf }
-                vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-                -- vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+                -- vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+                vim.keymap.set("n", "gD", vim.lsp.buf.definition, opts)
                 vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
                 -- vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
                 vim.keymap.set("n", "<space>ih",
@@ -56,7 +56,7 @@ return {
                 textDocument = {
                     completion = {
                         completionItem = {
-                            snippetSupport = false
+                            snippetSupport = true
                         },
                     },
                 },
