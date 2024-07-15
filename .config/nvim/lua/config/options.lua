@@ -25,7 +25,8 @@ local options = {
     shortmess     = "aIF",
     commentstring = "#%s",
     grepprg       = "rg --color=auto --vimgrep",
-    grepformat    = "%f:%l:%c:%m"
+    grepformat    = "%f:%l:%c:%m",
+    mouse         = ""
 }
 
 for key, val in pairs(options) do
