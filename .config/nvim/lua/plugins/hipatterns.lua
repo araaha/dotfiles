@@ -12,9 +12,12 @@ return {
                 todo      = { pattern = "%f[%w]()TODO()%f[%W]", group = "MiniHipatternsTodo" },
                 note      = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
 
-                hex_color = hipatterns.gen_highlighter.hex_color(),
+                hex_color = hipatterns.gen_highlighter.hex_color({ style = "#" }),
                 trailing  = {
-                    pattern = "%f[%s]%s-$",
+                    pattern = function(buf_id)
+                        if vim.bo[buf_id].filetype == "go" then return nil end
+                        return "%f[%s]%s-$"
+                    end,
                     group = "Todo"
                 },
 
