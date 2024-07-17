@@ -218,19 +218,24 @@
         <command>~/dotfiles/scripts/screenshot.sh select</command>
       </action>
     </keybind>
+    <keybind key="C-A-u">
+      <action name="Execute">
+        <command>uairctl toggle</command>
+      </action>
+    </keybind>
     <keybind key="C-A-r">
       <action name="Execute">
-        <command>rofi -show drun -modi drun</command>
+        <command>rofi -show-icons -show drun -modi drun</command>
       </action>
     </keybind>
     <keybind key="C-A-q">
-      <action name="Execute">
-        <command>rofi -no-show-icons -show calc -modi calc -no-show-match -no-sort -terse -no-bold -calc-command "echo -n '{result}' | xclip -r -sel clip" -kb-secondary-copy "" -kb-accept-entry "Return,Control+c" -theme-str '#inputbar { spacing: 16px; padding: 0px 0px 0px 0px;}'</command>
-      </action>
+    <action name="Execute">
+    <command>rofi -show calc -modi calc -no-show-match -no-sort -terse -no-bold -calc-command "echo -n '{result}' | xclip -r -sel clip" -kb-secondary-copy "" -kb-accept-entry "Return,Control+c"</command>
+    </action>
     </keybind>
     <keybind key="C-A-c">
       <action name="Execute">
-        <command>rofi -no-show-icons -kb-accept-entry "Control+c,Return" -kb-secondary-copy "" -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'</command>
+        <command>rofi -kb-accept-entry "Control+c,Return" -kb-secondary-copy "" -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'</command>
       </action>
     </keybind>
     <keybind key="C-A-t">
@@ -330,6 +335,15 @@
         <height>50%</height>
       </action>
     </keybind>
+    <keybind key="W-3">
+      <action name="Unmaximize"/>
+      <action name="MoveResizeTo">
+        <x>0</x>
+        <y>-0</y>
+        <width>50%</width>
+        <height>50%</height>
+      </action>
+    </keybind>
     <keybind key="W-4">
       <action name="Unmaximize"/>
       <action name="MoveResizeTo">
@@ -339,12 +353,57 @@
         <height>50%</height>
       </action>
     </keybind>
-    <keybind key="W-3">
+    <keybind key="W-5">
+      <action name="Unmaximize"/>
+      <action name="MoveResizeTo">
+        <x>0</x>
+        <y>0</y>
+        <width>33%</width>
+        <height>50%</height>
+      </action>
+    </keybind>
+    <keybind key="W-6">
+      <action name="Unmaximize"/>
+      <action name="MoveResizeTo">
+        <x>633</x>
+        <y>0</y>
+        <width>33%</width>
+        <height>50%</height>
+      </action>
+    </keybind>
+    <keybind key="W-7">
+      <action name="Unmaximize"/>
+      <action name="MoveResizeTo">
+        <x>1265</x>
+        <y>0</y>
+        <width>34%</width>
+        <height>50%</height>
+      </action>
+    </keybind>
+    <keybind key="W-t">
       <action name="Unmaximize"/>
       <action name="MoveResizeTo">
         <x>0</x>
         <y>-0</y>
-        <width>50%</width>
+        <width>33%</width>
+        <height>50%</height>
+      </action>
+    </keybind>
+    <keybind key="W-y">
+      <action name="Unmaximize"/>
+      <action name="MoveResizeTo">
+        <x>633</x>
+        <y>-0</y>
+        <width>33%</width>
+        <height>50%</height>
+      </action>
+    </keybind>
+    <keybind key="W-u">
+      <action name="Unmaximize"/>
+      <action name="MoveResizeTo">
+        <x>1265</x>
+        <y>-0</y>
+        <width>34%</width>
         <height>50%</height>
       </action>
     </keybind>
