@@ -36,14 +36,14 @@ return {
                 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
                 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 
-                vim.keymap.set("n", "<C-s>", function()
-                    if vim.bo.filetype == "sh" or vim.bo.filetype == "" then
-                        vim.cmd("silent w")
-                    else
-                        vim.lsp.buf.format()
-                        vim.cmd("silent w")
+                for _, client in pairs(vim.lsp.get_clients()) do
+                    if client.name ~= "copilot" then
+                        vim.keymap.set("n", "<C-s>", function()
+                            vim.lsp.buf.format()
+                            vim.cmd("write")
+                        end, opts)
                     end
-                end, opts)
+                end
 
                 vim.diagnostic.config({
                     virtual_text = true,
@@ -96,8 +96,6 @@ return {
         })
         lspconfig.ruff.setup({
         })
-        -- lspconfig.ruff_lsp.setup({
-        -- })
         lspconfig.lua_ls.setup({
             on_init = function(client)
                 client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
