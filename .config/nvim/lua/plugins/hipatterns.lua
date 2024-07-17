@@ -6,11 +6,11 @@ return {
         local hipatterns = require("mini.hipatterns")
         hipatterns.setup({
             highlighters = {
-                -- Highlight standalone "FIXME", "HACK", "TODO", "NOTE"
-                hack      = { pattern = "%f[%w]()HACK()%f[%W]", group = "MiniHipatternsHack" },
-                fixme     = { pattern = "%f[%w]()FIXME()%f[%W]", group = "MiniHipatternsFixme" },
-                todo      = { pattern = "%f[%w]()TODO()%f[%W]", group = "MiniHipatternsTodo" },
-                note      = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
+                -- Highlight standalone " FIXME ", " HACK ", "TODO", "NOTE"
+                hack      = { pattern = "%s-HACK%s*", group = "MiniHipatternsHack" },
+                fixme     = { pattern = "%s-FIXME%s*", group = "MiniHipatternsFixme" },
+                todo      = { pattern = "%s-TODO%s*", group = "MiniHipatternsTodo" },
+                note      = { pattern = "%s-NOTE%s*", group = "MiniHipatternsNote" },
 
                 hex_color = hipatterns.gen_highlighter.hex_color({ style = "#" }),
                 trailing  = {
