@@ -88,7 +88,11 @@ vim.api.nvim_create_autocmd("FileType", {
 
         vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
 
-        render_box(code_ranges, "Comment")
-        render_box(header_ranges, "Identifier")
+        vim.defer_fn(function()
+            render_box(code_ranges, "Comment")
+        end, 50)
+        vim.defer_fn(function()
+            render_box(header_ranges, "Identifier")
+        end, 50)
     end
 })
