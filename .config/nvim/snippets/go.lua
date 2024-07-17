@@ -19,20 +19,20 @@ return {
             regTrig = false,
             snippetType = "snippet",
             hidden = false,
-        }, fmta([[hidden:echo 'undo'
-        package main
+        }, fmta([[package main
 
-        func main() {
-            <>
-        }]], ls.i(0))
+func main() {
+    <>
+}]], ls.i(0))
     ),
     s(
         {
             trig = "for([%w_]+)",
             regTrig = true,
             snippetType = "autosnippet",
+            wordTrig = true,
             hidden = true,
-        }, fmta([[for <> := <>; <> << <>; <>++{
+        }, fmta([[for <> := <>; <> << <>; <>++ {
         <>
 }]], {
             d(1, function(_, snip)
