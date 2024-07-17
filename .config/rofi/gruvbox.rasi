@@ -1,7 +1,7 @@
 /*****----- Configuration -----*****/
 configuration {
 	modi:                       "drun";
-    show-icons:                 true;
+    show-icons:                 false;
     display-drun:               "";
     display-run:                "";
     display-filebrowser:        "";
@@ -15,6 +15,7 @@ configuration {
 * {
     background:     #24242490;
     foreground:     #EBDBB2FF;
+
     selected:       #ac9f7a50;
     t:              transparent;
     active:         #B8BB26FF;
