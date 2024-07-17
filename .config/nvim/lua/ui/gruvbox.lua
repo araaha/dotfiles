@@ -75,6 +75,7 @@ Gruvbox.config = {
         CursorLine = { bg = "#242424", fg = "None" },
 
         Delimiter = { link = "GruvboxOrange" },
+        Folded = { bg = "None", fg = "#83A598" },
 
         Pmenu = { fg = "None", bg = "None" },
         PmenuSel = { fg = "#E6DBAF", bg = "#7C6F64" },
