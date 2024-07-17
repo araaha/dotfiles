@@ -2,7 +2,6 @@ return {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
     keys = " cp",
-    event = "InsertEnter",
     opts = {
         suggestion = {
             enabled = true,
