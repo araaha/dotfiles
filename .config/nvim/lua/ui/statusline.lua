@@ -1,3 +1,4 @@
+---@diagnostic disable: need-check-nil
 local modes = {
     ["n"] = "NORMAL",
     ["no"] = "NORMAL",
@@ -112,7 +113,7 @@ local function mode()
 end
 
 local function filetype()
-    if vim.api.nvim_buf_get_option(vim.api.nvim_get_current_buf(), "filetype") == "" then
+    if vim.bo.filetype == "" then
         return ""
     end
 
@@ -146,41 +147,13 @@ local function modified()
     return " %{&modified?\"\":\"\"}"
 end
 
-local function lsp_progress()
-    if not rawget(vim, "lsp") or vim.lsp.status then
-        return ""
-    end
-
-    local Lsp = vim.lsp.util.get_progress_messages()[1]
-
-    if vim.o.columns < 70 or not Lsp or vim.bo.filetype == "go" then
-        return ""
-    end
-
-    if Lsp.done then
-        vim.defer_fn(function()
-            vim.cmd.redrawstatus()
-        end, 1000)
-    end
-
-    local msg = Lsp.message or ""
-    local percentage = Lsp.percentage or 0
-    local title = Lsp.title or ""
-    local spinners = { "", "󰪞", "󰪟", "󰪠", "󰪢", "󰪣", "󰪤", "󰪥" }
-    local ms = vim.loop.hrtime() / 1000000
-    local frame = math.floor(ms / 120) % #spinners
-    local content = string.format(" %%<%s %s %s (%s%%%%) ", spinners[frame + 1], title, msg, percentage)
-
-    return ("%#StatuslineAccentF#" .. content) or ""
-end
-
 local function lsp()
     local count = {}
     local levels = {
-        errors = "Error",
-        warnings = "Warn",
-        info = "Info",
-        hints = "Hint",
+        errors = 1,
+        warnings = 2,
+        info = 3,
+        hints = 4,
     }
 
     for k, level in pairs(levels) do
@@ -212,7 +185,7 @@ local function lsp()
 end
 
 local function get_lsp_clients()
-    local clients = vim.lsp.buf_get_clients()
+    local clients = vim.lsp.get_clients()
     if next(clients) == nil then
         return ""
     end
@@ -228,6 +201,53 @@ local function get_lsp_clients()
     return "%#LspClient#" .. string.format(" %s ", table.concat(c, "|"))
 end
 
+local countdown = ""
+
+local function pomo()
+    local timer = vim.uv.new_timer()
+
+    local function getTime()
+        local handle = io.popen("uairctl fetch {time}\n")
+        local res = ""
+        if handle then
+            res = handle:read("*L")
+            if res == nil then
+                res = ""
+                timer:stop()
+            end
+            handle:close()
+        end
+        return res
+    end
+
+    local function zero()
+        local res = getTime()
+        if res == nil then
+            countdown = ""
+            timer:stop()
+            return
+        elseif res == "" then
+            countdown = ""
+        else
+            countdown = string.format("%%#StatuslineInsertAccent# %s", res)
+        end
+
+        vim.cmd.redrawstatus()
+        if res == "00:00" then
+            vim.cmd("CellularAutomaton game_of_life")
+            vim.defer_fn(function()
+                vim.cmd("bdelete!")
+                vim.opt_local.statusline = "%{%v:lua.Statusline.active()%}"
+            end, 3000)
+            return
+        end
+    end
+
+    timer:start(0, 1000, vim.schedule_wrap(zero))
+end
+
+pomo()
+
 Statusline = {}
 
 Statusline.active = function()
@@ -237,7 +257,7 @@ Statusline.active = function()
         filepath(),
         modified(),
         "%=",
-        lsp_progress(),
+        countdown,
         lsp(),
         get_lsp_clients(),
         filetype(),
