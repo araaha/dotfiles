@@ -81,7 +81,7 @@ post_processing = false
 regex           = '(?P<match>([.\w\-@$~\[\]]+)?(/[.\w\-@$\[\]]+)+)'
 
 [hints.enabled.binding]
-key  = "O"
+key  = "Y"
 mods = "Alt"
 
 [[hints.enabled]]
