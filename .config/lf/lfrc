@@ -270,3 +270,4 @@ cmd edit-config ${{
 map R edit-config
 
 map p :paste; reload
+map rr $dragon-drop $fx & disown; lf -remote 'send unselect'
