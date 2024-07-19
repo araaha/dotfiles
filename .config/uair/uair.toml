@@ -1,0 +1,15 @@
+[defaults]
+format = "{time}\n"
+time_format = "%M:%S"
+
+[[sessions]]
+id = "work"
+name = "Work"
+duration = "30m"
+command = "notify-send 'Take a rest'"
+
+[[sessions]]
+id = "rest"
+name = "Rest"
+duration = "6m"
+command = "notify-send 'Rest Done!'"
