@@ -23,6 +23,9 @@ require("lazy").setup({
         border = { "┏", "━", "┓", "┃", "┛", "━", "┗", "┃" },
         backdrop = 100
     },
+    rocks = {
+        enabled = false
+    },
     performance = {
         cache = {
             enabled = true,
