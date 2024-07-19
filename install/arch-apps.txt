@@ -15,7 +15,6 @@ edir
 erdtree
 fd
 ffmpegthumbnailer
-firefox
 flameshot
 foomatic-db-gutenprint-ppds
 fx
@@ -75,6 +74,7 @@ ripgrep
 ripgrep-all
 rofi
 rofi-calc
+rofi-pass
 ruff
 scrot
 sshfs

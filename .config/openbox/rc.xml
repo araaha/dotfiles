@@ -223,6 +223,11 @@
         <command>uairctl toggle</command>
       </action>
     </keybind>
+    <keybind key="C-A-p">
+      <action name="Execute">
+        <command>env PASSWORD_STORE_DIR=/home/araaha/.local/share/pass GNUPGHOME=/home/araaha/.local/share/.gnupg rofi-pass</command>
+      </action>
+    </keybind>
     <keybind key="C-A-r">
       <action name="Execute">
         <command>rofi -show-icons -show drun -modi drun</command>
