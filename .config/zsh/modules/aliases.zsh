@@ -1,9 +1,9 @@
-alias \$=''
 alias \#='sudo'
+alias \$=''
 alias alu="apt list --upgradable"
-alias bbat="bluetooth_battery"
 alias bctl="bluetoothctl"
 alias cat="bat -pp"
+alias catt="/usr/bin/cat"
 alias copy="xclip -r -sel clip"
 alias cp='cp -v'
 alias cpugetavail='cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_available_governors'
@@ -28,15 +28,12 @@ alias nerdfetch="nitch"
 alias nsxiv="nsxiv -g 800x600+560+240 -b -a -sf"
 alias nv="nvim"
 alias packages="bat --paging=never --color=never --decorations=never /var/log/pacman.log | rg -a installed"
-alias p="ipython --TerminalInteractiveShell.highlighting_style=gruvbox"
-alias sai="sudo apt install"
 alias sa="sudo apt"
-alias saup="sudo apt upgrade -y"
+alias sai="sudo apt install"
 alias sau="sudo apt update -y; sudo apt clean"
+alias saup="sudo apt upgrade -y"
 alias sxiv="nsxiv -g 800x600+560+240 -b -a -sf"
 alias ticker='ticker --sort=user --config="$HOME/.config/.ticker.yaml"'
 alias tree="tree --noreport -C"
 alias vi="nvim -u ~/.config/nvim/vi.lua"
-alias weather="curl wttr.in"
-alias yay="yay --removemake"
 alias zathura="zathura --fork"
