@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.15.1+50
+Name=LocalSend
+GenericName=An open source cross-platform alternative to AirDrop
+Icon=localsend
+Exec=env GTK_USE_PORTAL=1 localsend %U
+Categories=GTK;FileTransfer;Utility;
+Keywords=Sharing;LAN;Files;
+StartupNotify=true
