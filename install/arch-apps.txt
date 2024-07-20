@@ -40,6 +40,7 @@ libnotify
 libsixel
 libvoikko
 light
+localsend
 lua-language-server
 lxappearance
 ly
@@ -62,8 +63,8 @@ perl-image-exiftool
 picom
 polybar
 pulseaudio
-pulseaudio-ctl
 pulseaudio-bluetooth
+pulseaudio-ctl
 pyright
 python-pip
 python-pipx
