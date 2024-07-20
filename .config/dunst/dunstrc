@@ -19,9 +19,11 @@
     frame_width = 4
     frame_color = "#9cd365"
     origin = top-center
-    width = 1500
+    width = 1200
+    height = 1080
     ignore_dbusclose = true
     timeout = 3
+    max_icon_size = 200
 
 [urgency_low]
     background = "#242424"
