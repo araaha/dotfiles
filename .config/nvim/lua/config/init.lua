@@ -1,6 +1,6 @@
 require("config.lazy")
+require("config.autocmd")
 vim.defer_fn(function()
     require("config.options")
     require("config.keymaps")
-    require("config.help")
-end, 50)
+end, 30)
