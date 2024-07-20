@@ -261,6 +261,7 @@ cmd ff %{{
 }}
 
 map ff push :ff<space>
+map sx $nsxiv 800x600+560+240 -b -a -sf "$fx" & disown
 
 cmd edit-config ${{
     $EDITOR ~/.config/lf/lfrc
