@@ -112,8 +112,9 @@ Gruvbox.config = {
         HopNextKey1 = { fg = "#242424", bg = "#83A598" },
         HopNextKey2 = { fg = "#242424", bg = "#D8A657" },
 
-        BqfSign = { fg = "#9DC365", bg = "None" },
-        IndentLine = { fg = "#FABD2F" },
+        BqfSign = { link = "GruvboxGreen" },
+        IndentLine = { link = "Comment" },
+        IndentLineCurrent = { fg = "#FABD2F" },
 
         MiniHipatternsFixme = { link = "ErrorMsg" },
         MiniHipatternsTodo = { link = "Todo" },
