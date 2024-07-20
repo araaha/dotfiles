@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
-LOBSTER_VERSION="4.2.2"
+LOBSTER_VERSION="4.2.7"
 
 config_file="$HOME/.config/lobster/lobster_config.txt"
 lobster_editor=${VISUAL:-${EDITOR}}
@@ -69,7 +69,7 @@ trap cleanup EXIT INT TERM
     tmp_position="/tmp/lobster_position"
     case "$(uname -s)" in
         MINGW* | *Msys) separator=';' && path_thing='' && sed="sed" ;;
-        *arwin) sed="gsed" ;;
+        *arwin) separator=':' && path_thing="\\" && sed="gsed" ;;
         *) separator=':' && path_thing="\\" && sed="sed" ;;
     esac
 
@@ -112,7 +112,7 @@ trap cleanup EXIT INT TERM
         [ -z "$base" ] && base="flixhq.to"
         [ -z "$player" ] && player="mpv"
         [ -z "$download_dir" ] && download_dir="$PWD"
-        [ -z "$provider" ] && provider="UpCloud"
+        [ -z "$provider" ] && provider="Vidcloud"
         [ -z "$history" ] && history=0
         [ -z "$subs_language" ] && subs_language="english"
         subs_language="$(printf "%s" "$subs_language" | cut -c2-)"
@@ -195,7 +195,7 @@ EOF
     --rofi, --dmenu, --external-menu
       Use rofi instead of fzf
     -p, --provider
-      Specify the provider to watch from (if no provider is provided, it defaults to UpCloud) (currently supported: Upcloud, Vidcloud)
+      Specify the provider to watch from (if no provider is provided, it defaults to Vidcloud) (currently supported: Vidcloud, UpCloud)
     -q, --quality
       Specify the video quality (if no quality is provided, it defaults to 1080)
     --quiet
@@ -213,7 +213,7 @@ EOF
     -x, --debug
       Enable debug mode (prints out debug info to stdout and also saves it to /tmp/lobster.log)
 
-  Note: 
+  Note:
     All arguments can be specified in the config file as well.
     If an argument is specified in both the config file and the command line, the command line argument will be used.
 
@@ -321,43 +321,16 @@ EOF
     }
 
     extract_from_json() {
-        json_key="file"
-        encrypted=$(printf "%s" "$json_data" | tr "{}" "\n" | $sed -nE "s_.*\"${json_key}\":\"([^\"]*)\".*_\1_p" | grep "\.m3u8")
-        if [ -n "$encrypted" ]; then
-            video_link=$(printf "%s" "$json_data" | tr "{|}" "\n" | $sed -nE "s_.*\"${json_key}\":\"([^\"]*)\".*_\1_p" | head -1)
-        else
-            json_key="sources"
-            encrypted=$(printf "%s" "$json_data" | tr "{}" "\n" | $sed -nE "s_.*\"${json_key}\":\"([^\"]*)\".*_\1_p")
-            encrypted_video_link=$(printf "%s" "$json_data" | tr "{|}" "\n" | $sed -nE "s_.*\"sources\":\"([^\"]*)\".*_\1_p" | head -1)
-
-            keys="$(curl -s "https://keys4.fun/" | tr -d '\n ' | tr ',' ' ' | sed -nE "s@.*\"rabbitstream\":\{\"keys\":\[([0-9 ]*)\].*@\1@p")"
-
-            keyString=""
-            for key in $keys; do
-                keyString="$keyString$(printf "\\$(printf %o $key)")"
-            done
-
-            final_key=$(printf "%s" "$keyString" | base64)
-
-            # ty @CoolnsX for helping me with figuring out how to implement aes in openssl
-            video_link=$(printf "%s" "$encrypted_video_link" | base64 -d |
-                openssl enc -aes-256-cbc -d -md md5 -k "$final_key" 2>/dev/null | $sed -nE "s_.*\"file\":\"([^\"]*)\".*_\1_p")
-
-            json_data=$(printf "%s" "$json_data" | $sed -e "s|${encrypted_video_link}|${video_link}|")
-        fi
+        video_link=$(printf "%s" "$json_data" | tr '[' '\n' | $sed -nE 's@.*\"file\":\"(.*\.m3u8).*@\1@p' | head -1)
         [ -n "$quality" ] && video_link=$(printf "%s" "$video_link" | $sed -e "s|/playlist.m3u8|/$quality/index.m3u8|")
 
         [ "$json_output" = "1" ] && printf "%s\n" "$json_data" && exit 0
-        case "$json_key" in
-            file) subs_links=$(printf "%s" "$json_data" | tr "{}" "\n" | $sed -nE "s@\"${json_key}\":\"([^\"]*)\",\"label\":\"(.$subs_language)[,\"\ ].*@\1@p") ;;
-            sources) subs_links=$(printf "%s" "$json_data" | tr "{}" "\n" | $sed -nE "s@.*\"file\":\"([^\"]*)\",\"label\":\"(.$subs_language)[,\"\ ].*@\1@p") ;;
-            *) subs_links="" ;;
-        esac
+        subs_links=$(printf "%s" "$json_data" | tr "{}" "\n" | $sed -nE "s@.*\"file\":\"([^\"]*)\",\"label\":\"(.$subs_language)[,\"\ ].*@\1@p")
         subs_arg="--sub-file"
         num_subs=$(printf "%s" "$subs_links" | wc -l)
         if [ "$num_subs" -gt 0 ]; then
             subs_links=$(printf "%s" "$subs_links" | $sed -e "s/:/\\$path_thing:/g" -e "H;1h;\$!d;x;y/\n/$separator/" -e "s/$separator\$//")
-            subs_arg="--sub-files"
+            [ "$num_subs" -gt 1 ] && subs_arg="--sub-files"
         fi
         [ -z "$subs_links" ] && send_notification "No subtitles found"
     }
@@ -368,7 +341,7 @@ EOF
         provider_link=$(printf "%s" "$parse_embed" | cut -f1)
         source_id=$(printf "%s" "$parse_embed" | cut -f3)
         embed_type=$(printf "%s" "$parse_embed" | cut -f2)
-        json_data=$(curl -s "${provider_link}/ajax/embed-${embed_type}/getSources?id=${source_id}" -H "X-Requested-With: XMLHttpRequest")
+        json_data=$(curl -s "http://provider.akash-palmito.org:30174/rabbit/${source_id}")
         [ -n "$json_data" ] && extract_from_json
     }
 
@@ -415,9 +388,10 @@ EOF
                 fi
                 ;;
             vlc)
-                vlc "$video_link" --meta-title "$displayed_title"
+                vlc_subs_links=$(printf "%s" "$subs_links" | sed 's/https\\:/https:/g; s/:\([^\/]\)/#\1/g')
+                vlc "$video_link" --meta-title "$displayed_title" --input-slave="$vlc_subs_links"
                 ;;
-            mpv|mpv.exe)
+            mpv | mpv.exe)
                 [ -z "$continue_choice" ] && check_history
                 if [ "$history" = 1 ]; then
                     if [ -n "$subs_links" ]; then
@@ -684,9 +658,10 @@ EOF
     }
 
     configuration
+
     # Edge case for Windows, just exits with dep_ch's error message if it can't find mpv.exe either
-    if [ "$player" = "mpv" -a -z "$(command -v mpv)" ]; then
-        if [ -n "$(command -v mpv.exe)" ]; then
+    if [ "$player" = "mpv" ] && ! command -v mpv >/dev/null; then
+        if command -v mpv.exe >/dev/null; then
             player="mpv.exe"
         else
             dep_ch mpv.exe
@@ -757,11 +732,11 @@ EOF
             -p | --provider)
                 provider="$2"
                 if [ -z "$provider" ]; then
-                    provider="UpCloud"
+                    provider="Vidcloud"
                     shift
                 else
                     if [ "${provider#-}" != "$provider" ]; then
-                        provider="UpCloud"
+                        provider="Vidcloud"
                         shift
                     else
                         shift 2
@@ -837,7 +812,7 @@ EOF
             [ ! -L "$applications" ] && ln -sf "/tmp/lobster/applications/" "$applications"
         fi
     fi
-    [ -z "$provider" ] && provider="UpCloud"
+    [ -z "$provider" ] && provider="Vidcloud"
     [ "$trending" = "1" ] && choose_from_trending
     [ "$recent" = "movie" ] && choose_from_recent_movie
     [ "$recent" = "tv" ] && choose_from_recent_tv
