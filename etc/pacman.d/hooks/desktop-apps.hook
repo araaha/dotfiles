@@ -2,11 +2,13 @@
 Operation = Install
 Operation = Upgrade
 Type = Package
-Target = alacritty
+Target = alacritty*
 Target = sioyek*
 Target = rofi*
+Target = chromium*
+Target = localsend*
 
 [Action]
 Description = Deleting desktop applications...
 When = PostTransaction
-Exec = /usr/bin/bash -c "rm -f /usr/share/applications/Alacritty.desktop; rm -f /usr/share/applications/sioyek.desktop; rm -f /usr/share/applications/rofi.desktop; rm -f /usr/share/applications/rofi-theme-selector.desktop"
+Exec = /usr/bin/bash -c "rm -f /usr/share/applications/Alacritty.desktop; rm -f /usr/share/applications/sioyek.desktop; rm -f /usr/share/applications/rofi.desktop; rm -f /usr/share/applications/rofi-theme-selector.desktop; rm -f /usr/share/applications/localsend.desktop; rm -f /usr/share/applications/chromium.desktop"
