@@ -2,10 +2,10 @@
 configuration {
 	modi:                       "drun";
     show-icons:                 false;
-    display-drun:               "";
-    display-run:                "";
-    display-filebrowser:        "";
-    display-window:             "";
+    display-drun:               "  ";
+    display-run:                "  ";
+    display-filebrowser:        "  ";
+    display-window:             "  ";
 	drun-display-format:        "{name} [<span weight='light' size='small'><i>({generic})</i></span>]";
 	window-format:              "{w} · {c} · {t}";
 }
@@ -81,9 +81,9 @@ mainbox {
 /*****----- Inputbar -----*****/
 inputbar {
     enabled:                     true;
-    spacing:                     16px;
+    spacing:                     0px;
     margin:                      0px;
-    padding:                     15px 0px 15px 15px;
+    padding:                     15px 0px 15px 0px;
     border:                      0px;
     border-radius:               0px;
     border-color:                @border-colour;
@@ -97,6 +97,7 @@ prompt {
     background-color:            transparent;
     text-color:                  inherit;
 }
+
 textbox-prompt-colon {
     enabled:                     true;
     expand:                      false;
@@ -174,7 +175,7 @@ element selected.active {
 element-icon {
     background-color:            transparent;
     text-color:                  inherit;
-    size:                        107px;
+    size:                        12%;
     cursor:                      inherit;
 }
 element-text {
