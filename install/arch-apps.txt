@@ -58,13 +58,13 @@ ouch
 pacman
 parallel
 pass
-pavucontrol
 perl-image-exiftool
 picom
 polybar
 pulseaudio
 pulseaudio-bluetooth
 pulseaudio-ctl
+pulsemixer
 pyright
 python-pip
 python-pipx
