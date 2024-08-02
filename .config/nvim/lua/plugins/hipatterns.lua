@@ -7,12 +7,12 @@ return {
         hipatterns.setup({
             highlighters = {
                 -- Highlight standalone " FIXME ", " HACK ", "TODO", "NOTE"
-                hack      = { pattern = "%s-HACK%s*", group = "MiniHipatternsHack" },
-                fixme     = { pattern = "%s-FIXME%s*", group = "MiniHipatternsFixme" },
-                todo      = { pattern = "%s-TODO%s*", group = "MiniHipatternsTodo" },
-                note      = { pattern = "%s-NOTE%s*", group = "MiniHipatternsNote" },
+                hack      = { pattern = "HACK", group = "MiniHipatternsHack" },
+                fixme     = { pattern = "FIXME", group = "MiniHipatternsFixme" },
+                todo      = { pattern = "TODO", group = "MiniHipatternsTodo" },
+                note      = { pattern = "NOTE", group = "MiniHipatternsNote" },
 
-                hex_color = hipatterns.gen_highlighter.hex_color({ style = "#" }),
+                hex_color = hipatterns.gen_highlighter.hex_color(),
                 trailing  = {
                     pattern = function(buf_id)
                         if vim.bo[buf_id].filetype == "go" then return nil end

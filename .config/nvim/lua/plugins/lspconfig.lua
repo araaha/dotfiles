@@ -16,7 +16,7 @@ return {
                 local opts = { buffer = ev.buf }
                 -- vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
                 vim.keymap.set("n", "gD", vim.lsp.buf.definition, opts)
-                vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+                vim.keymap.set("n", "<M-o>", vim.lsp.buf.hover, opts)
                 -- vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
                 vim.keymap.set("n", "<space>ih",
                     function()

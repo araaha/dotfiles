@@ -47,13 +47,14 @@ return {
                 }
             },
             performance = {
-                max_view_entries = 5
+                max_view_entries = 7
             },
             snippet = {
                 expand = function(args)
                     require("luasnip").lsp_expand(args.body)
                 end
             },
+            preselect = cmp.PreselectMode.None,
             window = {
                 completion = {
                     border = "single",
@@ -69,12 +70,9 @@ return {
             mapping = {
                 ["<C-p>"] = cmp.mapping.select_prev_item(select_opts),
                 ["<C-n>"] = cmp.mapping.select_next_item(select_opts),
-                ["<C-Space>"] = cmp.mapping.complete(),
-                ["<CR>"] = cmp.mapping.abort(),
+                ["<C-Space>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true }),
                 ["<Tab>"] = cmp.mapping(function(fallback)
-                    if cmp.visible() then
-                        cmp.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true })
-                    elseif luasnip.expand_or_jumpable() then
+                    if luasnip.expand_or_jumpable() then
                         luasnip.expand_or_jump()
                     else
                         fallback()
