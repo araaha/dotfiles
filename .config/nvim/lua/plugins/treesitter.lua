@@ -21,17 +21,14 @@ local opts = {
         },
     },
     ensure_installed = { "c", "lua", "vim", "vimdoc", "cpp", "latex", "css", "go", "python", "bash",
-        "diff", "yaml", "xml", "markdown", "ini", "json", "html", "typst" },
+        "diff", "yaml", "xml", "markdown", "ini", "json", "html", "typst", "make" },
 }
 
 return {
     "nvim-treesitter/nvim-treesitter",
-    version      = false,
-    event        = "VeryLazy",
-    dependencies = {
-        "yorickpeterse/nvim-tree-pairs"
-    },
-    config       = function()
+    version = false,
+    event   = "VeryLazy",
+    config  = function()
         require("nvim-treesitter.configs").setup(opts)
     end,
 }
