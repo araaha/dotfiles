@@ -5,6 +5,7 @@ picom -b &
 xset s off -dpms &
 udiskie -N &
 unclutter -idle 10 -root &
+redshift -P &
 xset r rate 150 50 &
 setxkbmap -option caps:ctrl_modifier &
 xmodmap -e "keycode 37 = " &
