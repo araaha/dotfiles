@@ -9,7 +9,7 @@
 # http://zdharma.org/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
 ZSH_COMPLETION_GENERATOR_SRCDIR=${0:A:h}
 
-ZSH_COMPLETION_GENERATOR_DIR="$ZDOTDIR/plugins/custom-completions"
+ZSH_COMPLETION_GENERATOR_DIR="$pwd/custom-completions"
 # which python to use
 local python
 if [[ -z $GENCOMPL_PY ]]; then
