@@ -28,6 +28,7 @@ map({ "n" }, "<C-s>", ":silent! w<CR>", { silent = true })
 
 map({ "n", "v" }, "{", "{(")
 map({ "n", "v" }, "}", "})")
+map({ "v" }, "gs", [[y<esc>:%s/<C-r>"//g<left><left>]], {})
 
 map("n", "=l", function()
     vim.diagnostic.setloclist({ open = false })
