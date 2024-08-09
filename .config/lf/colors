@@ -1,6 +1,7 @@
 export LF_COLORS="\
 ~/Downloads=01;35:\
 ~/.config=01;32:\
+~/Site=01;32:\
 ~/.local/share=01;37:\
 ~/dotfiles=33:\
 ~/dotfiles-private=33:\
