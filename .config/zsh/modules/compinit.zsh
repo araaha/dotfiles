@@ -1,7 +1,8 @@
-fpath=($fpath $ZDOTDIR/plugins/custom-completions/)
+fpath=($fpath $ZDOTDIR/plugins/zsh-completion-generator/custom-completions/)
 autoload -Uz compinit
-if [ $(date +'%j') != $(date -r $ZSH/.zcompdump +'%j') ]; then
-    compinit
+if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
+  compinit
 else
-    compinit -C
+  compinit -C
 fi
+

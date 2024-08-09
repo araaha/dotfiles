@@ -1,6 +1,5 @@
 bindkey -r "^S"
 bindkey "^W" backward-kill-word
-bindkey "^ " autosuggest-accept
 bindkey "^K" kill-whole-line
 bindkey "^[f" kill-line
 bindkey "^[q" accept-and-menu-complete
