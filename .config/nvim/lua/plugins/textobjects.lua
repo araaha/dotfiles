@@ -64,6 +64,7 @@ return {
         { "dof", "<cmd>TSTextobjectSelect @function.inner<cr>\"ay\"_d<cmd>TSTextobjectSelect @function.outer<cr>\"aP", mode = { "n" } },
     },
     config  = function()
+        -- fix
         require("nvim-treesitter.configs").setup(opts)
     end
 }

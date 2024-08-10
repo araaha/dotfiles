@@ -3,10 +3,9 @@ return {
     version      = false,
     lazy         = true,
     opts         = {},
-    keys         = "<Leader>dap",
+    keys         = {
+        { "<Leader>di",  "<cmd>DapStepInto<cr>", mode = "n" },
+        { "<Leader>dtb", "<cmd>DapStepInto<cr>", mode = "n" }
+    },
     dependencies = "mfussenegger/nvim-dap",
-    config       = function()
-        require("dap-go").setup()
-        vim.keymap.set("n", " di", "<cmd>DapStepInto<cr>", {})
-    end
 }

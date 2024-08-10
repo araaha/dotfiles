@@ -3,7 +3,7 @@ return {
     branch = "trace",
     lazy   = true,
     cmd    = "FzfLua",
-    keys   = { "<C-t>", " fl", " ff", { "<C-x><C-f>", mode = "i" } },
+    keys   = { "<C-t>", "<Leader>fl", "<Leader>ff", { "<C-x><C-f>", mode = "i" } },
     config = function()
         local fzf = require("fzf-lua")
         local actions = require("fzf-lua").actions
@@ -92,8 +92,8 @@ return {
 
         vim.keymap.set("n", "<C-t>", fzf.files, {})
         vim.keymap.set("i", "<C-x><C-f>", fzf.complete_file, { silent = true })
-        vim.keymap.set("n", " fl", fzf.blines, {})
-        vim.keymap.set("n", " ff", function()
+        vim.keymap.set("n", "<Leader>fl", fzf.blines, {})
+        vim.keymap.set("n", "<Leader>ff", function()
             fzf.files({ cwd_prompt = false, cwd = "~" })
         end, {})
     end,

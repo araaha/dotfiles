@@ -57,7 +57,7 @@ map("n", "=f", function()
     end
 end)
 
-map("n", " lp", ":silent! Lazy profile<CR>", { silent = true })
+map("n", "<Leader>lp", ":silent! Lazy profile<CR>", { silent = true })
 map("n", "<M-PageDown>", ":silent! cnext<CR>", { silent = true })
 map("n", "<M-PageUp>", ":silent! cprevious<CR>", { silent = true })
 map("n", "<PageDown>", ":silent! lnext<CR>", { silent = true })
@@ -86,4 +86,4 @@ map("n", "<S-CR>", function()
     end
 end, { expr = true, replace_keycodes = true })
 
-map("n", " tr", [[:%s/\s\+$//e<CR>:w<CR>]], { silent = true })
+map("n", "<Leader>tr", [[:%s/\s\+$//e<CR>:w<CR>]], { silent = true })

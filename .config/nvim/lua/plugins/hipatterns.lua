@@ -6,7 +6,7 @@ return {
         local hipatterns = require("mini.hipatterns")
         hipatterns.setup({
             highlighters = {
-                -- Highlight standalone " FIXME ", " HACK ", "TODO", "NOTE"
+                -- Highlight standalone "FIXME", "HACK" , "TODO", "NOTE"
                 hack      = { pattern = "HACK", group = "MiniHipatternsHack" },
                 fixme     = { pattern = "FIXME", group = "MiniHipatternsFixme" },
                 todo      = { pattern = "TODO", group = "MiniHipatternsTodo" },

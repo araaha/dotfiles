@@ -22,8 +22,18 @@ return {
     "rmagatti/goto-preview",
     version = false,
     keys    = {
-        { "gd", "<cmd>lua require(\"goto-preview\").goto_preview_definition()<CR>", mode = "n" },
-        { "X",  "<cmd>lua require(\"goto-preview\").close_all_win()<CR>",           mode = "n" }
+        {
+            "gd",
+            function() require("goto-preview").goto_preview_definition() end,
+            mode = "n"
+        },
+        {
+            "X",
+            function()
+                require("goto-preview").close_all_win()
+            end,
+            mode = "n"
+        }
     },
     opts    = opts,
 }

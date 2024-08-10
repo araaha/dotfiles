@@ -12,7 +12,7 @@ local opts = {
         ["}"] = { action = "close", pair = "{}", neigh_pattern = "[^\\].", register = { cr = true } },
         -- [">"] = { action = "close", pair = "<>", neigh_pattern = "[^\\]." },
 
-        ["\""] = { action = "closeopen", pair = "\"\"", neigh_pattern = "[^\\].", register = { cr = true } },
+        ["\""] = { action = "closeopen", pair = "\"\"", neigh_pattern = "[^A-Za-z\\].", register = { cr = true } },
         ["'"] = { action = "closeopen", pair = "''", neigh_pattern = "[^\\].", register = { cr = false } },
     },
 }
