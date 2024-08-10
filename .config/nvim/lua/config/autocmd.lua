@@ -17,10 +17,6 @@ local remember = function()
     end
 end
 
-vim.defer_fn(function()
-    remember()
-end, 10)
-
 au({ "BufReadPost" }, {
     callback = remember,
 })
