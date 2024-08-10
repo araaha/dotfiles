@@ -5,7 +5,8 @@ return {
     opts         = {},
     keys         = {
         { "<Leader>di",  "<cmd>DapStepInto<cr>", mode = "n" },
-        { "<Leader>dtb", "<cmd>DapStepInto<cr>", mode = "n" }
+        { "<Leader>dtb", "<cmd>DapStepInto<cr>", mode = "n" },
     },
     dependencies = "mfussenegger/nvim-dap",
 }
+

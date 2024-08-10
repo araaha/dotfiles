@@ -1,7 +1,7 @@
 return {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
-    keys = " cp",
+    keys = "<Leader>cp",
     opts = {
         suggestion = {
             enabled = true,

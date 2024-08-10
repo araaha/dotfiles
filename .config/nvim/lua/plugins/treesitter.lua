@@ -28,7 +28,6 @@ return {
     "nvim-treesitter/nvim-treesitter",
     version = false,
     event   = "VeryLazy",
-    config  = function()
-        require("nvim-treesitter.configs").setup(opts)
-    end,
+    opts    = opts,
+    main    = "nvim-treesitter.configs"
 }
