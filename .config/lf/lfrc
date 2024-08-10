@@ -31,10 +31,10 @@ cmd open ${{
     test -L $f && f=$(readlink -f $f)
     case $(file --mime-type $f -b) in
         text/*) nvim $(echo "$fx");;
+        image/gif|video/*)
+           mpv $(echo "$fx") > /dev/null 2> /dev/null & disown;;
         image/*)
            nsxiv -g 800x600+560+240 -b -a -sf $(echo "$fx") & disown;;
-        video/*)
-           mpv $(echo "$fx") > /dev/null 2> /dev/null & disown;;
         application/octet-stream) $EDITOR $fx;;
         application/json) $EDITOR $fx;;
         application/javascript) $EDITOR $fx;;
@@ -50,7 +50,7 @@ cmd open ${{
 map <delete> delete
 
 cmd fzf_jump ${{
-    res="$(rg --color=never --files --hidden --follow --no-messages --no-ignore | fzf --reverse --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
+    res="$(rg --color=never --files --hidden --follow --no-messages --no-ignore | fzf +m --reverse --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
     if [ -d "$res" ]; then
         cmd="cd"
     else
@@ -60,7 +60,7 @@ cmd fzf_jump ${{
 }}
 
 cmd fzf_jump_abs ${{
-    res="$(rg --color=never --files --hidden --follow --no-messages --no-ignore ~/ | fzf --reverse --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
+    res="$(rg --color=never --files --hidden --follow --no-messages --no-ignore ~/ | fzf +m --reverse --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
     if [ -d "$res" ]; then
         cmd="cd"
     else
@@ -188,7 +188,7 @@ on-cd
 
 # and fzf integration
 cmd fzf_z ${{
-    sel="$(zoxide query -l | fzf --reverse  +s || true)"
+    sel="$(zoxide query -l | fzf +m --reverse  +s || true)"
     if [ -d "$sel" ]; then
         cmd="cd"
     else
@@ -287,9 +287,10 @@ cmd rfv ${{
       --bind "ctrl-o:execute:$OPENER" \
       --bind 'alt-a:select-all,alt-d:deselect-all,ctrl-/:toggle-preview' \
       --delimiter : \
-      --preview 'bat --style=full --color=always --highlight-line {2} {1}' \
-      --preview-window '~4,+{2}+4/3,<80(up)' \
+      --height 70% \
+      --preview 'bat --paging=always --color=always --highlight-line {2} {1}' \
+      --preview-window '~0,+{2}+1/2,<80(up)' \
       --query "$*"
 }}
 map rfv rfv
-map gg $lazygit
+map zg $lazygit
