@@ -5,22 +5,38 @@ return {
         {
             "<M-h>",
             function() require("tmux").move_left() end,
-            mode = ""
+        },
+        {
+            "<M-h>",
+            "<esc><cmd>lua require('tmux').move_left()<cr>a",
+            mode = "i"
         },
         {
             "<M-j>",
             function() require("tmux").move_down() end,
-            mode = ""
+        },
+        {
+            "<M-j>",
+            "<esc><cmd>lua require('tmux').move_down()<cr>a",
+            mode = "i"
         },
         {
             "<M-k>",
             function() require("tmux").move_up() end,
-            mode = ""
+        },
+        {
+            "<M-k>",
+            "<esc><cmd>lua require('tmux').move_up()<cr>a",
+            mode = "i"
         },
         {
             "<M-l>",
             function() require("tmux").move_right() end,
-            mode = ""
+        },
+        {
+            "<M-l>",
+            "<esc><cmd>lua require('tmux').move_right()<cr>a",
+            mode = "i"
         },
     },
 }
