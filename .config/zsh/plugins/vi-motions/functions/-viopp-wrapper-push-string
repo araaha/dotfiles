@@ -1,0 +1,2 @@
+local arg
+for arg; zle -U "$arg"
