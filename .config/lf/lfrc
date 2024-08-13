@@ -175,8 +175,12 @@ cmd mkdir %{{
     lf -remote "send $id select \"$*\""
 }}
 
-map <f-2> $printf '%s\n' $fx | edir
+cmd edir ${{
+    printf '%s\n' $fx | edir
+    reload
+}}
 
+map <f-2> :edir
 map cl :clear; unselect
 
 map cd :push ''
@@ -233,6 +237,8 @@ cmd pager ${{
     set -f
     case $f in
         *.html) w3m -dump $f | moar;;
+        *.wav|*.mp3|*.flac|*.m4a|*.wma|*.ape|*.ac3|*.og[agx]|*.spx|*.opus|*.as[fx]|*.mka)
+            exiftool $f | moar;;
         *) bat --paging=always $f;;
     esac
 }}
@@ -248,6 +254,7 @@ map gl :cd ~/.local/share
 map gc :cd ~/.config
 map gs :cd ~/Screenshots/
 map gd :cd ~/dotfiles/
+map gp :cd ~/dotfiles-private/
 map gt :cd /tmp/
 map gT :cd ~/.local/share/Trash/files/
 map gb :cd ~/Books
@@ -290,7 +297,7 @@ cmd rfv ${{
       --height 70% \
       --preview 'bat --paging=always --color=always --highlight-line {2} {1}' \
       --preview-window '~0,+{2}+1/2,<80(up)' \
-      --query "$*"
+      --query "$*" || true
 }}
 map rfv rfv
 map zg $lazygit
