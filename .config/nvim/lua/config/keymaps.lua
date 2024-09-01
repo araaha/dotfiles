@@ -1,11 +1,12 @@
 local map = vim.keymap.set
 
+map("n", "zq", "ZQ")
+map("n", "zz", "ZZ")
 map("i", "<C-c>", "<Esc>")
 map("i", "<C-v>", "")
 map("i", "<C-q>", "")
 map("i", "<C-l>", "")
 map("i", "<C-l>", "")
-map({ "n", "i" }, "<C-h>", "<C-w>")
 map("n", "<C-c>", ":noh<CR><Esc>", { silent = true })
 map("n", "D", "dd")
 map("n", "gJ", "J")
@@ -14,10 +15,8 @@ map({ "n", "v", "o" }, "L", "$")
 map({ "n", "v", "o" }, "M", "D")
 map({ "n", "v" }, "j", "gj")
 map({ "n", "v" }, "k", "gk")
-map("", "<C-h>", "<C-w>h")
-map("", "<C-j>", "<C-w>j")
-map("", "<C-k>", "<C-w>k")
-map("", "<C-l>", "<C-w>l")
+map("n", "<C-w>s", ":new<CR>")
+map("n", "<C-w>v", ":vnew<CR>")
 map("n", "K", ":bnext<CR>", { silent = true })
 map("n", "J", ":bprev<CR>", { silent = true })
 map({ "n", "v" }, "<C-PageDown>", ":m .+1<CR>", { silent = true })
@@ -28,36 +27,11 @@ map({ "n" }, "<C-s>", ":silent! w<CR>", { silent = true })
 
 map({ "n", "v" }, "{", "{(")
 map({ "n", "v" }, "}", "})")
-map({ "v" }, "gs", [[y<esc>:%s/<C-r>"//g<left><left>]], {})
 
-map("n", "=l", function()
-    vim.diagnostic.setloclist({ open = false })
-    local win = vim.api.nvim_get_current_win()
-    local qf_winid = vim.fn.getloclist(win, { winid = 0 }).winid
-    local action = qf_winid > 0 and "lclose" or "silent! lopen"
-    vim.cmd(action)
-end, { silent = true })
-
-map("n", "=q", function()
-    local qf_winid = vim.fn.getqflist({ winid = 0 }).winid
-    local action = qf_winid > 0 and "cclose" or "copen"
-    vim.cmd(action)
-end, { silent = true })
-
-map("n", "=f", function()
-    local win = vim.api.nvim_get_current_win()
-    local qf_winid = vim.fn.getqflist({ winid = 0 }).winid
-    local lf_winid = vim.fn.getloclist(win, { winid = 0 }).winid
-    if qf_winid > 0 then
-        vim.cmd("copen")
-    elseif lf_winid > 0 then
-        vim.cmd("lopen")
-    else
-        return
-    end
-end)
-
+map("n", "<Leader>lf", ":vert term lf %<CR>", { silent = true })
+map("n", "<Leader>lg", ":vert term lazygit<CR>", { silent = true })
 map("n", "<Leader>lp", ":silent! Lazy profile<CR>", { silent = true })
+
 map("n", "<M-PageDown>", ":silent! cnext<CR>", { silent = true })
 map("n", "<M-PageUp>", ":silent! cprevious<CR>", { silent = true })
 map("n", "<PageDown>", ":silent! lnext<CR>", { silent = true })
@@ -87,3 +61,5 @@ map("n", "<S-CR>", function()
 end, { expr = true, replace_keycodes = true })
 
 map("n", "<Leader>tr", [[:%s/\s\+$//e<CR>:w<CR>]], { silent = true })
+map({ "v" }, "gs", [[y<esc>:%s/<C-r>"//g<left><left>]], {})
+map('t', '<esc>', '<C-\\>', {})

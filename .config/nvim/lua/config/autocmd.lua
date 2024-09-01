@@ -17,7 +17,7 @@ local remember = function()
     end
 end
 
-au({ "BufReadPost" }, {
+au({ "BufRead" }, {
     callback = remember,
 })
 
@@ -27,28 +27,9 @@ au({ "CursorMoved" }, {
     end
 })
 
-au({ "BufEnter" }, {
-    callback = function()
-        if vim.bo.filetype == "help" then
-            vim.cmd.only()
-            vim.bo.buflisted = true
-            vim.defer_fn(function()
-                vim.cmd("norm! zz")
-            end, 20)
-        end
-    end,
-})
-
-au({ "Filetype" }, {
-    pattern = "qf",
-    callback = function()
-        vim.opt_local.wrap = true
-    end
-})
-
 au({ "TermOpen" }, {
     callback = function()
-        vim.cmd("startinsert")
+        vim.cmd.startinsert()
     end
 })
 
@@ -61,5 +42,15 @@ au({ "CmdLineEnter" }, {
 au({ "CmdLineLeave" }, {
     callback = function()
         vim.opt.smartcase = true
+    end
+})
+
+au('BufReadPre', {
+    callback = function()
+        local max_filesize = 100 * 1024 * 1024
+        local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(0))
+        if ok and stats and stats.size > max_filesize then
+            vim.b.minihipatterns_disable = true
+        end
     end
 })

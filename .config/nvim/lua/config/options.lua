@@ -14,23 +14,35 @@ local options = {
     matchpairs    = "(:),{:},[:],<:>",
     cursorline    = true,
     list          = true,
-    fillchars     = "eob: ",
+    fillchars     = "eob: ,foldopen:┃,foldsep:┃",
     listchars     = "tab:  ",
     foldenable    = false,
-    foldmethod    = "expr",
     foldexpr      = "v:lua.vim.treesitter.foldexpr()",
     foldtext      = "",
     guicursor     = "",
     wildoptions   = "pum,fuzzy",
     splitright    = true,
     splitbelow    = true,
-    pumheight     = 12,
+    pumheight     = math.floor(vim.o.lines * 0.33),
     shortmess     = "aIF",
     commentstring = "#%s",
     grepprg       = "rg --color=auto --vimgrep",
     grepformat    = "%f:%l:%c:%m",
-    mouse         = ""
+    mouse         = "",
+    wrap          = false,
+    inccommand    = "split",
+    cmdwinheight  = math.floor(vim.o.lines * 0.28),
 }
+
+local au = vim.api.nvim_create_autocmd
+au({ "VimResized" },
+    {
+        callback = function()
+            vim.api.nvim_set_option_value("cmdwinheight", math.floor(vim.o.lines * 0.28), {})
+            vim.api.nvim_set_option_value("pumheight", math.floor(vim.o.lines * 0.33), {})
+        end
+    }
+)
 
 for key, val in pairs(options) do
     vim.api.nvim_set_option_value(key, val, {})
