@@ -6,10 +6,10 @@ time_format = "%M:%S"
 id = "work"
 name = "Work"
 duration = "30m"
-command = "notify-send 'Take a rest'"
+command = "dunstify 'Take a rest'"
 
 [[sessions]]
 id = "rest"
 name = "Rest"
 duration = "6m"
-command = "notify-send 'Rest Done!'"
+command = "dunstify 'Rest Done!'"
