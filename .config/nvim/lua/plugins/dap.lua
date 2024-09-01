@@ -1,6 +1,5 @@
 return {
     "mfussenegger/nvim-dap",
-    version = false,
     lazy    = true,
     keys    = {
         {

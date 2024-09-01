@@ -1,8 +1,7 @@
 return {
     "neovim/nvim-lspconfig",
-    version = false,
-    event   = "VeryLazy",
-    config  = function()
+    event = "VeryLazy",
+    config = function()
         local lspconfig = require("lspconfig")
         vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
         vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help,
@@ -14,10 +13,9 @@ return {
                 vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 
                 local opts = { buffer = ev.buf }
-                -- vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
                 vim.keymap.set("n", "gD", vim.lsp.buf.definition, opts)
                 vim.keymap.set("n", "<M-o>", vim.lsp.buf.hover, opts)
-                -- vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+                vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
                 vim.keymap.set("n", "<space>ih",
                     function()
                         vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(opts))
@@ -28,7 +26,6 @@ return {
                     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
                 end, opts)
                 vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, opts)
-                vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, opts)
                 vim.keymap.set({ "n", "v" }, "<space>ca",
                     function() vim.lsp.buf.code_action { only = { "quickfix" } } end, opts)
                 vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
@@ -36,11 +33,54 @@ return {
                 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
                 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 
+                vim.keymap.set("n", "=l", function()
+                    vim.diagnostic.setloclist({ open = false })
+                    local win = vim.api.nvim_get_current_win()
+                    local qf_winid = vim.fn.getloclist(win, { winid = 0 }).winid
+                    local action = qf_winid > 0 and "lclose" or "silent! lopen"
+                    vim.cmd(action)
+                end, { silent = true })
+
+                vim.keymap.set("n", "=q", function()
+                    vim.diagnostic.setqflist({ open = false })
+                    local qf_winid = vim.fn.getqflist({ winid = 0 }).winid
+                    local action = qf_winid > 0 and "cclose" or "copen"
+                    vim.cmd(action)
+                end, { silent = true })
+
+                vim.keymap.set("n", "=f", function()
+                    local win = vim.api.nvim_get_current_win()
+                    local qf_winid = vim.fn.getqflist({ winid = 0 }).winid
+                    local lf_winid = vim.fn.getloclist(win, { winid = 0 }).winid
+                    if qf_winid > 0 then
+                        vim.cmd("copen")
+                    elseif lf_winid > 0 then
+                        vim.cmd("lopen")
+                    else
+                        return
+                    end
+                end)
+                --
+                local function update_list_if_visible()
+                    local loclist = vim.fn.getloclist(0, { winid = 0 })
+                    local qflist = vim.fn.getqflist({ winid = 0 })
+                    if loclist.winid ~= 0 then
+                        vim.diagnostic.setloclist({ open = false })
+                    end
+                    if qflist.winid ~= 0 then
+                        vim.diagnostic.setqflist({ open = false })
+                    end
+                end
+
+                vim.api.nvim_create_autocmd("DiagnosticChanged", {
+                    callback = update_list_if_visible,
+                })
+
                 for _, client in pairs(vim.lsp.get_clients()) do
                     if client.name ~= "copilot" then
                         vim.keymap.set("n", "<C-s>", function()
                             vim.lsp.buf.format()
-                            vim.cmd("write")
+                            vim.cmd("silent! write")
                         end, opts)
                     end
                 end
@@ -83,60 +123,44 @@ return {
         lspconfig.pyright.setup({
             settings = {
                 pyright = {
-                    -- Using Ruff's import organizer
                     disableOrganizeImports = true,
+                    disableLanguageServices = false,
                 },
                 python = {
                     analysis = {
-                        -- Ignore all files for analysis to exclusively use Ruff for linting
                         ignore = { '*' },
+                        autoImportCompletions = true
                     },
                 },
             },
         })
-        lspconfig.ruff.setup({
-        })
+        lspconfig.ruff.setup({})
         lspconfig.lua_ls.setup({
             on_init = function(client)
                 client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
                     runtime = {
-                        -- Tell the language server which version of Lua you're using
-                        -- (most likely LuaJIT in the case of Neovim)
                         version = 'LuaJIT'
                     },
-                    -- Make the server aware of Neovim runtime files
                     workspace = {
                         checkThirdParty = false,
                         library = {
                             vim.env.VIMRUNTIME,
-                            -- Depending on the usage, you might want to add additional paths here.
                             "${3rd}/luv/library"
-                            -- "${3rd}/busted/library",
                         }
-                        -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
-                        -- library = vim.api.nvim_get_runtime_file("", true)
                     }
                 })
             end,
             settings = {
                 Lua = {
-                    hint = { enable = true }
+                    hint = { enable = true },
+                    completion = {
+                        callSnippet = "Replace"
+                    }
                 }
             }
         })
-        lspconfig.bashls.setup({})
-
-        vim.api.nvim_create_autocmd("DiagnosticChanged", {
-            callback = function()
-                vim.diagnostic.setloclist({ open = false })
-                vim.diagnostic.setqflist({ open = false })
-            end
-        })
-
-        lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_config,
-            { on_attach = function(client) client.server_capabilities.semanticTokensProvider = nil end })
+        lspconfig.bashls.setup({ filetypes = { "sh", "zsh" } })
 
         vim.cmd("LspStart")
-        vim.api.nvim_create_autocmd("BufReadPost", { command = "LspStart" })
     end,
 }

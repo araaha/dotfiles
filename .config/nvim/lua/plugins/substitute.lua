@@ -1,23 +1,61 @@
 return {
     "gbprod/substitute.nvim",
     keys = {
-        "s", "S", "<Leader>s", "sx"
+        {
+            "s",
+            function() require("substitute").operator() end,
+            mode = "n",
+        },
+        {
+            "ss",
+            function() require("substitute").line() end,
+            mode = "n",
+        },
+        {
+            "S",
+            function() require("substitute").eol() end,
+            mode = "n",
+        },
+        {
+            "s",
+            function() require("substitute").visual() end,
+            mode = "x",
+        },
+        {
+            "<Leader>s",
+            function() require("substitute.range").operator() end,
+            mode = "n",
+        },
+        {
+            "<Leader>s",
+            function() require("substitute.range").visual() end,
+            mode = "x",
+        },
+        {
+            "<Leader>ss",
+            function() require("substitute.range").word() end,
+            mode = "n",
+        },
+        {
+            "sx",
+            function() require("substitute.exchange").operator() end,
+            mode = "n",
+        },
+        {
+            "sxx",
+            function() require("substitute.exchange").line() end,
+            mode = "n",
+        },
+        {
+            "X",
+            function() require("substitute.exchange").visual() end,
+            mode = "x",
+        },
+        {
+            "sxc",
+            function() require("substitute.exchange").cancel() end,
+            mode = "n"
+        }
     },
-    config = function()
-        require("substitute").setup()
-
-        vim.keymap.set("n", "s", require("substitute").operator, { noremap = true })
-        vim.keymap.set("n", "ss", require("substitute").line, { noremap = true })
-        vim.keymap.set("n", "S", require("substitute").eol, { noremap = true })
-        vim.keymap.set("x", "s", require("substitute").visual, { noremap = true })
-
-        vim.keymap.set("n", "<Leader>s", require("substitute.range").operator, { noremap = true })
-        vim.keymap.set("x", "<Leader>s", require("substitute.range").visual, { noremap = true })
-        vim.keymap.set("n", "<Leader>ss", require("substitute.range").word, { noremap = true })
-
-        vim.keymap.set("n", "sx", require("substitute.exchange").operator, { noremap = true })
-        vim.keymap.set("n", "sxx", require("substitute.exchange").line, { noremap = true })
-        vim.keymap.set("x", "X", require("substitute.exchange").visual, { noremap = true })
-        vim.keymap.set("n", "sxc", require("substitute.exchange").cancel, { noremap = true })
-    end
+    opts = {}
 }

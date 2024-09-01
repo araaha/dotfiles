@@ -1,9 +1,8 @@
 return {
     "ibhagwan/fzf-lua",
-    branch = "trace",
-    lazy   = true,
-    cmd    = "FzfLua",
-    keys   = {
+    lazy = true,
+    cmd  = "FzfLua",
+    keys = {
         {
             "<C-t>",
             function() require("fzf-lua").files() end,
@@ -15,21 +14,25 @@ return {
             mode = "n"
         },
         {
+            "<Leader>rfv",
+            function() require("fzf-lua").live_grep() end,
+            mode = "n"
+        },
+        {
             "<Leader>ff",
             function() require("fzf-lua").files({ cwd_prompt = false, cwd = "~" }) end,
             mode = "n"
         },
         {
             "<C-x><C-f>",
-            function() require("fzf-lua").complete_file() end,
+            function() require("fzf-lua").complete_path({ cmd = os.getenv("FZF_DEFAULT_COMMAND") }) end,
             mode = "i"
         }
     },
-    config = function()
-        local fzf = require("fzf-lua")
+    opts = function()
         local actions = require("fzf-lua").actions
 
-        fzf.setup({
+        return {
             keymap        = {
                 fzf = {
                     ["ctrl-u"] = "half-page-up"
@@ -52,7 +55,7 @@ return {
                 buf_name = "FloatBorder"
             },
             complete_file = {
-                cmd = os.getenv("FZF_DEFAULT_COMMAND")
+                cmd = os.getenv("FZF_DEFAULT_COMMAND"),
             },
             grep          = {
                 multiline = 1,
@@ -108,7 +111,7 @@ return {
                     ["ctrl-x"]  = actions.buf_vsplit,
                     ["ctrl-t"]  = false,
                 }
-            },
-        })
-    end,
+            }
+        }
+    end
 }

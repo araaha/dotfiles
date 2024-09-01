@@ -1,5 +1,5 @@
 return {
-    'MagicDuck/grug-far.nvim',
+    "MagicDuck/grug-far.nvim",
     cmd = "GrugFar",
     keys = {
         {
@@ -8,5 +8,10 @@ return {
             mode = "n"
         }
     },
-    opts = {}
+    opts = {
+        wrap = false,
+        icons = {
+            enabled = false
+        }
+    }
 }

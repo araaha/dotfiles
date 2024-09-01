@@ -1,12 +1,10 @@
 return {
     "echasnovski/mini.hipatterns",
-    version = false,
-    event   = "VeryLazy",
-    config  = function()
+    event = "VeryLazy",
+    opts  = function()
         local hipatterns = require("mini.hipatterns")
-        hipatterns.setup({
+        return {
             highlighters = {
-                -- Highlight standalone "FIXME", "HACK" , "TODO", "NOTE"
                 hack      = { pattern = "HACK", group = "MiniHipatternsHack" },
                 fixme     = { pattern = "FIXME", group = "MiniHipatternsFixme" },
                 todo      = { pattern = "TODO", group = "MiniHipatternsTodo" },
@@ -34,8 +32,7 @@ return {
                         return hipatterns.compute_hex_color_group(hex, "bg")
                     end
                 },
-
             }
-        })
+        }
     end
 }

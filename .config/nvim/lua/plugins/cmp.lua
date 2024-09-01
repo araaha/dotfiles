@@ -1,13 +1,13 @@
 return {
-    "hrsh7th/nvim-cmp",
-    version      = false,
+    "yioneko/nvim-cmp",
+    branch       = "perf",
     event        = { "InsertEnter" },
     dependencies = {
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-nvim-lsp",
         "saadparwaiz1/cmp_luasnip",
     },
-    config       = function()
+    opts         = function()
         local luasnip = require("luasnip")
         local cmp = require("cmp")
         local types = require("cmp.types")
@@ -18,7 +18,7 @@ return {
         })
 
         local bufIsBig = function(bufnr)
-            local max_filesize = 200 * 1024 -- 100 KB
+            local max_filesize = 512 * 1024
             local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
             if ok and stats and stats.size > max_filesize then
                 return true
@@ -39,19 +39,30 @@ return {
 
         buffer_sources()
 
-        cmp.setup({
+        return {
             completion = {
                 autocomplete = {
-                    types.cmp.TriggerEvent.InsertEnter,
                     types.cmp.TriggerEvent.TextChanged
                 }
             },
             performance = {
-                max_view_entries = 7
+                max_view_entries = 10,
+                debounce = 0,
+                throttle = 0,
+                fetching_timeout = 0,
+                async_budget = 1,
+                confirm_resolve_timeout = 0
+            },
+            matching = {
+                disallow_fuzzy_matching = false,
+                disallow_fullfuzzy_matching = true,
+                disallow_partial_fuzzy_matching = true,
+                disallow_partial_matching = false,
+                disallow_prefix_unmatching = false,
             },
             snippet = {
                 expand = function(args)
-                    require("luasnip").lsp_expand(args.body)
+                    luasnip.lsp_expand(args.body)
                 end
             },
             preselect = cmp.PreselectMode.None,
@@ -68,8 +79,8 @@ return {
                 }
             },
             mapping = {
-                ["<C-p>"] = cmp.mapping.select_prev_item(select_opts),
-                ["<C-n>"] = cmp.mapping.select_next_item(select_opts),
+                ["<C-p>"] = cmp.mapping.select_prev_item(),
+                ["<C-n>"] = cmp.mapping.select_next_item(),
                 ["<C-Space>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true }),
                 ["<Tab>"] = cmp.mapping(function(fallback)
                     if luasnip.expand_or_jumpable() then
@@ -123,6 +134,6 @@ return {
                     return vim_item
                 end
             },
-        })
-    end
+        }
+    end,
 }

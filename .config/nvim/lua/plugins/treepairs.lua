@@ -1,5 +1,7 @@
 return {
     "araaha/nvim-tree-pairs",
     opts = {},
-    keys = "%",
+    keys = {
+        { "%", mode = { "n", "v", "o" } }
+    },
 }
