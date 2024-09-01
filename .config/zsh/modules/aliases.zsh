@@ -1,7 +1,8 @@
 alias \#='sudo'
 alias \$=''
 alias alu="apt list --upgradable"
-alias bctl="bluetoothctl"
+alias bdisc="bluetoothctl disconnect 40:C1:F6:2A:8C:DD"
+alias bconn="bluetoothctl connect 40:C1:F6:2A:8C:DD"
 alias cat="bat -pp"
 alias catt="/usr/bin/cat"
 alias copy="xclip -r -sel clip"
@@ -36,5 +37,4 @@ alias saup="sudo apt upgrade -y"
 alias sxiv="nsxiv -g 800x600+560+240 -b -a -sf"
 alias ticker='ticker --sort=user --config="$HOME/.config/.ticker.yaml"'
 alias tree="tree --noreport -C"
-alias vi="nvim -u ~/.config/nvim/vi.lua"
 alias zathura="zathura --fork"

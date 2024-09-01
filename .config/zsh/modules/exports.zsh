@@ -46,7 +46,7 @@ export GNUPGHOME="$XDG_DATA_HOME/.gnupg"
 export PASSWORD_STORE_DIR="$XDG_DATA_HOME/pass"
 export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
 
-export RIPGREP_CONFIG_PATH="$HOME/dotfiles/.config/ripgreprc"
+export RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
 
 export _ZO_ECHO=0
 export _ZO_DATA_DIR="$HOME/.local/share/zoxide/"

@@ -57,7 +57,7 @@ function generate_prompt {
     local prompt_segment
     local prompt_ending
 
-    prompt_ending="%F{green}|> %f"
+    prompt_ending="%F{blue}█ %f"
     prompt_segment="%{$black%}%{$green%} I %k%f"
 
     case "${VI_KEYMAP}" in
@@ -70,7 +70,7 @@ function generate_prompt {
 
     # Include the return code if it's non-zero
     if [[ ${TMP_RET} != 0 ]]; then
-        prompt_ending="%{$black%}%{$red%}|>%k%f "
+        prompt_ending="%{$black%}%{$red%}█%k%f "
     fi
 
     echo -n "%{$red%}%~%f\n${prompt_segment}${prompt_ending}"
