@@ -21,6 +21,7 @@ local modes = {
     ["!"] = "SHELL",
     ["nt"] = "TERMINAL",
     ["t"] = "TERMINAL",
+    ["ntT"] = "(TERMINAL)",
     ["niI"] = "(INSERT)",
 }
 
@@ -120,17 +121,27 @@ local function filetype()
     return "%#StatuslineReplaceAccent#" .. " %{&filetype} "
 end
 
-local function filepath()
+local function filepath(s)
     local fpath = vim.fn.expand("%")
     if fpath == "" or fpath == "." then
         return ""
     end
 
-    if vim.o.columns < 70 then
-        return string.format(" %s", vim.fn.expand("%:t"))
+    local term = {}
+    for word in fpath:gmatch("%S+") do
+        table.insert(term, word)
     end
 
-    return string.format("%s %s", update_mode_colors_foreground(), fpath)
+    local current_mode = vim.api.nvim_get_mode().mode
+    if current_mode == "nt" or current_mode == "ntT" or current_mode == "t" then
+        return string.format("%s%s", s, term[1])
+    end
+
+    if vim.o.columns < 70 then
+        return string.format("%s%s", s, vim.fn.expand("%:t"))
+    end
+
+    return string.format("%s%s%s", update_mode_colors_foreground(), s, fpath)
 end
 
 local function lineinfo()
@@ -254,7 +265,7 @@ Statusline.active = function()
     return table.concat {
         update_mode_colors(),
         mode(),
-        filepath(),
+        filepath(" "),
         modified(),
         "%=",
         countdown,
@@ -266,7 +277,7 @@ Statusline.active = function()
 end
 
 Statusline.inactive = function()
-    return string.format("%s%s", update_mode_colors_foreground(), vim.fn.expand("%"))
+    return string.format("%s", filepath(""))
 end
 
 local ag = vim.api.nvim_create_augroup
