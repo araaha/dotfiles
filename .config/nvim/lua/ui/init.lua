@@ -1,6 +1,5 @@
 require("ui.gruvbox")
 require("ui.indentmini")
-vim.defer_fn(function()
+vim.schedule(function()
     require("ui.statusline")
-    require("ui.help")
-end, 20)
+end)
