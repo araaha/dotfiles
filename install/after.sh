@@ -43,9 +43,6 @@ systemctl enable --now ly
 systemctl enable --now --user greenclip
 systemctl enable --now --user redshift
 
-#set sleep scripts
-sudo ln -s ~/dotfiles/scripts/xset-keyboard-repeat.sh /usr/lib/systemd/system-sleep/
-
 #install compiled/zipped apps
 yay -S cyme-bin \
 djvu2pdf \
