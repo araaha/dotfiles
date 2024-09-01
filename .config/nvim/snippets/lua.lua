@@ -16,14 +16,11 @@ return {
     s(
         {
             trig = "plug",
-            regTrig = false,
-            snippetType = "autosnippet",
-            hidden = true,
+            snippetType = "snippet",
+            hidden = false,
         }, fmt([[
     return {{
         "{}",
-        version = {},
-        lazy    = {},
         event   = {},
         opts    = {{}},
     }}
@@ -37,7 +34,6 @@ return {
     s(
         {
             trig = "snip",
-            regTrig = false,
             snippetType = "snippet",
             hidden = false,
         }, fmta([[
