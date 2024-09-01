@@ -74,7 +74,6 @@ map fi find
 map fd :fzf_jump_abs
 map <c-t> :fzf_jump
 
-map <c-s> $$SHELL
 map c
 
 map n
@@ -86,7 +85,7 @@ map q quit
 map ZQ quit
 map / search
 
-map D %garbage put $fx
+map D &garbage put $fx
 
 map m
 
@@ -98,7 +97,11 @@ cmd mkdir %{{
 
 map mk push :mkdir<space>
 
-map to push %touch<space>
+cmd touch ${{
+    touch -- "$*"
+    nvim "$*"
+}}
+map to push :touch<space>
 
 cmd open-with $"$@" $fx
 
@@ -113,7 +116,7 @@ cmd find_fzf ${{
 }}
 map <c-o> :find_fzf
 
-cmd garbage_clear ${{
+cmd garbage_clear &{{
   garbage empty --all
 }}
 
@@ -125,8 +128,8 @@ map tc garbage_clear
 map tr garbage_restore
 
 
-cmd decompress %ouch decompress "$fx"
-cmd compress %ouch compress "$fx" "$fx"."$@"
+cmd decompress &ouch decompress "$fx"
+cmd compress &ouch compress "$fx" "$fx"."$@"
 
 map unselect
 map <enter>
@@ -157,7 +160,7 @@ cmd chmod ${{
 
 map ch :chmod +x
 
-cmd copy-path ${{
+cmd copy-path &{{
   echo -n $f | xclip -sel clipboard | lf -remote "send echo $f"
 }}
 
@@ -169,15 +172,9 @@ map <backtab> :toggle; up
 cmap <tab> cmd-menu-complete
 cmap <backtab> cmd-menu-complete-back
 
-cmd mkdir %{{
-    IFS=" "
-    mkdir -p -- "$*"
-    lf -remote "send $id select \"$*\""
-}}
-
 cmd edir ${{
     printf '%s\n' $fx | edir
-    reload
+    lf -remote "send reload"
 }}
 
 map <f-2> :edir
@@ -207,7 +204,7 @@ cmap <up> cmd-history-prev
 cmap <down> cmd-history-next
 
 
-cmd link %{{
+cmd link &{{
     set -- $(cat ~/.local/share/lf/files)
     mode="copy"
     shift
@@ -262,7 +259,7 @@ map gb :cd ~/Books
 map <c-c> cmd-escape
 map <esc> cmd-escape
 
-cmd ff %{{
+cmd ff &{{
     IFS=" "
     ff -- "$*"
     lf -remote "send $id select \"$*\""
@@ -279,7 +276,7 @@ cmd edit-config ${{
 map R edit-config
 
 map p :paste; reload
-map rr $dragon-drop $fx & disown; lf -remote 'send unselect'
+map rr &dragon-drop $fx & disown; lf -remote 'send unselect'
 cmd rfv ${{
   RELOAD='reload:rg --column --color=always --smart-case {q} || :'
   OPENER='if [[ $FZF_SELECT_COUNT -eq 0 ]]; then
