@@ -1,11 +1,12 @@
 xwallpaper --center ~/.local/share/Wallpapers/Pacman.png &
 /usr/bin/light -Ss "sysfs/backlight/amdgpu_bl0" 13 &
 ./.config/polybar/launch.sh &
+./scripts/bluetooth-autoconnect.sh &
 picom -b &
 xset s off -dpms &
 udiskie -N &
 unclutter -idle 10 -root &
-redshift -P &
+xsct 4000 &
 xset r rate 150 50 &
 setxkbmap -option caps:ctrl_modifier &
 xmodmap -e "keycode 37 = " &

@@ -213,6 +213,16 @@
         <command>~/dotfiles/scripts/backlight-dec.sh</command>
       </action>
     </keybind>
+    <keybind key="F9">
+      <action name="Execute">
+        <command>xsct -d 0 0.1</command>
+      </action>
+    </keybind>
+    <keybind key="F8">
+      <action name="Execute">
+        <command>xsct -d 0 -0.1</command>
+      </action>
+    </keybind>
     <keybind key="Print">
       <action name="Execute">
         <command>~/dotfiles/scripts/screenshot.sh select</command>
@@ -425,12 +435,17 @@
     </keybind>
     <keybind key="XF86AudioRaiseVolume">
       <action name="Execute">
-        <command>pulseaudio-ctl up 2</command>
+        <command>pamixer --allow-boost --increase 2</command>
       </action>
     </keybind>
     <keybind key="XF86AudioLowerVolume">
       <action name="Execute">
-        <command>pulseaudio-ctl down 2</command>
+        <command>pamixer --decrease 2 </command>
+      </action>
+    </keybind>
+    <keybind key="XF86AudioMute">
+      <action name="Execute">
+        <command>pamixer --toggle-mute</command>
       </action>
     </keybind>
     <keybind key="XF86AudioPlay">
@@ -441,11 +456,6 @@
     <keybind key="XF86AudioPause">
       <action name="Execute">
         <command>playerctl play-pause</command>
-      </action>
-    </keybind>
-    <keybind key="XF86AudioMute">
-      <action name="Execute">
-        <command>pulseaudio-ctl mute</command>
       </action>
     </keybind>
     <keybind key="C-A-l">
