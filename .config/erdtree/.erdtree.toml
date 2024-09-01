@@ -1,4 +1,4 @@
-icons         = true
+icons         = false
 human         = true
 layout        = "inverted"
 suppress-size = true
