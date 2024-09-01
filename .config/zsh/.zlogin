@@ -5,3 +5,5 @@
     zcompile "$zcompdump"
   fi
 } &!
+
+stty -ixon
