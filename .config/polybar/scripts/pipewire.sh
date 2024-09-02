@@ -4,8 +4,9 @@ while true; do
     IS_MUTED=$(pamixer --get-volume-human)
     if [ "$IS_MUTED" = "muted" ]; then
         echo "󰝟 $VOLUME%"
+    else
+        echo "󰕾 $VOLUME%"
     fi
-    echo "󰕾 $VOLUME%"
     sleep 0.01
 done
 
