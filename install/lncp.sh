@@ -39,6 +39,7 @@ git clone "https://github.com/SylEleuth/gruvbox-plus-icon-pack" ~/.local/share/i
 rm -rf ~/.local/share/icons/!(Gruvbox-Plus-Dark)
 
 #binaries
+mkdir -p ~/.local/bin
 sudo cp -frv "$dots/misc/binaries/"!(nsxiv|st-0.8.5) ~/.local/bin
 sudo cp -fv "$dots/misc/binaries/nsxiv/nsxiv" ~/.local/bin
 sudo cp -fv "$dots/misc/binaries/st-0.8.5/st" ~/.local/bin
