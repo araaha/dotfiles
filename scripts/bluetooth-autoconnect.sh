@@ -13,6 +13,6 @@ connected() {
 while true; do
     if [ "$(powered)" = "yes" ] && [ "$(connected)" = "no" ]; then
         echo "connect ${MAC}" | bluetoothctl
-        sleep 4
     fi
+    sleep 4
 done
