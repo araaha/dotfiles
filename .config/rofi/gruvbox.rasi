@@ -3,6 +3,8 @@ configuration {
 	modi:                       "drun";
     show-icons:                 false;
     display-drun:               "  ";
+    display-calc:               " 󰪚 ";
+    display-clipboard:          " 󰅍 ";
     display-run:                "  ";
     display-filebrowser:        "  ";
     display-window:             "  ";
@@ -84,7 +86,7 @@ inputbar {
     spacing:                     0px;
     margin:                      0px;
     padding:                     15px 0px 15px 0px;
-    border:                      0px;
+    border:                      0px 0px 0px 0px;
     border-radius:               0px;
     border-color:                @border-colour;
     background-color:            #83a598;
