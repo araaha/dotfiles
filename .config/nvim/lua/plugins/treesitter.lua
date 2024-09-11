@@ -23,7 +23,7 @@ return {
                 node_decremental = "<S-TAB>",
             },
         },
-        ensure_installed = { "c", "lua", "vim", "vimdoc", "cpp", "latex", "css", "go", "python", "bash",
+        ensure_installed = { "c", "lua", "vim", "vimdoc", "cpp", "css", "go", "python", "bash",
             "diff", "yaml", "xml", "markdown", "ini", "json", "html", "typst", "make", "toml" },
     },
     main  = "nvim-treesitter.configs"
