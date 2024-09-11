@@ -219,6 +219,8 @@ local groups = {
     CmpItemAbbrMatch = { link = "GruvboxBlue" },
     CmpItemAbbrMatchFuzzy = { link = "GruvboxBlueUnderline" },
     CmpItemMenu = { link = "GruvboxRed" },
+    CmpSelMenu = { bg = colors.bg0 },
+    CmpSelBackground = { link = "Visual" },
     CmpItemKindText = { link = "StatuslineCmdLineAccent" },
     CmpItemKindVariable = { link = "StatuslineCmdLineAccent" },
     CmpItemKindMethod = { link = "GruvboxRed" },
