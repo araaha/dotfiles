@@ -68,8 +68,8 @@ return {
             preselect = cmp.PreselectMode.None,
             window = {
                 completion = {
-                    border = "single",
-                    winhighlight = "FloatBorder:FloatBorder,CursorLine:StatusLine",
+                    border = "",
+                    winhighlight = "Normal:CmpSelMenu,FloatBorder:FloatBorder,CursorLine:CmpSelBackground",
                     side_padding = 0,
                     scrollbar = false
                 },
