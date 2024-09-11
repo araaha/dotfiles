@@ -5,6 +5,7 @@ xwallpaper --center ~/.local/share/Wallpapers/Pacman.png &
 picom -b &
 xset s off -dpms &
 udiskie -N &
+greenclip daemon &
 unclutter -idle 10 -root &
 xsct 4000 &
 xset r rate 150 50 &
