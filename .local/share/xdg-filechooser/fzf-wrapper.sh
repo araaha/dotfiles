@@ -31,11 +31,11 @@ out="$5"
 if [ "$save" = "1" ]; then
     cmd="dialog --yesno \"Save to $path ?\" 0 0 && ( printf '%s' \"$path\" > $out )"
 elif [ "$directory" = "1" ]; then
-    cmd="fd $FD_EXCLUDE --hidden --absolute-path | ~/.local/bin/fzf-preview.sh $FZF_DEFAULT_OPTS --prompt 'Select directories > '"
+    cmd="fd --absolute-path . 'Screenshots' 'Downloads' | ~/.local/bin/fzf-preview.sh $FZF_DEFAULT_OPTS --prompt 'Select directories > '"
 elif [ "$multiple" = "1" ]; then
-    cmd="fd $FD_EXCLUDE --hidden --absolute-path | ~/.local/bin/fzf-preview.sh $FZF_DEFAULT_OPTS --prompt 'Select files > '"
+    cmd="fd --absolute-path . 'Screenshots' 'Downloads' | ~/.local/bin/fzf-preview.sh $FZF_DEFAULT_OPTS --prompt 'Select files > '"
 else
-    cmd="fd $FD_EXCLUDE --hidden --absolute-path  | ~/.local/bin/fzf-preview.sh +m $FZF_DEFAULT_OPTS --prompt 'Select file > '"
+    cmd="fd --absolute-path . 'Screenshots' 'Downloads'  | ~/.local/bin/fzf-preview.sh +m $FZF_DEFAULT_OPTS --prompt 'Select file > '"
 fi
 
 ~/.local/bin/st -T "Filepicker" -g 100x20+370+300 -e sh -c "$cmd > $out"
