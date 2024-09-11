@@ -82,7 +82,7 @@ map N
 map N search-prev
 
 map q quit
-map ZQ quit
+map zq quit
 map / search
 
 map D &garbage put $fx
@@ -236,6 +236,7 @@ cmd pager ${{
         *.html) w3m -dump $f | moar;;
         *.wav|*.mp3|*.flac|*.m4a|*.wma|*.ape|*.ac3|*.og[agx]|*.spx|*.opus|*.as[fx]|*.mka)
             exiftool $f | moar;;
+        *.zip|*.jar|*.war|*.ear|*.oxt) unzip -l "$1" | moar;;
         *) bat --paging=always $f;;
     esac
 }}
@@ -298,3 +299,4 @@ cmd rfv ${{
 }}
 map rfv rfv
 map zg $lazygit
+map su $sudoedit "$f"
