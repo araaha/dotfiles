@@ -14,6 +14,7 @@ if [ "$1" = "test" ]; then
     if [ -n "$DBUS_OUTPUT" ]; then
         exit 0
     fi
+    echo ""
     exit 1
 fi
 
