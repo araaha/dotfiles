@@ -20,4 +20,4 @@
 --glob=!**/pkg/mod/**
 --smart-case
 --hidden
---color=always
+--color=auto
