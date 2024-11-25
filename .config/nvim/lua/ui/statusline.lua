@@ -137,7 +137,11 @@ local function filepath(s)
         return string.format("%s%s", s, term[1])
     end
 
-    if vim.o.columns < 70 then
+    if string.len(vim.fn.expand("%")) > 50 and vim.o.columns <= 80 then
+        return string.format("%s%s", s, vim.fn.expand("%:t"))
+    end
+
+    if vim.o.columns <= 80 then
         return string.format("%s%s", s, vim.fn.expand("%:t"))
     end
 
@@ -155,7 +159,7 @@ local function lineinfo()
 end
 
 local function modified()
-    return " %{&modified?\"\":\"\"}"
+    return " %{&modified?\"\":\"\"} "
 end
 
 local function lsp()
