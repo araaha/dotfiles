@@ -22,7 +22,8 @@ return {
             use_frecency = true,
             -- proximity bonus boosts the score of items matching nearby words
             use_proximity = true,
-            max_items = 200,
+            use_typo_resistance = false,
+            max_items = 50,
             -- controls which sorts to use and in which order, these three are currently the only allowed options
             sorts = { 'label', 'kind', 'score' },
         },
@@ -69,9 +70,6 @@ return {
                         extended_filetypes = {},
                         ignored_filetypes = {},
                     }
-
-                    --- Example usage for disabling the snippet provider after pressing trigger characters (i.e. ".")
-                    -- enabled = function(ctx) return ctx ~= nil and ctx.trigger.kind == vim.lsp.protocol.CompletionTriggerKind.TriggerCharacter end,
                 },
                 buffer = {
                     name = 'Buffer',
@@ -83,17 +81,55 @@ return {
         },
         windows = {
             autocomplete = {
-                draw = function(ctx)
-                    local icon = ctx.kind_icon
+                max_items = 50,
+                draw = {
+                    gap = 1,
+                    padding = { 0, 0 },
+                    components = {
+                        kind_icon = {
+                            ellipsis = false,
+                            text = function(ctx) return " " .. ctx.kind_icon .. ctx.icon_gap .. " " end,
+                        },
+                        kind = {
+                            ellipsis = false,
+                            width = { fill = true },
+                            text = function(ctx) return ctx.kind end,
+                        },
+                        label = {
+                            width = { fill = true, max = 30 },
+                            text = function(ctx) return ctx.label .. ctx.label_detail end,
+                            ellipsis = false,
+                            highlight = function(ctx)
+                                -- label and label details
+                                local highlights = {
+                                    { 0, #ctx.label, group = ctx.deprecated and 'BlinkCmpLabelDeprecated' or 'BlinkCmpLabel' },
+                                }
+                                if ctx.label_detail then
+                                    table.insert(highlights,
+                                        { #ctx.label, #ctx.label + #ctx.label_detail, group = 'BlinkCmpLabelDetail' })
+                                end
 
-                    return {
-                        { " " .. icon .. " ", hl_group = "BlinkCmpKind" .. ctx.kind },
-                        {
-                            " " .. ctx.item.label,
-                            max_width = 30,
+                                -- characters matched on the label by the fuzzy matcher
+                                for _, idx in ipairs(ctx.label_matched_indices) do
+                                    table.insert(highlights, { idx, idx + 1, group = 'BlinkCmpLabelMatch' })
+                                end
+
+                                return highlights
+                            end,
                         },
                     }
-                end,
+                }
+                -- draw = function(ctx)
+                --     local icon = ctx.kind_icon
+                --
+                --     return {
+                --         { " " .. icon .. " ", hl_group = "BlinkCmpKind" .. ctx.kind },
+                --         {
+                --             " " .. ctx.item.label,
+                --             max_width = 30,
+                --         },
+                --     }
+                -- end,
             },
             documentation = {
                 border = "single",
