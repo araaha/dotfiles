@@ -1,6 +1,8 @@
 alacritty
 bash-language-server
 bat
+bluez
+bluez-utils
 bottom
 calcurse
 cronie
@@ -32,6 +34,7 @@ hyperfine
 ifuse
 imagemagick
 jless
+jq
 krita
 lazygit
 lf
@@ -49,6 +52,7 @@ neovim
 networkmanager
 ninja
 noto-fonts-emoji
+noto-fonts-emoji-cjk
 openbox
 openssl-1.1
 ouch
@@ -84,6 +88,7 @@ unrar
 unzip
 upower
 usbutils
+w3m
 wget
 wireless_tools
 xcape
