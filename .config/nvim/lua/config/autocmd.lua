@@ -21,11 +21,11 @@ au({ "BufRead" }, {
     callback = remember,
 })
 
-au({ "CursorMoved" }, {
-    callback = function()
-        vim.cmd("norm! zz")
-    end
-})
+-- au({ "CursorMoved" }, {
+--     callback = function()
+--         vim.cmd("norm! zz")
+--     end
+-- })
 
 au({ "TermOpen" }, {
     callback = function()

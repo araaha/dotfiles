@@ -25,6 +25,7 @@ local options = {
     splitbelow    = true,
     pumheight     = math.floor(vim.o.lines * 0.33),
     shortmess     = "aIF",
+    scrolloff     = 999,
     commentstring = "#%s",
     grepprg       = "rg --color=auto --vimgrep",
     grepformat    = "%f:%l:%c:%m",
