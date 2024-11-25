@@ -30,7 +30,7 @@ chsh -s "$(which zsh)"
 
 # Configure GRUB settings
 sudo sed -i 's/GRUB_CMDLINE_LINUX="[^"]*"/GRUB_CMDLINE_LINUX="rootfstype=ext4 quiet splash atkbd.softrepeat=1 vt.cur_default=0x200011 vt.color=3 vt.global_cursor_default=0"/' /etc/default/grub
-grub-mkconfig -o /boot/grub/grub.cfg
+sudo grub-mkconfig -o /boot/grub/grub.cfg
 sudo mkinitcpio -P
 
 # Enable and start system services
@@ -43,7 +43,6 @@ yay -S cyme-bin \
 djvu2pdf \
 dragon-drop \
 edir \
-epy-ereader-git \
 gdu-bin \
 pulseaudio-ctl \
 rofi-greenclip \
@@ -55,6 +54,7 @@ ttf-arphic-uming \
 ttf-gowun-batang \
 webtorrent-cli \
 xdg-desktop-portal-termfilechooser-git \
+ungoogled-chromium-xdg-bin \
 ttf-ms-fonts \
 ttf-weather-icons \
 uair \
