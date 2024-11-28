@@ -39,6 +39,7 @@ export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
 
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
+export NODE_OPTIONS="--disable-warning=ExperimentalWarning"
 export SSH_HOME="$XDG_CONFIG_HOME/ssh"
 
 export GPG_TTY=$(tty)
