@@ -25,11 +25,8 @@ ln -s "$dots/.local/share/"!(themes|icons)  "$HOME/.local/share/"
 #themes/icons
 sudo pacman -S unzip
 
-cp -v "$dots/.local/share/themes/Gruvbox-Material-Dark-HIDPI.zip" ~/.local/share/themes
-cp -v "$dots/.local/share/themes/gruvbox-material-dark-blocks.zip" ~/.local/share/themes
-
-unzip "$HOME/.local/share/themes/Gruvbox-Material-Dark-HIDPI.zip"
-unzip "$HOME/.local/share/themes/gruvbox-material-dark-blocks.zip"
+unzip "$dots/.local/share/themes/Gruvbox-Material-Dark-HIDPI.zip" -d "$HOME/.local/share/themes/Gruvbox-Material-Dark-HIDPI.zip"
+unzip "$dots/.local/share/themes/gruvbox-material-dark-blocks.zip" -d "$HOME/.local/share/themes/gruvbox-material-dark-blocks.zip"
 
 git clone "https://github.com/SylEleuth/gruvbox-plus-icon-pack" ~/.local/share/icons
 
