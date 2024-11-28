@@ -7,7 +7,7 @@ xset s off -dpms &
 udiskie -N &
 greenclip daemon &
 unclutter -idle 10 -root &
-xsct 4000 &
+~/.local/bin/xsct 4000 0.4 &
 xset r rate 150 50 &
 setxkbmap -option caps:ctrl_modifier &
 xmodmap -e "keycode 37 = " &
