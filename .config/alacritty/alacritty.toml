@@ -55,8 +55,8 @@ cursor = "CellForeground"
 text   = "CellBackground"
 
 [font]
-size = 10.25
-offset = { x = 0, y = 0 }
+size = 13
+offset = { x = 0, y = 3 }
 glyph_offset = { x = 0, y = 0 }
 
 [font.normal]
