@@ -4,7 +4,7 @@ set -e
 shopt -s extglob
 
 # Remove unnecessary files
-sudo rm -rf -I ~/!(scripts|.config|Downloads|Books|Screenshots|dotfiles|dotfiles-private|.local)
+sudo rm -rf ~/!(scripts|.config|Downloads|Books|Screenshots|dotfiles|dotfiles-private|.local)
 
 # Update font cache and build bat cache
 fc-cache -fv
@@ -37,6 +37,7 @@ sudo mkinitcpio -P
 systemctl enable --now cronie
 systemctl enable --now cups.socket
 systemctl enable --now ly
+systemctl enable --now bluetooth
 
 #install compiled/zipped apps
 yay -S cyme-bin \

@@ -5,4 +5,4 @@ yay -Y --gendb
 yay -Sy
 yay -Y --devel --save
 #Install apps
-yay --removemake --needed --sudoloop -S - < ~/dotfiles/install/arch-apps.txt
+yay --disable-download-timeout --removemake --needed --sudoloop -S - < ~/dotfiles/install/arch-apps.txt

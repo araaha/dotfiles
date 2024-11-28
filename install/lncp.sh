@@ -42,4 +42,4 @@ sudo cp -fv "$dots/misc/binaries/nsxiv/nsxiv" ~/.local/bin
 sudo cp -fv "$dots/misc/binaries/st-0.8.5/st" ~/.local/bin
 
 #/etc/
-sudo cp -v "$dots/etc"/* /etc/
+sudo cp -rv "$dots/etc"/* /etc/
