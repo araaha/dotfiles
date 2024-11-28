@@ -12,7 +12,6 @@ delve
 dialog
 difftastic
 dunst
-edir
 erdtree
 fd
 ffmpegthumbnailer
@@ -40,7 +39,6 @@ lazygit
 lf
 libnotify
 libsixel
-light
 lua-language-server
 lxappearance
 ly
@@ -52,7 +50,7 @@ neovim
 networkmanager
 ninja
 noto-fonts-emoji
-noto-fonts-emoji-cjk
+noto-fonts-cjk
 openbox
 openssl-1.1
 ouch

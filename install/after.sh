@@ -43,6 +43,7 @@ yay -S cyme-bin \
 djvu2pdf \
 dragon-drop \
 edir \
+light \
 gdu-bin \
 pulseaudio-ctl \
 rofi-greenclip \
