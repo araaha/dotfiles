@@ -12,7 +12,7 @@ kb-remove-char-forward: "Delete";
 kb-remove-to-sol: "";
 kb-page-next: "Control+d";
 kb-page-prev: "Control+u";
-font: "MesloLGS NF 20";
+font: "MesloLGS NF 30";
 modi: "window,drun,run";
 combi-modi: "window,drun,run";
 location: 0;

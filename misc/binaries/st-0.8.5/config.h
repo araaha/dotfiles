@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "MesloLGS NF:pixelsize=20:antialias=true:autohint=true";
+static char *font = "MesloLGS NF:pixelsize=35:antialias=true:autohint=true";
 static int borderpx = 0;
 const int boxdraw = 1;
 const int boxdraw_bold = 1;

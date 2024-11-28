@@ -38,7 +38,7 @@ else
     cmd="fd --absolute-path . 'Screenshots' 'Downloads'  | ~/.local/bin/fzf-preview.sh +m $FZF_DEFAULT_OPTS --prompt 'Select file > '"
 fi
 
-~/.local/bin/st -T "Filepicker" -g 100x20+370+300 -e sh -c "$cmd > $out"
+~/.local/bin/st -T "Filepicker" -g 80x25+720+400 -e sh -c "$cmd > $out"
 
 if ! [ -s "$out" ]; then
     exit 1

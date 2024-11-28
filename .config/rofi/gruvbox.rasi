@@ -51,8 +51,8 @@ window {
     location:                    center;
     anchor:                      center;
     fullscreen:                  false;
-    width:                       700px;
-    height:                      600px;
+    width:                       36.45%;
+    height:                      52.5%;
     x-offset:                    0px;
     y-offset:                    0px;
 
@@ -116,7 +116,7 @@ entry {
     placeholder-color:           inherit;
     blink:false;
     cursor-color: #9cd365;
-    cursor-width: 13px;
+    cursor-width: 19.5px;
 
 }
 
