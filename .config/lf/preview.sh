@@ -58,7 +58,7 @@ case "$(printf "%s\n" "$(readlink -f "$1")" | awk '{print tolower($0)}')" in
         djvutxt "$1" | bat --color=always --style=plain --paging=never
         ;;
     *.md)
-        bat "$1"
+        mdcat "$1"
         ;;
     *.ino)
         bat --color=always --style=plain --paging=never --language=cpp "$1"

@@ -237,6 +237,7 @@ cmd pager ${{
         *.wav|*.mp3|*.flac|*.m4a|*.wma|*.ape|*.ac3|*.og[agx]|*.spx|*.opus|*.as[fx]|*.mka)
             exiftool $f | moar;;
         *.zip|*.jar|*.war|*.ear|*.oxt) unzip -l "$1" | moar;;
+        *.md) mdcat "$f" | moar;;
         *) bat --paging=always $f;;
     esac
 }}
@@ -267,7 +268,7 @@ cmd ff &{{
 }}
 
 map ff push :ff<space>
-map sx $nsxiv 800x600+560+240 -b -a -sf "$fx" & disown
+map sx $nsxiv -g 1200x1000+840+400 -b -a -sf "$fx" & disown
 
 cmd edit-config ${{
     $EDITOR ~/.config/lf/lfrc
