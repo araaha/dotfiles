@@ -24,7 +24,7 @@ sudo crontab ~/dotfiles/misc/crontab/sudo-crontabs
 chsh -s "$(which zsh)"
 
 # Configure GRUB settings
-sudo sed -i 's/GRUB_CMDLINE_LINUX="[^"]*"/GRUB_CMDLINE_LINUX="rootfstype=ext4 quiet splash atkbd.softrepeat=1 vt.cur_default=0x200011 vt.color=3 vt.global_cursor_default=0"/' /etc/default/grub
+sudo sed -i 's/GRUB_CMDLINE_LINUX="[^"]*"/GRUB_CMDLINE_LINUX="rootfstype=ext4 quiet splash atkbd.softrepeat=1 vt.cur_default=0x200011 vt.color=3 vt.global_cursor_default=0 cpufreq.default_governor=powersave"/' /etc/default/grub
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 sudo mkinitcpio -P
 
