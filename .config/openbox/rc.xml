@@ -208,7 +208,7 @@
       </action>
     </keybind>
     <!-- Decrease backlight 1% -->
-    <keybind key="F2">
+    <keybind key="XF86MonBrightnessDown">
       <action name="Execute">
         <command>~/dotfiles/scripts/backlight-dec.sh</command>
       </action>
