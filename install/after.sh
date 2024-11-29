@@ -1,10 +1,11 @@
 #!/bin/bash
 
 set -e
-shopt -s extglob
 
 # Remove unnecessary files
-sudo rm -rf ~/!(scripts|.config|Downloads|Books|Screenshots|dotfiles|dotfiles-private|.local)
+rm -rf ~/!(scripts|.config|Downloads|Books|Screenshots|dotfiles|dotfiles-private|.local)
+find "$HOME" -maxdepth 1 -mindepth 1 ! \( -name "scripts" -o -name ".config" -o -name "Downloads" -o -name "Books" \
+    -o -name "Screenshots" -o -name "dotfiles" -o -name "dotfiles-private" -o -name ".local" \) -exec rm -rf {} +
 
 # Update font cache and build bat cache
 fc-cache -fv

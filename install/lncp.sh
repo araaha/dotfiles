@@ -2,9 +2,7 @@
 
 set -e
 
-shopt -s extglob
-
-dots="$HOME/dotfiles"
+DOTS="$HOME/dotfiles"
 
 sudo rm -rf "$HOME/.config"
 sudo rm -rf "$HOME/.zshrc"
@@ -18,25 +16,23 @@ mkdir -p "$HOME/Screenshots/"
 mkdir -p "$HOME/.local/share/themes"
 mkdir -p "$HOME/.local/share/icons"
 
-ln -s "$dots/scripts/" "$HOME/"
-ln -srf "$dots/.config"/* "$HOME/.config/"
-ln -s "$dots/.local/share/"!(themes|icons)  "$HOME/.local/share/"
+ln -sr "$DOTS/scripts/" "$HOME/"
+ln -srf "$DOTS/.config"/* "$HOME/.config/"
+find dotfiles/.local/share -mindepth 1 -maxdepth 1 ! -name "themes" -exec ln -sr {} "$HOME/.local/nice" +
 
 #themes/icons
 sudo pacman -S unzip
 
-unzip "$dots/.local/share/themes/Gruvbox-Material-Dark-HIDPI.zip" -d "$HOME/.local/share/themes/Gruvbox-Material-Dark-HIDPI.zip"
-unzip "$dots/.local/share/themes/gruvbox-material-dark-blocks.zip" -d "$HOME/.local/share/themes/gruvbox-material-dark-blocks.zip"
+unzip "$DOTS/.local/share/themes/Gruvbox-Material-Dark-HIDPI.zip" -d "$HOME/.local/share/themes/Gruvbox-Material-Dark-HIDPI.zip"
+unzip "$DOTS/.local/share/themes/gruvbox-material-dark-blocks.zip" -d "$HOME/.local/share/themes/gruvbox-material-dark-blocks.zip"
 
 git clone "https://github.com/SylEleuth/gruvbox-plus-icon-pack" ~/.local/share/icons
 
-rm -rf ~/.local/share/icons/!(Gruvbox-Plus-Dark)
+find ~/.local/share/icons/ -mindepth 1 -maxdepth 1 ! -name "Gruvbox-Plus-Dark" -exec rm -rf {} +
 
 #binaries
 mkdir -p ~/.local/bin
-sudo cp -frv "$dots/misc/binaries/"!(nsxiv|st-0.8.5) ~/.local/bin
-sudo cp -fv "$dots/misc/binaries/nsxiv/nsxiv" ~/.local/bin
-sudo cp -fv "$dots/misc/binaries/st-0.8.5/st" ~/.local/bin
+find "$HOME/dotfiles/misc/binaries" -type f -executable -print0 | xargs -0 -I % cp % ~/.local/bin
 
 #/etc/
-sudo cp -rv "$dots/etc"/* /etc/
+sudo cp -rv "$DOTS/etc"/* /etc/
