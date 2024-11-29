@@ -3,18 +3,12 @@
 set -e
 
 # Remove unnecessary files
-rm -rf ~/!(scripts|.config|Downloads|Books|Screenshots|dotfiles|dotfiles-private|.local)
 find "$HOME" -maxdepth 1 -mindepth 1 ! \( -name "scripts" -o -name ".config" -o -name "Downloads" -o -name "Books" \
-    -o -name "Screenshots" -o -name "dotfiles" -o -name "dotfiles-private" -o -name ".local" \) -exec rm -rf {} +
+    -o -name "Screenshots" -o -name "dotfiles" -o -name "dotfiles-private" -o -name ".local" \) -exec rm -rf {} \;
 
 # Update font cache and build bat cache
 fc-cache -fv
 bat cache --build
-
-# Remove orphaned packages using yay
-if [[ $(yay -Qdtq) ]]; then
-    yay -Qdtq | yay -Rns -
-fi
 
 # Configure sudo settings in /etc/sudoers
 echo "Defaults !tty_tickets" | sudo tee -a /etc/sudoers

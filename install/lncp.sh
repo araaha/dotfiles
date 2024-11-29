@@ -18,7 +18,7 @@ mkdir -p "$HOME/.local/share/icons"
 
 ln -sr "$DOTS/scripts/" "$HOME/"
 ln -srf "$DOTS/.config"/* "$HOME/.config/"
-find dotfiles/.local/share -mindepth 1 -maxdepth 1 ! -name "themes" -exec ln -sr {} "$HOME/.local/nice" +
+find "$DOTS/.local/share" -mindepth 1 -maxdepth 1 ! -name "themes" -exec ln -sr {} "$HOME/.local/share" \;
 
 #themes/icons
 sudo pacman -S unzip
@@ -28,7 +28,7 @@ unzip "$DOTS/.local/share/themes/gruvbox-material-dark-blocks.zip" -d "$HOME/.lo
 
 git clone "https://github.com/SylEleuth/gruvbox-plus-icon-pack" ~/.local/share/icons
 
-find ~/.local/share/icons/ -mindepth 1 -maxdepth 1 ! -name "Gruvbox-Plus-Dark" -exec rm -rf {} +
+find ~/.local/share/icons/ -mindepth 1 -maxdepth 1 ! -name "Gruvbox-Plus-Dark" -exec rm -rf {} \;
 
 #binaries
 mkdir -p ~/.local/bin
