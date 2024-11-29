@@ -1,5 +1,5 @@
-xwallpaper --center ~/.local/share/Wallpapers/Pacman.png &
-/usr/bin/light -Ss "sysfs/backlight/amdgpu_bl0" 13 &
+xwallpaper --stretch "$HOME/.local/share/Wallpapers/Pacman.png" &
+light -S 13 &
 ./.config/polybar/launch.sh &
 ./scripts/bluetooth-autoconnect.sh &
 picom -b &
@@ -11,4 +11,5 @@ xsct 4000 &
 xset r rate 150 50 &
 setxkbmap -option caps:ctrl_modifier &
 xmodmap -e "keycode 37 = " &
+xrdb -merge "$HOME/dotfiles/.config/X11/Xresources"
 dbus-update-activation-environment --systemd DISPLAY XDG_CURRENT_DESKTOP=openbox
