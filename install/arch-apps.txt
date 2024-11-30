@@ -1,4 +1,5 @@
 alacritty
+amd-ucode
 bash-language-server
 bat
 bluez
@@ -94,14 +95,10 @@ xclip
 xcolor
 xdg-desktop-portal
 xf86-video-amdgpu
-xorg-setxkbmap
 xorg-xinit
 xorg-server
 xorg-xev
-xorg-xmodmap
 xorg-xrandr
-xorg-xrdb
-xorg-xset
 xournalpp
 xwallpaper
 yt-dlp
