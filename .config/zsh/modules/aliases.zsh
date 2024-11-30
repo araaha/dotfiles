@@ -3,7 +3,7 @@ alias \$=''
 alias alu="apt list --upgradable"
 alias bdisc="bluetoothctl disconnect 40:C1:F6:2A:8C:DD"
 alias bconn="bluetoothctl connect 40:C1:F6:2A:8C:DD"
-alias cat="bat -pp"
+alias cat="bat -pp --color=auto"
 alias catt="/usr/bin/cat"
 alias copy="xclip -r -sel clip"
 alias cp='cp -v'
