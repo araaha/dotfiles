@@ -11,5 +11,4 @@ xsct 4000 &
 xset r rate 150 50 &
 setxkbmap -option caps:ctrl_modifier &
 xmodmap -e "keycode 37 = " &
-xrdb -merge "$HOME/dotfiles/.config/X11/Xresources"
 dbus-update-activation-environment --systemd DISPLAY XDG_CURRENT_DESKTOP=openbox
