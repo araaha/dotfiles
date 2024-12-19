@@ -277,7 +277,7 @@ cmd edit-config ${{
 
 map R edit-config
 
-map p :paste; reload
+map p :paste
 map rr &dragon-drop $fx & disown; lf -remote 'send unselect'
 cmd rfv ${{
   RELOAD='reload:rg --column --color=always --smart-case {q} || :'
