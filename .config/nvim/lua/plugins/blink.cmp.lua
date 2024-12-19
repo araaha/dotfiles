@@ -1,25 +1,26 @@
 return {
     "saghen/blink.cmp",
-    event = "InsertEnter",
+    event = { "InsertEnter" },
     enabled = true,
     version = "0.*",
     opts = {
         keymap = {
-            ["<C-n>"]      = { "show", "select_next" },
-            ["<C-p>"]      = { "show", "select_prev" },
-            ["<C-e>"]      = { "hide" },
-            -- accept = { "<C-Space>" },
             ["<C-Space>"]  = { "select_and_accept" },
-            ["<Down>"]     = { "select_next" },
-            ["<Up>"]       = { "select_prev" },
-            ["<PageDown>"] = { "scroll_documentation_down" },
-            ["<PageUp>"]   = { "scroll_documentation_up" },
+            ["<C-n>"]      = { "show", "select_next", "fallback" },
+            ["<C-p>"]      = { "show", "select_prev", "fallback" },
+            ["<C-e>"]      = { "hide", "fallback" },
+            ["<C-y>"]      = { "show", "show_documentation", "hide_documentation" },
+            ["<Down>"]     = { "select_next", "fallback" },
+            ["<Up>"]       = { "select_prev", "fallback" },
+            ["<PageDown>"] = { "scroll_documentation_down", "fallback" },
+            ["<PageUp>"]   = { "scroll_documentation_up", "fallback" },
             ["<Tab>"]      = { "snippet_forward", "fallback" },
-            ["<S-Tab>"]    = { "snippet_backward" }
+            ["<S-Tab>"]    = { "snippet_backward", "fallback" }
         },
-
         -- Disables keymaps, completions and signature help for these filetypes
-        blocked_filetypes = {},
+        -- enabled = function() return vim.bo.buftype ~= "prompt" end,
+
+        snippets = {},
 
         completion = {
             keyword = {
@@ -28,7 +29,7 @@ return {
                 -- example: 'foo_|_bar' will match 'foo_' for 'prefix' and 'foo__bar' for 'full'
                 range = 'prefix',
                 -- Regex used to get the text when fuzzy matching
-                regex = '[%w_\\-]',
+                regex = '[-_]\\|\\k',
                 -- After matching with regex, any characters matching this regex at the prefix will be excluded
                 exclude_from_prefix_regex = '[\\-]',
             },
@@ -93,7 +94,7 @@ return {
                     override_brackets_for_filetypes = {},
                     -- Synchronously use the kind of the item to determine if brackets should be added
                     kind_resolution = {
-                        enabled = false,
+                        enabled = true,
                         blocked_filetypes = { 'typescriptreact', 'javascriptreact', 'vue' },
                     },
                     -- Asynchronously use semantic token to determine if brackets should be added
@@ -122,6 +123,17 @@ return {
                 -- falling back to the next direction when there's not enough space
                 direction_priority = { 's', 'n' },
                 -- Controls how the completion items are rendered on the popup window
+                auto_show = true,
+
+                cmdline_position = function()
+                    if vim.g.ui_cmdline_pos ~= nil then
+                        local pos = vim.g.ui_cmdline_pos -- (1, 0)-indexed
+                        return { pos[1] - 1, pos[2] }
+                    end
+                    local height = (vim.o.cmdheight == 0) and 1 or vim.o.cmdheight
+                    return { vim.o.lines - height, 0 }
+                end,
+
                 draw = {
                     -- Aligns the keyword you've typed to a component in the menu
                     align_to_component = 'label', -- or 'none' to disable
@@ -130,12 +142,17 @@ return {
                     -- Gap between columns
                     gap = 1,
 
+                    treesitter = { "lsp" },
+
                     -- Components to render, grouped by column
                     columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 } },
                     components = {
                         kind_icon = {
                             ellipsis = false,
-                            text = function(ctx) return " " .. ctx.kind_icon .. ctx.icon_gap .. " " end,
+                            text = function(ctx)
+                                return " " ..
+                                    ctx.kind_icon .. ctx.icon_gap .. " "
+                            end,
                         },
                         kind = {
                             ellipsis = false,
@@ -153,12 +170,24 @@ return {
                                 }
                                 if ctx.label_detail then
                                     table.insert(highlights,
-                                        { #ctx.label, #ctx.label + #ctx.label_detail, group = 'BlinkCmpLabelDetail' })
+                                        {
+                                            #ctx.label,
+                                            #ctx.label +
+                                            #ctx.label_detail,
+                                            group =
+                                            'BlinkCmpLabelDetail'
+                                        })
                                 end
 
                                 -- characters matched on the label by the fuzzy matcher
                                 for _, idx in ipairs(ctx.label_matched_indices) do
-                                    table.insert(highlights, { idx, idx + 1, group = 'BlinkCmpLabelMatch' })
+                                    table.insert(highlights,
+                                        {
+                                            idx,
+                                            idx + 1,
+                                            group =
+                                            'BlinkCmpLabelMatch'
+                                        })
                                 end
 
                                 return highlights
@@ -250,7 +279,6 @@ return {
             use_frecency = true,
             -- proximity bonus boosts the score of items matching nearby words
             use_proximity = true,
-            max_items = 50,
             -- controls which sorts to use and in which order, these three are currently the only allowed options
             sorts = { 'label', 'kind', 'score' },
 
@@ -273,21 +301,54 @@ return {
         },
 
         sources = {
-            completion = {
-                -- Static list of providers to enable, or a function to dynamically enable/disable providers based on the context
-                enabled_providers = { 'lsp', 'snippets', 'buffer' },
-                -- Example dynamically picking providers based on the filetype and treesitter node:
-                -- enabled_providers = function(ctx)
-                --   local node = vim.treesitter.get_node()
-                --   if vim.bo.filetype == 'lua' then
-                --     return { 'lsp', 'path' }
-                --   elseif node and vim.tbl_contains({ 'comment', 'line_comment', 'block_comment' }), node:type())
-                --     return { 'buffer' }
-                --   else
-                --     return { 'lsp', 'path', 'snippets', 'buffer' }
-                --   end
-                -- end
+            -- Static list of providers to enable, or a function to dynamically enable/disable providers based on the context
+            default = { 'lsp', 'snippets', 'buffer' },
+
+            -- Example dynamically picking providers based on the filetype and treesitter node:
+            -- providers = function(ctx)
+            --   local node = vim.treesitter.get_node()
+            --   if vim.bo.filetype == 'lua' then
+            --     return { 'lsp', 'path' }
+            --   elseif node and vim.tbl_contains({ 'comment', 'line_comment', 'block_comment' }, node:type()) then
+            --     return { 'buffer' }
+            --   else
+            --     return { 'lsp', 'path', 'snippets', 'buffer' }
+            --   end
+            -- end
+
+            -- You may also define providers per filetype
+            per_filetype = {
+                -- lua = { 'lsp', 'path' },
             },
+
+            -- By default, we choose providers for the cmdline based on the current cmdtype
+            -- You may disable cmdline completions by replacing this with an empty table
+            cmdline = function()
+                local type = vim.fn.getcmdtype()
+                -- Search forward and backward
+                if type == '/' or type == '?' then return { 'buffer' } end
+                -- Commands
+                if type == ':' then return { 'cmdline', 'path' } end
+                return {}
+            end,
+
+            -- Function to use when transforming the items before they're returned for all providers
+            -- The default will lower the score for snippets to sort them lower in the list
+            transform_items = function(_, items)
+                for _, item in ipairs(items) do
+                    if item.kind == require('blink.cmp.types').CompletionItemKind.Snippet then
+                        item.score_offset = item.score_offset - 3
+                    end
+                end
+                return items
+            end,
+            -- Minimum number of characters in the keyword to trigger all providers
+            -- May also be `function(ctx: blink.cmp.Context): number`
+            min_keyword_length = 0,
+            -- Example for setting a minimum keyword length for markdown files
+            -- min_keyword_length = function()
+            --   return vim.bo.filetype == 'markdown' and 2 or 0
+            -- end,
 
             -- Please see https://github.com/Saghen/blink.compat for using `nvim-cmp` sources
             providers = {
@@ -304,34 +365,23 @@ return {
                     should_show_items = true, -- Whether or not to show the items
                     max_items = 10,           -- Maximum number of items to display in the menu
                     min_keyword_length = 0,   -- Minimum number of characters in the keyword to trigger the provider
-                    fallback_for = {},        -- If any of these providers return 0 items, it will fallback to this provider
+                    fallbacks = {},           -- If any of these providers return 0 items, it will fallback to this provider
                     score_offset = 0,         -- Boost/penalize the score of the items
                     override = nil,           -- Override the source's functions
-                },
-                path = {
-                    name = 'Path',
-                    module = 'blink.cmp.sources.path',
-                    score_offset = 3,
-                    opts = {
-                        trailing_slash = false,
-                        label_trailing_slash = true,
-                        get_cwd = function(context) return vim.fn.expand(('#%d:p:h'):format(context.bufnr)) end,
-                        show_hidden_files_by_default = false,
-                    }
                 },
                 snippets = {
                     name = 'Snippets',
                     module = 'blink.cmp.sources.snippets',
                     score_offset = -3,
                     opts = {
-                        friendly_snippets = true,
+                        friendly_snippets = false,
                         search_paths = { vim.fn.stdpath('config') .. '/snippets' },
                         global_snippets = { 'all' },
                         extended_filetypes = {},
                         ignored_filetypes = {},
-                        get_filetype = function(context)
-                            return vim.bo.filetype
-                        end
+                        -- get_filetype = function(context)
+                        --     return vim.bo.filetype
+                        -- end
                     }
 
                     --- Example usage for disabling the snippet provider after pressing trigger characters (i.e. ".")
@@ -342,7 +392,7 @@ return {
                 buffer = {
                     name = 'Buffer',
                     module = 'blink.cmp.sources.buffer',
-                    fallback_for = { 'lsp' },
+                    fallbacks = { 'lsp' },
                     opts = {
                         -- default to all visible buffers
                         get_bufnrs = function()
