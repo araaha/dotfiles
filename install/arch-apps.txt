@@ -33,6 +33,8 @@ gzip
 hyperfine
 ifuse
 imagemagick
+impala
+iwd
 jless
 jq
 krita
@@ -48,10 +50,9 @@ mdcat
 meson
 mpv
 neovim
-networkmanager
 ninja
-noto-fonts-emoji
 noto-fonts-cjk
+noto-fonts-emoji
 openbox
 openssl-1.1
 ouch
@@ -95,9 +96,9 @@ xclip
 xcolor
 xdg-desktop-portal
 xf86-video-amdgpu
-xorg-xinit
 xorg-server
 xorg-xev
+xorg-xinit
 xorg-xrandr
 xournalpp
 xwallpaper

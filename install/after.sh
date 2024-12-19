@@ -17,8 +17,8 @@ echo "Defaults passwd_tries=10" | sudo tee -a /etc/sudoers
 echo "Defaults passwd_timeout=0" | sudo tee -a /etc/sudoers
 
 # Set up crontab
-crontab ~/dotfiles/misc/crontab/crontabs
-sudo crontab ~/dotfiles/misc/crontab/sudo-crontabs
+crontab ~/dotfiles/install/crontabs/crontab
+sudo crontab ~/dotfiles/install/crontabs/sudo-crontab
 
 # Change default shell to zsh
 chsh -s "$(which zsh)"
@@ -30,9 +30,11 @@ sudo mkinitcpio -P
 
 # Enable and start system services
 systemctl enable --now cronie
-systemctl enable --now cups.socket
+systemctl enable --now cups
 systemctl enable --now ly
 systemctl enable --now bluetooth
+systemctl enable --now systemd-networkd
+systemctl enable --now systemd-resolved
 
 #install compiled/zipped apps
 yay -S cyme-bin \
@@ -48,7 +50,6 @@ sioyek \
 tdrop \
 ticker \
 ttf-arphic-uming \
-ttf-gowun-batang \
 webtorrent-cli \
 xdg-desktop-portal-termfilechooser-git \
 ungoogled-chromium-xdg-bin \
@@ -59,5 +60,4 @@ rofi-git \
 rofi-calc-git \
 rofi-pass \
 localsend-bin \
-tb.go \
 openssh-dotconfig-bin
