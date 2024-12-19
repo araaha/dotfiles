@@ -1,4 +1,4 @@
-export XDG_RUNTIME_DIR='/run/user/1000'
+export XDG_RUNTIME_DIR="/run/user/1000"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_DATA_DIRS="/usr/local/share:/usr/share"
 export XDG_CURRENT_DESKTOP=openbox
@@ -23,7 +23,7 @@ export SYSTEMD_PAGER="moar"
 export SYSTEMD_PAGERSECURE=true
 
 export LESS='--tilde --save-marks --shift 2 -g --ignore-case --incsearch -j.5 -m -R -n --use-color -Dd+b$Du+r$DS-b$DE-r$DP+g'
-export MOAR='-no-linenumbers -no-statusbar -style algol_nu -wrap -colors 16M'
+export MOAR='-terminal-fg -no-linenumbers -no-statusbar -style algol_nu -wrap -colors 16M'
 
 export LESSHISTSIZE=1000
 
