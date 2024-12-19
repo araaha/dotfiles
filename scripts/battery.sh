@@ -13,3 +13,8 @@ if [ "$battery_level" -le 10 ] && [ "$charging_status" != "charging" ]
 then
     DISPLAY=:0 dunstify -u CRITICAL -t 1000 "Battery level is ${battery_level}%!"
 fi
+
+if [ "$battery_level" -ge 80 ] && [ "$charging_status" = "charging" ]
+then
+    DISPLAY=:0 dunstify -u CRITICAL -t 1000 "Battery level is ${battery_level}%! Unplug"
+fi
