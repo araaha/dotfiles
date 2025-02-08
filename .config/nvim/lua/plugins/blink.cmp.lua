@@ -29,9 +29,7 @@ return {
                 -- example: 'foo_|_bar' will match 'foo_' for 'prefix' and 'foo__bar' for 'full'
                 range = 'prefix',
                 -- Regex used to get the text when fuzzy matching
-                regex = '[-_]\\|\\k',
                 -- After matching with regex, any characters matching this regex at the prefix will be excluded
-                exclude_from_prefix_regex = '[\\-]',
             },
 
             trigger = {
@@ -62,7 +60,6 @@ return {
                 max_items = 50,
                 -- Controls if completion items will be selected automatically,
                 -- and whether selection automatically inserts
-                selection = 'preselect',
                 -- Controls how the completion items are selected
                 -- 'preselect' will automatically select the first item in the completion list
                 -- 'manual' will not select any item by default
@@ -136,7 +133,6 @@ return {
 
                 draw = {
                     -- Aligns the keyword you've typed to a component in the menu
-                    align_to_component = 'label', -- or 'none' to disable
                     -- Left and right padding, optionally { left, right } for different padding on each side
                     padding = { 0, 0 },
                     -- Gap between columns
@@ -274,7 +270,6 @@ return {
         fuzzy = {
             -- when enabled, allows for a number of typos relative to the length of the query
             -- disabling this matches the behavior of fzf
-            use_typo_resistance = false,
             -- frencency tracks the most recently/frequently used items and boosts the score of the item
             use_frecency = true,
             -- proximity bonus boosts the score of items matching nearby words
