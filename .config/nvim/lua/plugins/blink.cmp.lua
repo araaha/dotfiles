@@ -2,7 +2,8 @@ return {
     "saghen/blink.cmp",
     event = { "InsertEnter" },
     enabled = true,
-    version = "0.*",
+    version = "*",
+    dependencies = { 'L3MON4D3/LuaSnip', version = 'v2.*' },
     opts = {
         keymap = {
             ["<C-Space>"]  = { "select_and_accept" },
@@ -20,7 +21,11 @@ return {
         -- Disables keymaps, completions and signature help for these filetypes
         -- enabled = function() return vim.bo.buftype ~= "prompt" end,
 
-        snippets = {},
+        snippets = { preset = 'luasnip' },
+
+        cmdline = {
+            enabled = false
+        },
 
         completion = {
             keyword = {
@@ -57,7 +62,7 @@ return {
 
             list = {
                 -- Maximum number of items to display
-                max_items = 50,
+                max_items = 10,
                 -- Controls if completion items will be selected automatically,
                 -- and whether selection automatically inserts
                 -- Controls how the completion items are selected
@@ -91,7 +96,7 @@ return {
                     override_brackets_for_filetypes = {},
                     -- Synchronously use the kind of the item to determine if brackets should be added
                     kind_resolution = {
-                        enabled = true,
+                        enabled = false,
                         blocked_filetypes = { 'typescriptreact', 'javascriptreact', 'vue' },
                     },
                     -- Asynchronously use semantic token to determine if brackets should be added
@@ -146,8 +151,7 @@ return {
                         kind_icon = {
                             ellipsis = false,
                             text = function(ctx)
-                                return " " ..
-                                    ctx.kind_icon .. ctx.icon_gap .. " "
+                                return " " .. ctx.kind_icon .. ctx.icon_gap .. " "
                             end,
                         },
                         kind = {
@@ -204,7 +208,6 @@ return {
                     },
                 },
             },
-
             documentation = {
                 -- Controls whether the documentation window will automatically show when selecting a completion item
                 auto_show = true,
@@ -222,7 +225,7 @@ return {
                     border = 'single',
                     winblend = 0,
                     winhighlight =
-                    'Normal:BlinkCmpDoc,FloatBorder:BlinkCmpDocBorder,CursorLine:BlinkCmpDocCursorLine,Search:None',
+                    'Normal:BlinkCmpMenu,FloatBorder:BlinkCmpDocBorder,CursorLine:BlinkCmpMenuSelection,Search:None',
                     -- Note that the gutter will be disabled when border ~= 'none'
                     scrollbar = false,
                     -- Which directions to show the documentation window,
@@ -273,9 +276,9 @@ return {
             -- frencency tracks the most recently/frequently used items and boosts the score of the item
             use_frecency = true,
             -- proximity bonus boosts the score of items matching nearby words
-            use_proximity = true,
+            use_proximity = false,
             -- controls which sorts to use and in which order, these three are currently the only allowed options
-            sorts = { 'label', 'kind', 'score' },
+            sorts = { 'score', 'kind', 'label' },
 
             prebuilt_binaries = {
                 -- Whether or not to automatically download a prebuilt binary from github. If this is set to `false`
@@ -316,17 +319,6 @@ return {
                 -- lua = { 'lsp', 'path' },
             },
 
-            -- By default, we choose providers for the cmdline based on the current cmdtype
-            -- You may disable cmdline completions by replacing this with an empty table
-            cmdline = function()
-                local type = vim.fn.getcmdtype()
-                -- Search forward and backward
-                if type == '/' or type == '?' then return { 'buffer' } end
-                -- Commands
-                if type == ':' then return { 'cmdline', 'path' } end
-                return {}
-            end,
-
             -- Function to use when transforming the items before they're returned for all providers
             -- The default will lower the score for snippets to sort them lower in the list
             transform_items = function(_, items)
@@ -344,62 +336,6 @@ return {
             -- min_keyword_length = function()
             --   return vim.bo.filetype == 'markdown' and 2 or 0
             -- end,
-
-            -- Please see https://github.com/Saghen/blink.compat for using `nvim-cmp` sources
-            providers = {
-                lsp = {
-                    name = 'LSP',
-                    module = 'blink.cmp.sources.lsp',
-
-                    --- *All* of the providers have the following options available
-                    --- NOTE: All of these options may be functions to get dynamic behavior
-                    --- See the type definitions for more information.
-                    --- Check the enabled_providers config for an example
-                    enabled = true,           -- Whether or not to enable the provider
-                    transform_items = nil,    -- Function to transform the items before they're returned
-                    should_show_items = true, -- Whether or not to show the items
-                    max_items = 10,           -- Maximum number of items to display in the menu
-                    min_keyword_length = 0,   -- Minimum number of characters in the keyword to trigger the provider
-                    fallbacks = {},           -- If any of these providers return 0 items, it will fallback to this provider
-                    score_offset = 0,         -- Boost/penalize the score of the items
-                    override = nil,           -- Override the source's functions
-                },
-                snippets = {
-                    name = 'Snippets',
-                    module = 'blink.cmp.sources.snippets',
-                    score_offset = -3,
-                    opts = {
-                        friendly_snippets = false,
-                        search_paths = { vim.fn.stdpath('config') .. '/snippets' },
-                        global_snippets = { 'all' },
-                        extended_filetypes = {},
-                        ignored_filetypes = {},
-                        -- get_filetype = function(context)
-                        --     return vim.bo.filetype
-                        -- end
-                    }
-
-                    --- Example usage for disabling the snippet provider after pressing trigger characters (i.e. ".")
-                    -- enabled = function(ctx)
-                    --   return ctx ~= nil and ctx.trigger.kind == vim.lsp.protocol.CompletionTriggerKind.TriggerCharacter
-                    -- end,
-                },
-                buffer = {
-                    name = 'Buffer',
-                    module = 'blink.cmp.sources.buffer',
-                    fallbacks = { 'lsp' },
-                    opts = {
-                        -- default to all visible buffers
-                        get_bufnrs = function()
-                            return vim
-                                .iter(vim.api.nvim_list_wins())
-                                :map(function(win) return vim.api.nvim_win_get_buf(win) end)
-                                :filter(function(buf) return vim.bo[buf].buftype ~= 'nofile' end)
-                                :totable()
-                        end,
-                    }
-                },
-            },
         },
 
         appearance = {
