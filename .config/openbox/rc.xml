@@ -202,13 +202,13 @@
     </keybind>
     <!-- Keybindings for desktop switching -->
     <!-- Increase backlight 1% -->
-    <keybind key="XF86MonBrightnessUp">
+    <keybind key="F3">
       <action name="Execute">
         <command>~/dotfiles/scripts/backlight-inc.sh</command>
       </action>
     </keybind>
     <!-- Decrease backlight 1% -->
-    <keybind key="XF86MonBrightnessDown">
+    <keybind key="F2">
       <action name="Execute">
         <command>~/dotfiles/scripts/backlight-dec.sh</command>
       </action>
@@ -223,7 +223,7 @@
         <command>~/.local/bin/xsct -d 0 -0.1</command>
       </action>
     </keybind>
-    <keybind key="Print">
+    <keybind key="0xDA">
       <action name="Execute">
         <command>~/dotfiles/scripts/screenshot.sh select</command>
       </action>
@@ -433,17 +433,17 @@
     <keybind key="W-f">
       <action name="ToggleMaximize"/>
     </keybind>
-    <keybind key="XF86AudioRaiseVolume">
+    <keybind key="F7">
       <action name="Execute">
         <command>pamixer --allow-boost --increase 2</command>
       </action>
     </keybind>
-    <keybind key="XF86AudioLowerVolume">
+    <keybind key="F6">
       <action name="Execute">
         <command>pamixer --decrease 2 </command>
       </action>
     </keybind>
-    <keybind key="XF86AudioMute">
+    <keybind key="F5">
       <action name="Execute">
         <command>pamixer --toggle-mute</command>
       </action>
