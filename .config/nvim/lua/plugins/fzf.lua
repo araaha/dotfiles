@@ -9,6 +9,11 @@ return {
             mode = "n"
         },
         {
+            "<Leader>fz",
+            function() require("fzf-lua").zoxide() end,
+            mode = "n"
+        },
+        {
             "<Leader>fl",
             function() require("fzf-lua").blines() end,
             mode = "n"
@@ -48,11 +53,13 @@ return {
             },
             fzf_colors    = {
                 ["gutter"] = "-1",
-                ["bg"] = "-1",
+                ["bg"]     = "-1",
             },
             hls           = {
+                live_prompt = "Normal",
                 path_linenr = "GruvboxGreen",
-                buf_name = "FloatBorder"
+                buf_name = "FloatBorder",
+                border = "FloatBorder"
             },
             complete_file = {
                 cmd = os.getenv("FZF_DEFAULT_COMMAND"),
@@ -64,13 +71,15 @@ return {
                 rg_opts = "--line-number --colors=line:none",
             },
             winopts       = {
+                title_flags = false,
                 preview = {
+                    border = "none",
                     default = "bat",
                     scrollbar = false,
+                    vertical = "up:50%",
                     delay = 4,
                 },
-                win_border = { "┏", "━", "┓", "┃", "┛", "━", "┗", "┃" },
-                hl = { border = "FloatBorder", },
+                border = { "┏", "━", "┓", "┃", "┛", "━", "┗", "┃" },
                 height = "0.8",
                 width = "0.60",
                 col = 0.48,
