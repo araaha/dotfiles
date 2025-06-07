@@ -1,5 +1,8 @@
 vim.bo.buflisted = true
-vim.cmd("resize " .. vim.o.lines * 0.45)
+
+if vim.v.vim_did_enter == 1 then
+    vim.cmd("resize " .. math.floor(vim.o.lines * 0.45))
+end
 
 vim.api.nvim_create_autocmd({ "VimResized" },
     {
