@@ -11,6 +11,7 @@ set incsearch
 
 set reverse
 set findlen 0
+set period 1
 set noanchorfind
 
 set info size
@@ -32,7 +33,7 @@ cmd open ${{
     case $(file --mime-type $f -b) in
         text/*) nvim $(echo "$fx");;
         image/gif|video/*)
-           mpv $(echo "$fx") > /dev/null 2> /dev/null & disown;;
+           mpv --auto-window-resize=no $(echo "$fx") > /dev/null 2> /dev/null & disown;;
         image/*)
            nsxiv -g 800x600+560+240 -b -a -sf $(echo "$fx") & disown;;
         application/octet-stream) $EDITOR $fx;;
@@ -158,7 +159,7 @@ cmd chmod ${{
   lf -remote "send reload"; lf -remote "send unselect"
 }}
 
-map ch :chmod +x
+map ch push :chmod<space>
 
 cmd copy-path &{{
   echo -n $f | xclip -sel clipboard | lf -remote "send echo $f"
@@ -203,7 +204,6 @@ map <a-c> :fzf_z
 cmap <up> cmd-history-prev
 cmap <down> cmd-history-next
 
-
 cmd link &{{
     set -- $(cat ~/.local/share/lf/files)
     mode="copy"
@@ -226,7 +226,7 @@ cmd link &{{
 map P :link
 
 map r
-map rm delete; reload
+map rm delete
 
 map t
 
