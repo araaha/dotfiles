@@ -12,6 +12,12 @@ return {
         wrap = false,
         icons = {
             enabled = false
-        }
+        },
+        showCompactInputs = false,
+        showInputsTopPadding = false,
+        showInputsBottomPadding = false,
+        showStatusIcon = false,
+        showEngineInfo = false,
+        showStatusInfo = false
     }
 }
