@@ -51,7 +51,7 @@ tdrop \
 ticker \
 ttf-arphic-uming \
 webtorrent-cli \
-xdg-desktop-portal-termfilechooser-git \
+xdg-desktop-portal-termfilechooser-hunkyburrito-git \
 ungoogled-chromium-xdg-bin \
 ttf-ms-fonts \
 ttf-weather-icons \
@@ -60,4 +60,3 @@ rofi-git \
 rofi-calc-git \
 rofi-pass \
 localsend-bin \
-openssh-dotconfig-bin
