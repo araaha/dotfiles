@@ -27,9 +27,6 @@ map("n", "X", ":bdelete!<CR>", { silent = true })
 map({ "i" }, "<C-s>", "<C-o>:silent! w<CR>", { silent = true })
 map({ "n" }, "<C-s>", ":silent! w<CR>", { silent = true })
 
-map({ "n", "v" }, "{", "{(")
-map({ "n", "v" }, "}", "})")
-
 map("n", "<Leader>lf", ":vert term lf %<CR>", { silent = true })
 map("n", "<Leader>lg", ":vert term lazygit<CR>", { silent = true })
 map("n", "<Leader>lp", ":silent! Lazy profile<CR>", { silent = true })
@@ -46,22 +43,6 @@ map("n", "i", function()
     end
 end, { expr = true, desc = "properly indent on empty line when insert" })
 
-map("n", "<CR>", function()
-    if vim.o.buftype == "quickfix" then
-        return "<CR>"
-    else
-        return "moo<Esc>`o:delm o<CR>"
-    end
-end, { expr = true, replace_keycodes = true })
-
-map("n", "<S-CR>", function()
-    if vim.o.buftype == "quickfix" then
-        return "<CR>"
-    else
-        return "mpO<Esc>`p:delm p<CR>"
-    end
-end, { expr = true, replace_keycodes = true })
-
 map("n", "<Leader>tr", [[:%s/\s\+$//e<CR>:w<CR>]], { silent = true })
 map({ "v" }, "gs", [[y<esc>:%s/<C-r>"//g<left><left>]], {})
-map('t', '<esc>', '<C-\\>', {})
+map("t", "<esc>", "<C-\\>", {})
