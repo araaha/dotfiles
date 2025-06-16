@@ -128,9 +128,9 @@ cmd garbage_restore ${{
 map tc garbage_clear
 map tr garbage_restore
 
-
-cmd decompress &ouch decompress "$fx"
-cmd compress &ouch compress "$fx" "$fx"."$@"
+cmd decompress $ouch decompress "$fx"
+#NOTE just specify the format
+cmd compress $ouch compress "$fx" "$fx"."$@"
 
 map unselect
 map <enter>
@@ -178,7 +178,7 @@ cmd edir ${{
     lf -remote "send reload"
 }}
 
-map <f-2> :edir
+map rn :edir
 map cl :clear; unselect
 
 map cd :push ''
