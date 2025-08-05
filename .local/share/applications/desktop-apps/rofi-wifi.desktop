@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Wifi
-Icon=wifi
-Terminal=false
-Exec=/home/araaha/.local/bin/rofi-wifi.sh
-Categories=ConsoleOnly;System;FileTools;FileManager
-MimeType=inode/directory;
