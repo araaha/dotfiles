@@ -1,13 +1,8 @@
-**.fdb_latexmk
-**.log
-**.fls
-**.aux
-**.synctex.gz
-**/weather.sh
 **/cron-test.txt
 **/lazy-lock.json
 **/.zcompdump
 **/.zcompdump.zwc
+**/weather.sh
 .gnupg
 krita
 kritarc
