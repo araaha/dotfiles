@@ -33,7 +33,7 @@ func main() {
             wordTrig = true,
             hidden = true,
         }, fmta([[for <> := <>; <> << <>; <>++ {
-        <>
+    <>
 }]], {
             d(1, function(_, snip)
                 return sn(1, i(1, snip.captures[1]))
