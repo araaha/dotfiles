@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MAC="40:C1:F6:2A:8C:DD"
+MAC="$(bluetoothctl devices | rg 'Device' | head -n 1 | cut -d ' ' -f 2)"
 
 powered() {
     echo "show" | bluetoothctl | grep "Powered" | cut -d " " -f 2
