@@ -39,6 +39,7 @@ systemctl enable --now systemd-resolved
 #install compiled/zipped apps
 yay -S cyme-bin \
 djvu2pdf \
+chawan \
 dragon-drop \
 edir \
 light \
@@ -60,3 +61,6 @@ rofi-git \
 rofi-calc-git \
 rofi-pass \
 localsend-bin \
+codelldb-bin \
+megacmd \
+warpd
