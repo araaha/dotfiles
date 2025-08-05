@@ -4,6 +4,6 @@ return {
         { "%", mode = { "n", "v", "o" } }
     },
     opts = {
-        debounce_time = 0
+        debounce_time = 1
     }
 }
