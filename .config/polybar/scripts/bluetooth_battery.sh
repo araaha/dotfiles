@@ -1,10 +1,12 @@
 #!/bin/bash
 
+#Get MAC address
+MAC=$(bluetoothctl devices | rg 'Device' | head -n 1 | cut -d ' ' -f 2 | sed 's/:/_/g')
 # Execute the dbus-send command and capture stderr
 DBUS_OUTPUT=$(dbus-send \
         --print-reply=literal \
         --system \
-        --dest=org.bluez /org/bluez/hci0/dev_40_C1_F6_2A_8C_DD \
+        --dest=org.bluez /org/bluez/hci0/dev_"$MAC" \
         org.freedesktop.DBus.Properties.Get \
         string:"org.bluez.Battery1" \
         string:"Percentage")
