@@ -23,7 +23,6 @@ local function toggle_or_fallback(is_increment)
     if replacement then
         vim.cmd("normal! ciw" .. replacement)
     else
-        -- Feed the actual Ctrl-A or Ctrl-X to Neovim
         local key = is_increment and "<C-a>" or "<C-x>"
         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, false, true), "n", false)
     end

@@ -17,7 +17,6 @@ local options = {
     fillchars     = "eob: ,foldopen:┃,foldsep:┃",
     listchars     = "tab:  ",
     foldenable    = false,
-    foldexpr      = "v:lua.vim.treesitter.foldexpr()",
     foldtext      = "",
     guicursor     = "",
     wildoptions   = "pum,fuzzy",
