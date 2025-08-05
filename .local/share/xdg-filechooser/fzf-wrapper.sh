@@ -22,6 +22,8 @@ export FZF_DEFAULT_OPTS="--delimiter=/ --with-nth 4.. --no-scrollbar --border=no
 
 export FD_EXCLUDE="-E '.cache' -E 'icons' -E 'themes' -E '**pkg' -E '**.git' -E 'state' -E 'google-chrome' -E 'opt' -E 'chromium' -E 'firefox' -E 'cargo'"
 
+export GUM_STYLE="--no-show-help --prompt.padding='10 3 0 3' --prompt.foreground='#fbf1c7' --prompt.align='center' --prompt.width=80 --selected.align='center' --selected.width=40 --selected.background='#9cd365' --selected.foreground='#242424' --selected.margin='0 0' --selected.bold --unselected.align='center' --unselected.width=40 --unselected.foreground='#fbf1c7' --unselected.background='' --unselected.margin='0 0' --unselected.bold"
+
 multiple="$1"
 directory="$2"
 save="$3"
@@ -29,7 +31,8 @@ path="$4"
 out="$5"
 
 if [ "$save" = "1" ]; then
-    cmd="dialog --yesno \"Save to $path ?\" 0 0 && ( printf '%s' \"$path\" > $out )"
+    shortened_path="${path/$HOME/\~}"
+    cmd="gum confirm $GUM_STYLE 'Save to  $shortened_path?' && ( printf '%s' \"$path\" > $out)"
 elif [ "$directory" = "1" ]; then
     cmd="fd --absolute-path . 'Screenshots' 'Downloads' | ~/.local/bin/fzf-preview.sh $FZF_DEFAULT_OPTS --prompt 'Select directories > '"
 elif [ "$multiple" = "1" ]; then
@@ -38,7 +41,7 @@ else
     cmd="fd --absolute-path . 'Screenshots' 'Downloads'  | ~/.local/bin/fzf-preview.sh +m $FZF_DEFAULT_OPTS --prompt 'Select file > '"
 fi
 
-~/.local/bin/st -T "Filepicker" -g 80x25+720+400 -e sh -c "$cmd > $out"
+~/.local/bin/st -T "Filepicker" -g 80x24+600+360 -e sh -c "$cmd > $out"
 
 if ! [ -s "$out" ]; then
     exit 1
