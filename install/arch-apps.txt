@@ -6,12 +6,13 @@ bluez
 bluez-utils
 bottom
 calcurse
+clang
 cronie
 cups
 cups-pdf
 delve
-dialog
 difftastic
+downgrade
 dunst
 erdtree
 fd
@@ -28,6 +29,7 @@ gopls
 grep
 groff
 grub
+gum
 gutenprint
 gzip
 hyperfine
