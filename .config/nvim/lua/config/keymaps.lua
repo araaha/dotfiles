@@ -1,5 +1,7 @@
 local map = vim.keymap.set
 
+map("n", "<M-i>", "<C-i>")
+map("n", "<M-o>", "<C-o>")
 map("n", "zq", "ZQ")
 map("n", "zQ", "ZQ")
 map("n", "Zq", "ZQ")
@@ -14,7 +16,6 @@ map("n", "D", "dd")
 map("n", "gJ", "J")
 map({ "n", "v", "o" }, "H", "_")
 map({ "n", "v", "o" }, "L", "$")
-map({ "n", "v", "o" }, "M", "D")
 map({ "n", "v" }, "j", "gj")
 map({ "n", "v" }, "k", "gk")
 map("n", "<C-w>s", ":new<CR>")
@@ -46,3 +47,6 @@ end, { expr = true, desc = "properly indent on empty line when insert" })
 map("n", "<Leader>tr", [[:%s/\s\+$//e<CR>:w<CR>]], { silent = true })
 map({ "v" }, "gs", [[y<esc>:%s/<C-r>"//g<left><left>]], {})
 map("t", "<esc>", "<C-\\>", {})
+
+map("n", "<Leader>y", [["*y]], {})
+map("n", "<Leader>p", [["*p]], {})
