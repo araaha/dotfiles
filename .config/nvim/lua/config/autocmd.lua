@@ -66,7 +66,7 @@ au("LspAttach", {
     callback = function(ev)
         local opts = { buffer = ev.buf }
         vim.keymap.set("n", "gD", vim.lsp.buf.definition, opts)
-        vim.keymap.set("n", "<M-o>", function()
+        vim.keymap.set("n", "go", function()
             vim.lsp.buf.hover({ border = "single" })
         end, opts)
         vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
