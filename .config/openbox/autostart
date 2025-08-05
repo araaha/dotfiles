@@ -1,5 +1,5 @@
 xwallpaper --stretch "$HOME/.local/share/Wallpapers/Pacman.png" &
-light -S 13 &
+light -S 20 &
 ./.config/polybar/launch.sh &
 ./scripts/bluetooth-autoconnect.sh &
 picom -b &

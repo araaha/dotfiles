@@ -957,13 +957,6 @@
     <application class="st" name="Navigator">
       <fullscreen>yes</fullscreen>
     </application>
-    <application name="code">
-      <keepBorder>no</keepBorder>
-    </application>
-    <application name="org.pwmt.zathura">
-      <decor>no</decor>
-      <keepBorder>yes</keepBorder>
-    </application>
     <application name="Alacritty">
       <decor>no</decor>
       <keepBorder>no</keepBorder>
