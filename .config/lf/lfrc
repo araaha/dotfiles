@@ -26,7 +26,7 @@ set ifs "\n"
 map e $$f
 map E !$f
 
-map o :open $fx
+nmap o :open $fx
 
 cmd open ${{
     test -L $f && f=$(readlink -f $f)
@@ -87,6 +87,7 @@ map zq quit
 map / search
 
 map D &garbage put $fx
+vmap d &garbage put $fv
 
 map m
 
@@ -220,7 +221,6 @@ cmd link &{{
     esac
     rm ~/.local/share/lf/files
     lf -remote "send clear"
-    lf -remote "send reload"
 }}
 
 map P :link
@@ -238,6 +238,7 @@ cmd pager ${{
             exiftool $f | moar;;
         *.zip|*.jar|*.war|*.ear|*.oxt) unzip -l "$1" | moar;;
         *.md) mdcat "$f" | moar;;
+        *.[1-8]) man "$f" | col -b | moar;;
         *) bat --paging=always $f;;
     esac
 }}
@@ -248,6 +249,7 @@ map i :pager
 map <c-l> redraw
 
 map gD :cd ~/Downloads
+map gn :cd ~/.config/nvim/
 map gS :cd ~/Site
 map gl :cd ~/.local/share
 map gc :cd ~/.config
@@ -258,7 +260,11 @@ map gt :cd /tmp/
 map gT :cd ~/.local/share/Trash/files/
 map gb :cd ~/Books
 
-map <c-c> cmd-escape
+nmap <c-c> :cmd-escape; unselect
+vmap <c-c> visual-discard
+
+vmap V visual-unselect
+
 map <esc> cmd-escape
 
 cmd ff &{{
