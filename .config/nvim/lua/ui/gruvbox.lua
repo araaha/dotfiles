@@ -103,10 +103,10 @@ local groups = {
     GrugFarResultsMatch = { link = "Search" },
     GrugFarResultsHeader = { default = true, link = "GruvboxGreen" },
 
-    debugPC = { bg = colors.orange, fg = colors.bg0 },
+    debugPC = { bg = colors.blue, fg = colors.bg0 },
     debugBreakpoint = { link = "GruvboxRedSign" },
-    DapBreakpointSymbol = { fg = colors.red, bg = colors.bg1 },
-    DapStoppedSymbol = { fg = colors.green, bg = colors.bg1 },
+    DapBreakpoint = { fg = colors.red },
+    DapStopped = { fg = colors.green },
     DapUIBreakpointsCurrentLine = { link = "GruvboxYellow" },
     DapUIBreakpointsDisabledLine = { link = "GruvboxGray" },
     DapUIBreakpointsInfo = { link = "GruvboxAqua" },
