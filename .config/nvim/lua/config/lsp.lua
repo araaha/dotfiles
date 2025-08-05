@@ -3,10 +3,12 @@ vim.lsp.enable({
     "bashls",
     "ruff",
     "pyright",
-    "lua_ls"
+    "lua_ls",
+    "clangd"
 }, true)
 
 vim.diagnostic.config({
     virtual_text = true,
     underline = false,
+    signs = false
 })
