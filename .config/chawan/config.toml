@@ -1,0 +1,28 @@
+[buffer]
+scripting=true
+images=false
+styling=true
+history=false
+cookie=true
+
+[page]
+H = "cmd.buffer.cursorLineTextStart()"
+L = "cmd.buffer.cursorLineEnd()"
+M-i = "cmd.pager.nextBuffer"
+M-o = "cmd.pager.prevBuffer"
+j="() => { cmd.buffer.cursorDown(); cmd.buffer.centerLine(); }"
+k="() => { cmd.buffer.cursorUp(); cmd.buffer.centerLine(); }"
+C-u="() => { cmd.buffer.halfPageUp(); cmd.buffer.centerLine(); }"
+C-d="() => { cmd.buffer.halfPageDown(); cmd.buffer.centerLine(); }"
+
+[display]
+image-mode="none"
+highlight-color="3F3F3F"
+
+[external]
+copy-cmd="xclip -sel clip"
+mailcap = ["~/.config/chawan/mailcap"]
+download-dir = "~/Downloads"
+tmpdir="~/.cache/chawan"
+auto-mailcap="~/chawan/auto.mailcap"
+show-download-panel=false
