@@ -1,16 +1,11 @@
 alias \#='sudo'
 alias \$=''
-alias alu="apt list --upgradable"
 alias bdisc="bluetoothctl disconnect $(bluetoothctl devices | rg 'Device' | head -n 1 | cut -d ' ' -f 2)"
 alias bconn="bluetoothctl connect $(bluetoothctl devices | rg 'Device' | head -n 1 | cut -d ' ' -f 2)"
 alias cat="bat -pp --color=auto"
 alias catt="/usr/bin/cat"
 alias copy="xclip -r -sel clip"
 alias cp='cp -v'
-alias cpugetavail='cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_available_governors'
-alias cpushowcurrent='cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor'
-alias cpuusehigh='echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor'
-alias cpuuselow='echo powersave | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor'
 alias cyme="sudo cyme --hide-buses -b icon -b name -b speed -t"
 alias farge="farge --image-viewer nsxiv"
 alias ga="git add"
@@ -30,11 +25,5 @@ alias nerdfetch="nitch"
 alias nsxiv="nsxiv -g 800x600+560+240 -b -a -sf"
 alias nv="nvim"
 alias packages="bat --paging=never --color=never --decorations=never /var/log/pacman.log | rg -a installed --color=always | tail -n 200"
-alias sa="sudo apt"
-alias sai="sudo apt install"
-alias sau="sudo apt update -y; sudo apt clean"
-alias saup="sudo apt upgrade -y"
-alias sxiv="nsxiv -g 800x600+560+240 -b -a -sf"
 alias ticker='ticker --sort=user --config="$HOME/.config/.ticker.yaml"'
 alias tree="tree --noreport -C"
-alias zathura="zathura --fork"
