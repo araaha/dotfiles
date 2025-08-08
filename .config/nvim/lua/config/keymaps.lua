@@ -48,5 +48,5 @@ map("n", "<Leader>tr", [[:%s/\s\+$//e<CR>:w<CR>]], { silent = true })
 map({ "v" }, "gs", [[y<esc>:%s/<C-r>"//g<left><left>]], {})
 map("t", "<esc>", "<C-\\>", {})
 
-map("n", "<Leader>y", [["*y]], {})
-map("n", "<Leader>p", [["*p]], {})
+map({ "n", "v" }, "<Leader>y", [["+y]], {})
+map({ "n", "v" }, "<Leader>p", [["+p]], {})
