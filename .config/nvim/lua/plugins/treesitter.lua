@@ -24,7 +24,7 @@ return {
             },
         },
         ensure_installed = { "c", "lua", "vim", "vimdoc", "cpp", "css", "go", "python", "bash",
-            "diff", "yaml", "xml", "markdown", "ini", "json", "html", "typst", "make", "toml" },
+            "diff", "yaml", "xml", "markdown", "ini", "json", "html", "typst", "make", "toml", "javascript" },
     },
     main  = "nvim-treesitter.configs"
 }
