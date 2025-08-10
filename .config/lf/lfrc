@@ -70,9 +70,7 @@ cmd fzf_jump_abs ${{
     lf -remote "send $id $cmd \"$res\""
 }}
 
-map f
-map fi find
-map fd :fzf_jump_abs
+map ff :fzf_jump_abs
 map <c-t> :fzf_jump
 
 map c
@@ -94,7 +92,7 @@ map m
 cmd mkdir %{{
     IFS=" "
     mkdir -p -- "$*"
-    lf -remote "send $id select \"$*\""
+    lf -remote "send $id cd \"$*\""
 }}
 
 map mk push :mkdir<space>
@@ -200,7 +198,7 @@ cmd fzf_z ${{
     lf -remote "send $id $cmd \"$sel\""
 }}
 
-map <a-c> :fzf_z
+map fz :fzf_z
 
 cmap <up> cmd-history-prev
 cmap <down> cmd-history-next
@@ -259,6 +257,7 @@ map gp :cd ~/dotfiles-private/
 map gt :cd /tmp/
 map gT :cd ~/.local/share/Trash/files/
 map gb :cd ~/Books
+map gm :cd /media/
 
 nmap <c-c> :cmd-escape; unselect
 vmap <c-c> visual-discard
@@ -267,13 +266,13 @@ vmap V visual-unselect
 
 map <esc> cmd-escape
 
-cmd ff &{{
+cmd cf &{{
     IFS=" "
-    ff -- "$*"
+    cf -- "$*"
     lf -remote "send $id select \"$*\""
 }}
 
-map ff push :ff<space>
+map fc push :cf<space>
 map sx $nsxiv -g 1200x1000+840+400 -b -a -sf "$fx" & disown
 
 cmd edit-config ${{
@@ -307,3 +306,5 @@ cmd rfv ${{
 map rfv rfv
 map zg $lazygit
 map su $sudoedit "$f"
+
+map f
