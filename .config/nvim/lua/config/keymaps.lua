@@ -2,6 +2,8 @@ local map = vim.keymap.set
 
 map("n", "<M-i>", "<C-i>")
 map("n", "<M-o>", "<C-o>")
+map("n", "<C-i>", "")
+map("n", "<C-o>", "")
 map("n", "zq", "ZQ")
 map("n", "zQ", "ZQ")
 map("n", "Zq", "ZQ")
