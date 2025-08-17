@@ -1,7 +1,7 @@
 alias \#='sudo'
 alias \$=''
-alias bdisc="bluetoothctl disconnect $(bluetoothctl devices | rg 'Device' | head -n 1 | cut -d ' ' -f 2)"
-alias bconn="bluetoothctl connect $(bluetoothctl devices | rg 'Device' | head -n 1 | cut -d ' ' -f 2)"
+alias bdisc="bluetoothctl disconnect 18:9C:2C:4F:BB:5F"
+alias bconn="bluetoothctl connect 18:9C:2C:4F:BB:5F"
 alias cat="bat -pp --color=auto"
 alias catt="/usr/bin/cat"
 alias copy="xclip -r -sel clip"
