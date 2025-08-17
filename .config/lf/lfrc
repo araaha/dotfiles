@@ -127,9 +127,13 @@ cmd garbage_restore ${{
 map tc garbage_clear
 map tr garbage_restore
 
-cmd decompress $ouch decompress "$fx"
+
+cmd decompress %ouch decompress "$fx"
+nmap u
+nmap un :decompress
 #NOTE just specify the format
 cmd compress $ouch compress "$fx" "$fx"."$@"
+map zi compress
 
 map unselect
 map <enter>
@@ -266,13 +270,13 @@ vmap V visual-unselect
 
 map <esc> cmd-escape
 
-cmd cf &{{
+cmd fc &{{
     IFS=" "
-    cf -- "$*"
+    ff -- "$*"
     lf -remote "send $id select \"$*\""
 }}
 
-map fc push :cf<space>
+map fc push :fc<space>
 map sx $nsxiv -g 1200x1000+840+400 -b -a -sf "$fx" & disown
 
 cmd edit-config ${{
