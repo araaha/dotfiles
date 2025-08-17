@@ -16,24 +16,23 @@ return {
     s(
         {
             trig = "plug",
-            snippetType = "snippet",
-            hidden = false,
-        }, fmt([[
+            snippetType = "autosnippet",
+            regTrig = false,
+            hidden = true,
+        }, fmta([[
     return {{
-        "{}",
-        event   = {},
-        opts    = {{}},
+        "<>",
+        opts    = {<>},
     }}
 ]], {
-            i(1, ""),
-            i(2, "false"),
-            i(3, "true"),
-            i(4, "\"VeryLazy\""),
+            i(1),
+            i(2),
         })
     ),
     s(
         {
             trig = "snip",
+            regTrig = false,
             snippetType = "snippet",
             hidden = false,
         }, fmta([[
