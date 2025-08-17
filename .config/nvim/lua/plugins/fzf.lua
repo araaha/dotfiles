@@ -19,7 +19,7 @@ return {
             mode = "n"
         },
         {
-            "<Leader>rfv",
+            "rfv",
             function() require("fzf-lua").live_grep() end,
             mode = "n"
         },
