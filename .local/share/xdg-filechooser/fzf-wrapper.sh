@@ -31,14 +31,13 @@ path="$4"
 out="$5"
 
 if [ "$save" = "1" ]; then
-    shortened_path="${path/$HOME/\~}"
-    cmd="gum confirm $GUM_STYLE 'Save to  $shortened_path?' && ( printf '%s' \"$path\" > $out)"
+    cmd="gum confirm $GUM_STYLE 'Save to  ${path/$HOME/\~}?' && ( printf '%s' \"$path\" > $out)"
 elif [ "$directory" = "1" ]; then
-    cmd="fd --absolute-path . 'Screenshots' 'Downloads' | ~/.local/bin/fzf-preview.sh $FZF_DEFAULT_OPTS --prompt 'Select directories > '"
+    cmd="rg --files ~ --glob 'Downloads/**' --glob 'Screenshots/**' | ~/.local/bin/fzf-preview.sh $FZF_DEFAULT_OPTS --prompt 'Select directories > '"
 elif [ "$multiple" = "1" ]; then
-    cmd="fd --absolute-path . 'Screenshots' 'Downloads' | ~/.local/bin/fzf-preview.sh $FZF_DEFAULT_OPTS --prompt 'Select files > '"
+    cmd="rg --files ~ --glob 'Downloads/**' --glob 'Screenshots/**' | ~/.local/bin/fzf-preview.sh $FZF_DEFAULT_OPTS --prompt 'Select files > '"
 else
-    cmd="fd --absolute-path . 'Screenshots' 'Downloads'  | ~/.local/bin/fzf-preview.sh +m $FZF_DEFAULT_OPTS --prompt 'Select file > '"
+    cmd="rg --files ~ --glob 'Downloads/**' --glob 'Screenshots/**' | ~/.local/bin/fzf-preview.sh +m $FZF_DEFAULT_OPTS --prompt 'Select file > '"
 fi
 
 ~/.local/bin/st -T "Filepicker" -g 80x24+600+360 -e sh -c "$cmd > $out"
