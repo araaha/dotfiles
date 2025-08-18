@@ -1,8 +1,8 @@
 #!/bin/bash
 
-output='/home/araaha/Screenshots/%Y-%m-%d-%T-screenshot.png'
+output="/home/araaha/Screenshots/%Y-%m-%d-%T-screenshot.png"
 
-options=$(printf "Select\nWindow" | rofi -no-show-icons -dmenu -i -p "Select screenshot mode")
+options=$(printf "Select\nWindow" | rofi -no-show-icons -dmenu -i -p "Select screenshot mode ")
 
 case "$options" in
     "Select")
