@@ -4,10 +4,10 @@ set -e
 
 DOTS="$HOME/dotfiles"
 
-sudo rm -rf "$HOME/.config"
-sudo rm -rf "$HOME/.zshrc"
-sudo rm -rf "$HOME/.bashrc"
-sudo rm -rf "$HOME/.local"
+rm -rf "$HOME/.config"
+rm -rf "$HOME/.zshrc"
+rm -rf "$HOME/.bashrc"
+rm -rf "$HOME/.local"
 
 mkdir -p "$HOME/.config/"
 mkdir -p "$HOME/Downloads/"
@@ -21,7 +21,7 @@ ln -srf "$DOTS/.config"/* "$HOME/.config/"
 find "$DOTS/.local/share" -mindepth 1 -maxdepth 1 ! -name "themes" -exec ln -sr {} "$HOME/.local/share" \;
 
 #themes/icons
-sudo pacman -S unzip
+yay -S unzip
 
 unzip "$DOTS/.local/share/themes/Gruvbox-Material-Dark-HIDPI.zip" -d "$HOME/.local/share/themes/Gruvbox-Material-Dark-HIDPI.zip"
 unzip "$DOTS/.local/share/themes/gruvbox-material-dark-blocks.zip" -d "$HOME/.local/share/themes/gruvbox-material-dark-blocks.zip"
