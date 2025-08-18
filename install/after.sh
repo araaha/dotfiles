@@ -26,7 +26,6 @@ chsh -s "$(which zsh)"
 # Configure GRUB settings
 sudo sed -i 's/GRUB_CMDLINE_LINUX="[^"]*"/GRUB_CMDLINE_LINUX="rootfstype=ext4 quiet splash atkbd.softrepeat=1 vt.cur_default=0x200011 vt.color=3 vt.global_cursor_default=0 cpufreq.default_governor=powersave"/' /etc/default/grub
 sudo grub-mkconfig -o /boot/grub/grub.cfg
-sudo mkinitcpio -P
 
 # Enable and start system services
 systemctl enable --now cronie
@@ -37,30 +36,32 @@ systemctl enable --now systemd-networkd
 systemctl enable --now systemd-resolved
 
 #install compiled/zipped apps
-yay -S cyme-bin \
-djvu2pdf \
-chawan \
-dragon-drop \
-edir \
-light \
-gdu-bin \
-pulseaudio-ctl \
-rofi-greenclip \
-shellcheck-bin \
-sioyek \
-tdrop \
-ticker \
-ttf-arphic-uming \
-webtorrent-cli \
-xdg-desktop-portal-termfilechooser-hunkyburrito-git \
-ungoogled-chromium-xdg-bin \
-ttf-ms-fonts \
-ttf-weather-icons \
-uair \
-rofi-git \
-rofi-calc-git \
-rofi-pass \
-localsend-bin \
-codelldb-bin \
-megacmd \
-warpd
+yay -S chawan /
+codelldb-bin /
+cyme-bin /
+djvu2pdf /
+downgrade /
+dragon-drop /
+edir /
+gdu-bin /
+lazydocker /
+light /
+localsend-bin /
+megacmd /
+openssh-dotconfig-bin /
+pulseaudio-ctl /
+rofi-greenclip /
+shellcheck-bin /
+sioyek /
+tb.go /
+tdrop /
+ticker /
+tor-browser-bin /
+ttf-ms-fonts /
+ttf-weather-icons /
+uair /
+warpd /
+webtorrent-cli /
+xdg-desktop-portal-termfilechooser-hunkyburrito-git /
+yay /
+zen-browser-bin /
