@@ -215,7 +215,7 @@
     </keybind>
     <keybind key="XF86AudioPrev">
       <action name="Execute">
-      <command>~/.local/bin/xsct -d 0 0.1</command>
+        <command>~/.local/bin/xsct -d 0 0.1</command>
       </action>
     </keybind>
     <keybind key="XF86AudioMicMute">
@@ -244,9 +244,9 @@
       </action>
     </keybind>
     <keybind key="C-A-q">
-    <action name="Execute">
-    <command>rofi -show calc -modi calc -no-show-match -no-sort -terse -no-bold -calc-command "echo -n '{result}' | xclip -r -sel clip" -kb-secondary-copy "" -kb-accept-entry "Return,Control+c"</command>
-    </action>
+      <action name="Execute">
+        <command>rofi -show calc -modi calc -no-show-match -no-sort -terse -no-bold -calc-command "echo -n '{result}' | xclip -r -sel clip" -kb-secondary-copy "" -kb-accept-entry "Return,Control+c"</command>
+      </action>
     </keybind>
     <keybind key="C-A-c">
       <action name="Execute">
