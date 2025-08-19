@@ -21,7 +21,7 @@ crontab ~/dotfiles/install/crontabs/crontab
 sudo crontab ~/dotfiles/install/crontabs/sudo-crontab
 
 # Change default shell to zsh
-chsh -s "$(which zsh)"
+chsh -s "/bin/zsh"
 
 # Configure GRUB settings
 sudo sed -i 's/GRUB_CMDLINE_LINUX="[^"]*"/GRUB_CMDLINE_LINUX="rootfstype=ext4 quiet splash atkbd.softrepeat=1 vt.cur_default=0x200011 vt.color=3 vt.global_cursor_default=0 cpufreq.default_governor=powersave"/' /etc/default/grub
@@ -44,7 +44,7 @@ downgrade /
 dragon-drop /
 edir /
 gdu-bin /
-lazydocker /
+lazydocker-bin /
 light /
 localsend-bin /
 megacmd /
@@ -63,5 +63,4 @@ uair /
 warpd /
 webtorrent-cli /
 xdg-desktop-portal-termfilechooser-hunkyburrito-git /
-yay /
-zen-browser-bin /
+zen-browser-bin
