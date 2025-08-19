@@ -39,7 +39,6 @@ iwd
 jless
 jq
 krita
-lazydocker
 lazygit
 lf
 libnotify
@@ -53,6 +52,7 @@ mdcat
 meson
 mpv
 neovim
+nim
 ninja
 noto-fonts-cjk
 noto-fonts-emoji
@@ -78,6 +78,7 @@ rofi
 rofi-calc
 rofi-pass
 ruff
+rust
 scrot
 sudo
 terminus-font
