@@ -222,33 +222,26 @@ local function pomo()
     local timer = vim.uv.new_timer()
 
     local function getTime()
-        local handle = io.popen("uairctl fetch {time}\n")
+        local time = vim.fn.system("uairctl fetch {time}\n")
         local res = ""
-        if handle then
-            res = handle:read("*L")
-            if res == nil then
-                res = ""
-                timer:stop()
-            end
-            handle:close()
+        if time and #time > 0 and vim.v.shell_error == 0 then
+            res = time
         end
         return res
     end
 
     local function zero()
-        local res = getTime()
-        if res == nil then
+        local time = getTime()
+        if not time or #time == 0 then
             countdown = ""
             timer:stop()
             return
-        elseif res == "" then
-            countdown = ""
         else
-            countdown = string.format("%%#StatuslineInsertAccent# %s", res)
+            countdown = string.format("%%#StatuslineInsertAccent# %s", time)
         end
 
         vim.cmd.redrawstatus()
-        if res == "00:00" then
+        if time == "00:00" then
             vim.cmd("CellularAutomaton game_of_life")
             vim.defer_fn(function()
                 vim.cmd("bdelete!")
