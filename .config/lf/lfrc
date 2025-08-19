@@ -33,7 +33,7 @@ cmd open ${{
     case $(file --mime-type $f -b) in
         text/*) nvim $(echo "$fx");;
         image/gif|video/*)
-           mpv --no-keepaspect --no-keepaspect-window --auto-window-resize=no $(echo "$fx") > /dev/null 2> /dev/null & disown;;
+           mpv $(echo "$fx") > /dev/null 2> /dev/null & disown;;
         image/*)
            nsxiv -g 800x600+560+240 -b -a -sf $(echo "$fx") & disown;;
         application/octet-stream) $EDITOR $fx;;
