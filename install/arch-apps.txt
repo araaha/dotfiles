@@ -2,6 +2,7 @@ alacritty
 amd-ucode
 bash-language-server
 bat
+bc
 bluez
 bluez-utils
 bottom
@@ -12,6 +13,8 @@ cups
 cups-pdf
 delve
 difftastic
+dmidecode
+downgrade
 dunst
 erdtree
 ffmpegthumbnailer
@@ -27,7 +30,6 @@ go
 gopls
 grep
 groff
-grub
 gum
 gutenprint
 gzip
@@ -57,6 +59,7 @@ ninja
 noto-fonts-cjk
 noto-fonts-emoji
 openbox
+openssh
 openssl-1.1
 ouch
 pacman
@@ -69,7 +72,6 @@ pipewire
 pipewire-pulse
 playerctl
 polybar
-pulsemixer
 pyright
 qpdf
 ripgrep
@@ -96,7 +98,6 @@ unzip
 upower
 usbutils
 uv
-w3m
 wget
 wireless_tools
 xcape
@@ -105,6 +106,8 @@ xcolor
 xdg-desktop-portal
 xf86-video-amdgpu
 xorg-server
+xorg-xdpyinfo
+xorg-xev
 xorg-xev
 xorg-xinit
 xorg-xrandr
