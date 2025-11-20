@@ -24,7 +24,7 @@ sudo crontab ~/dotfiles/install/crontabs/sudo-crontab
 chsh -s "/bin/zsh"
 
 # Configure GRUB settings
-sudo sed -i 's/GRUB_CMDLINE_LINUX="[^"]*"/GRUB_CMDLINE_LINUX="rootfstype=ext4 quiet splash atkbd.softrepeat=1 vt.cur_default=0x200011 vt.color=3 vt.global_cursor_default=0 cpufreq.default_governor=powersave"/' /etc/default/grub
+sudo sed -i 's/GRUB_CMDLINE_LINUX="[^"]*"/GRUB_CMDLINE_LINUX="idle=nomwait amdgpu.noretry=0 amdgpu.ppfeaturemask=0xffffffff amdgpu.lockup_timeout=0 amdgpu.gpu_recovery=1 quiet splash atkbd.softrepeat=1 vt.cur_default=0x200011 vt.global_cursor_default=0 cpufreq.default_governor=powersave"/' /etc/default/grub
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 # Enable and start system services
