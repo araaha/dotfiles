@@ -1,5 +1,5 @@
 [Default Applications]
-text/html=w3m;
+text/html=cha;
 application/x-shellscript=nvim.desktop;
 inode/directory=lf.desktop;
 application/eps=org.pwmt.zathura-ps.desktop;
