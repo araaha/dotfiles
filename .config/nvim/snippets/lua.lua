@@ -16,14 +16,14 @@ return {
     s(
         {
             trig = "plug",
-            snippetType = "autosnippet",
+            snippetType = "snippet",
             regTrig = false,
-            hidden = true,
+            hidden = false,
         }, fmta([[
-    return {{
+    return {
         "<>",
         opts    = {<>},
-    }}
+    }
 ]], {
             i(1),
             i(2),

@@ -47,11 +47,11 @@ func main() {
     s(
         {
             trig = "pfor",
-            snippetType = "snippet",
+            snippetType = "autosnippet",
             desc = "Snippet for a pure for loop",
             hidden = false
         }, fmta("for <> {\n\t<>\n}", {
-            i(0), i(1)
+            i(1), i(2)
         })
     ),
     s(
@@ -61,7 +61,7 @@ func main() {
             desc = "Range",
             hidden = false
         }, fmta("for <>, <> := range <> {\n\t<>\n}", {
-            i(1, "_"), i(2, "v"), i(3), i(4)
+            i(1), i(2), i(3), i(4)
         })
     ),
     s(
@@ -84,10 +84,10 @@ func main() {
     ),
     s(
         {
-            trig = "func",
-            snippetType = "snippet",
+            trig = "fnc",
+            snippetType = "autosnippet",
             hidden = false,
-        }, fmta("func <> {\n\t<>\n}", { i(1), i(2) })
+        }, fmta("func <>(<>) {\n\t<>\n}", { i(1), i(2), i(3) })
     ),
     s(
         {
@@ -120,5 +120,41 @@ func main() {
         }, fmta("if err != nil {\n\t<>\n}", {
             i(1)
         })
+    ),
+    s(
+        {
+            trig = "elif",
+            snippetType = "autosnippet",
+            hidden = false,
+        }, fmta("else if <> {\n\t<>\n}", {
+            i(1),
+            i(2)
+        })
+    ),
+    s(
+        {
+            trig = "else",
+            snippetType = "autosnippet",
+            hidden = false,
+        }, fmta("else {\n\t<>\n}", {
+            i(1),
+        })
+    ),
+    s(
+        {
+            trig = "iff",
+            snippetType = "autosnippet",
+            hidden = false,
+        }, fmta("if <> {\n\t<>\n}", {
+            i(1),
+            i(2)
+        })
+    ),
+    s(
+        {
+            trig = "and",
+            snippetType = "autosnippet",
+            hidden = true,
+        }, fmta(" && <>", { i(1) })
     ),
 }
