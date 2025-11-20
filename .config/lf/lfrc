@@ -49,6 +49,8 @@ cmd open ${{
 }}
 
 map <delete> delete
+map <space>
+map <space>lg  $lazygit
 
 cmd fzf_jump ${{
     res="$(rg --color=never --files --hidden --follow --no-messages --no-ignore | fzf +m --reverse --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
@@ -70,7 +72,7 @@ cmd fzf_jump_abs ${{
     lf -remote "send $id $cmd \"$res\""
 }}
 
-map ff :fzf_jump_abs
+map <space>ff :fzf_jump_abs
 map <c-t> :fzf_jump
 
 map c
@@ -86,8 +88,6 @@ map / search
 
 map D &garbage put $fx
 vmap d &garbage put $fv
-
-map m
 
 cmd mkdir %{{
     IFS=" "
@@ -129,11 +129,11 @@ map tr garbage_restore
 
 
 cmd decompress %ouch decompress "$fx"
-nmap u
-nmap un :decompress
+map u
+map un :decompress
 #NOTE just specify the format
 cmd compress $ouch compress "$fx" "$fx"."$@"
-map zi compress
+map co push :compress<space>
 
 map unselect
 map <enter>
@@ -181,7 +181,7 @@ cmd edir ${{
     lf -remote "send reload"
 }}
 
-map rn :edir
+map <space>rn :edir
 map cl :clear; unselect
 
 map cd :push ''
@@ -202,7 +202,7 @@ cmd fzf_z ${{
     lf -remote "send $id $cmd \"$sel\""
 }}
 
-map fz :fzf_z
+map <space>fz :fzf_z
 
 cmap <up> cmd-history-prev
 cmap <down> cmd-history-next
@@ -235,7 +235,7 @@ map t
 cmd pager ${{
     set -f
     case $f in
-        *.html) w3m -dump $f | moar;;
+        *.html) cha -d $f | moar;;
         *.wav|*.mp3|*.flac|*.m4a|*.wma|*.ape|*.ac3|*.og[agx]|*.spx|*.opus|*.as[fx]|*.mka)
             exiftool $f | moar;;
         *.zip|*.jar|*.war|*.ear|*.oxt) unzip -l "$1" | moar;;
@@ -307,8 +307,7 @@ cmd rfv ${{
       --preview-window '~0,+{2}+1/2,<80(up)' \
       --query "$*" || true
 }}
-map rfv rfv
-map zg $lazygit
+map <space>rfv rfv
 map su $sudoedit "$f"
 
 map f
