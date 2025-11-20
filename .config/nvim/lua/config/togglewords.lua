@@ -3,6 +3,8 @@ local M = {}
 M.pairs = {
     ["true"] = "false",
     ["false"] = "true",
+    ["yes"] = "no",
+    ["no"] = "yes"
 }
 
 -- Add custom pairs

@@ -33,11 +33,11 @@ au({ "TermOpen" }, {
     end
 })
 
-au({ "TermClose" }, {
-    callback = function()
-        vim.cmd.bdelete()
-    end
-})
+-- au({ "TermClose" }, {
+--     callback = function()
+--         vim.cmd("silent! bdelete!")
+--     end
+-- })
 
 au({ "CmdLineEnter" }, {
     callback = function()
