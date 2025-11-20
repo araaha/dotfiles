@@ -435,12 +435,12 @@
     </keybind>
     <keybind key="XF86AudioRaiseVolume">
       <action name="Execute">
-        <command>pamixer --allow-boost --increase 2</command>
+        <command>pamixer --allow-boost -i 2</command>
       </action>
     </keybind>
     <keybind key="XF86AudioLowerVolume">
       <action name="Execute">
-        <command>pamixer --decrease 2 </command>
+        <command>pamixer --allow-boost -d 2 </command>
       </action>
     </keybind>
     <keybind key="XF86AudioMute">
