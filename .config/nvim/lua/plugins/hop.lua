@@ -11,14 +11,6 @@ return {
             "<cmd>HopYankChar1<cr>",
             mode = { "n", "x", "o" }
         },
-        {
-            "<M-f>",
-            function()
-                require("hop").hint_patterns({}, "\\~*/.*")
-                vim.cmd("norm gf")
-            end,
-            mode = { "n", "x", "o" }
-        },
     },
     opts = {
         keys = "werasdfcvjlk",

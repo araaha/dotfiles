@@ -1,6 +1,5 @@
 return {
     "ibhagwan/fzf-lua",
-    lazy = true,
     cmd  = "FzfLua",
     keys = {
         {
@@ -19,7 +18,7 @@ return {
             mode = "n"
         },
         {
-            "rfv",
+            "<Leader>rfv",
             function() require("fzf-lua").live_grep() end,
             mode = "n"
         },
@@ -80,8 +79,8 @@ return {
                     delay = 4,
                 },
                 border = { "┏", "━", "┓", "┃", "┛", "━", "┗", "┃" },
-                height = "0.8",
-                width = "0.60",
+                height = 0.8,
+                width = 0.60,
                 col = 0.48,
             },
             previewers    = {

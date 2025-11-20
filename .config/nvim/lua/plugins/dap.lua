@@ -45,6 +45,7 @@ return {
             "<leader>db",
             function()
                 require("dap").toggle_breakpoint()
+                vim.opt_local.signcolumn = "yes"
             end,
             desc = "Debug: Toggle Breakpoint",
         },

@@ -273,8 +273,6 @@ return {
         fuzzy = {
             -- when enabled, allows for a number of typos relative to the length of the query
             -- disabling this matches the behavior of fzf
-            -- frencency tracks the most recently/frequently used items and boosts the score of the item
-            use_frecency = true,
             -- proximity bonus boosts the score of items matching nearby words
             use_proximity = false,
             -- controls which sorts to use and in which order, these three are currently the only allowed options
