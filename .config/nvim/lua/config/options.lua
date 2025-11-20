@@ -20,6 +20,7 @@ local options = {
     foldtext      = "",
     guicursor     = "",
     wildoptions   = "pum,fuzzy",
+    swapfile      = false,
     splitright    = true,
     splitbelow    = true,
     pumheight     = math.floor(vim.o.lines * 0.33),
@@ -28,7 +29,7 @@ local options = {
     grepprg       = "rg --color=auto --vimgrep",
     grepformat    = "%f:%l:%c:%m",
     mouse         = "",
-    wrap          = false,
+    wrap          = true,
     inccommand    = "split",
     cmdwinheight  = math.floor(vim.o.lines * 0.28),
 }
