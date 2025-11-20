@@ -90,7 +90,7 @@ post_processing = false
 regex           = '\w+'
 
 [hints.enabled.binding]
-key  = "M"
+key  = "W"
 mods = "Alt"
 
 [[keyboard.bindings]]
@@ -158,6 +158,7 @@ semantic_escape_chars = "-,│`|:\"' ()_[]{}<>\t"
 opacity = 0.55
 dynamic_padding = false
 decorations = "None"
+dimensions = { columns = 80, lines = 24 }
 
 [scrolling]
 history = 50
