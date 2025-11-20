@@ -116,7 +116,7 @@ entry {
     placeholder-color:           inherit;
     blink:false;
     cursor-color: #9cd365;
-    cursor-width: 19.5px;
+    cursor-width: 22px;
 
 }
 
