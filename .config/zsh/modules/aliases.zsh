@@ -24,6 +24,7 @@ alias ncdu="gdu -c"
 alias nerdfetch="nitch -a"
 alias nsxiv="nsxiv -g 800x600+560+240 -b -a -sf"
 alias nv="nvim"
-alias packages="ls -lt /var/lib/pacman/local/ | head -n 30 | tail -n +2 | tac | awk '{ print \$9}'"
+alias packages="ls -lt /var/lib/pacman/local/ --color=never | head -n 30 | tail -n +2 | tac | awk '{ print \$9}'"
 alias ticker='ticker --sort=user --config="$HOME/.config/.ticker.yaml"'
 alias tree="tree --noreport -C"
+alias ssh='ssh -F "$SSH_HOME"/config -o UserKnownHostsFile="$SSH_HOME"/known_hosts'
