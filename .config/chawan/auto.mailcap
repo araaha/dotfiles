@@ -1,2 +1,2 @@
-image/*; nsxiv -; needsterminal
+image/*; mpv -; needsterminal
 video/*; mpv -; needsterminal
