@@ -45,7 +45,7 @@ case "$(printf "%s\n" "$(readlink -f "$1")" | awk '{print tolower($0)}')" in
             gnome-epub-thumbnailer "$1" "$CACHE"
         image "${CACHE}.jpg" "$2" "$3" "$4" "$5"
         ;;
-    *.html) w3m -dump "$1";;
+    *.html) cha -d "$1";;
     *.avi|*.mp4|*.wmv|*.dat|*.3gp|*.ogv|*.mkv|*.mpg|*.mpeg|*.vob|*.fl[icv]|*.m2v|*.mov|*.webm|*.mts|*.m4v|*.r[am]|*.qt|*.divx)
         [ ! -f "${CACHE}.jpg" ] && \
             ffmpegthumbnailer -i "$1" -o "${CACHE}.jpg" -s 0 -q 5
