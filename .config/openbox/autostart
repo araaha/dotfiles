@@ -1,15 +1,16 @@
-xwallpaper --stretch "$HOME/.local/share/Wallpapers/Pacman.png" &
 light -S 20 &
+pamixer --set-volume 100 &
 ./.config/polybar/launch.sh &
 ./scripts/bluetooth-autoconnect.sh &
 picom -b &
+xwallpaper --stretch "$HOME/.local/share/Wallpapers/Pacman.png" &
 xset s off -dpms &
-udiskie -N &
-greenclip daemon &
-unclutter -idle 10 -root &
 xsct 4000 &
 xset r rate 150 50 &
-dunst &
 setxkbmap -option caps:ctrl_modifier &
 xmodmap -e "keycode 37 = " &
+udiskie -N &
+greenclip daemon &
+unclutter --idle 10 &
+dunst &
 dbus-update-activation-environment --systemd DISPLAY XDG_CURRENT_DESKTOP=openbox
