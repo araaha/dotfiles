@@ -1,0 +1,4 @@
+#!/bin/bash
+
+xrdb -merge "$HOME/.config/X11/Xresources"
+exec openbox-session
