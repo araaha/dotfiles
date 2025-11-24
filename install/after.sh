@@ -63,4 +63,5 @@ uair /
 warpd /
 webtorrent-cli /
 xdg-desktop-portal-termfilechooser-hunkyburrito-git /
+drawy /
 zen-browser-bin
