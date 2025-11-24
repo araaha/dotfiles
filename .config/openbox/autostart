@@ -1,3 +1,5 @@
+dbus-daemon --session --nofork --nopidfile --address=unix:path=/run/user/1000/bus &
+systemctl --user import-environment DISPLAY XAUTHORITY &
 light -S 20 &
 pamixer --set-volume 100 &
 ./.config/polybar/launch.sh &
@@ -11,6 +13,6 @@ setxkbmap -option caps:ctrl_modifier &
 xmodmap -e "keycode 37 = " &
 udiskie -N &
 greenclip daemon &
+env HOME="$HOME/.local/share/" mega-cmd-server &
 unclutter --idle 10 &
-dunst &
-dbus-update-activation-environment --systemd DISPLAY XDG_CURRENT_DESKTOP=openbox
+dunst
