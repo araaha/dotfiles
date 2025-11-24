@@ -16,7 +16,7 @@ mkdir -p "$HOME/Screenshots/"
 mkdir -p "$HOME/.local/share/themes"
 mkdir -p "$HOME/.local/share/icons"
 
-ln -srv "$DOTS/scripts/" "$HOME/"
+ln -srfv "$DOTS/scripts/" "$HOME/"
 ln -srfv "$DOTS/.config"/* "$HOME/.config/"
 find "$DOTS/.local/share" -mindepth 1 -maxdepth 1 ! -name "themes" -exec ln -srv {} "$HOME/.local/share" \;
 
