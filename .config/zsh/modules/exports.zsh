@@ -5,6 +5,7 @@ export XDG_CURRENT_DESKTOP=openbox
 export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
+export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
 export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
 
 export GOPATH="$XDG_DATA_HOME/go"
