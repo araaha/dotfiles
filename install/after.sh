@@ -20,6 +20,9 @@ echo "Defaults passwd_timeout=0" | sudo tee -a /etc/sudoers
 crontab ~/dotfiles/install/crontabs/crontab
 sudo crontab ~/dotfiles/install/crontabs/sudo-crontab
 
+# Add user to video group
+usermod -aG video araaha
+
 # Change default shell to zsh
 chsh -s "/bin/zsh"
 
@@ -62,6 +65,7 @@ ttf-weather-icons /
 uair /
 warpd /
 webtorrent-cli /
-xdg-desktop-portal-termfilechooser-hunkyburrito-git /
+xdg-desktop-portal-termfilechooser-nosystemd-git /
 drawy /
+bun-bin /
 zen-browser-bin
