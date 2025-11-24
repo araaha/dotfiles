@@ -17,7 +17,7 @@ C-d="() => { cmd.buffer.halfPageDown(); cmd.buffer.centerLine(); }"
 
 [display]
 image-mode="none"
-highlight-color="3F3F3F"
+highlight-color="#3F3F3F"
 
 [external]
 copy-cmd="xclip -sel clip"
