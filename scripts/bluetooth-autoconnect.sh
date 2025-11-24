@@ -1,18 +1,23 @@
 #!/bin/bash
 
-MAC="$(bluetoothctl devices | rg 'Device' | head -n 1 | cut -d ' ' -f 2)"
+MAC="$(bluetoothctl devices | sed -n 's/^Device //p' | head -n 1 | cut -d ' ' -f1)"
+
+device_path="/org/bluez/hci0/dev_${MAC//:/_}"
 
 powered() {
-    echo "show" | bluetoothctl | grep "Powered" | cut -d " " -f 2
+    busctl get-property org.bluez /org/bluez/hci0 org.bluez.Adapter1 Powered \
+        | grep -q "true"
 }
 
 connected() {
-    echo "info ${MAC}" | bluetoothctl | grep "Connected" | cut -d " " -f 2
+    busctl get-property org.bluez "$device_path" org.bluez.Device1 Connected \
+        | grep -q "true"
 }
 
 while true; do
-    if [ "$(powered)" = "yes" ] && [ "$(connected)" = "no" ]; then
-        echo "connect ${MAC}" | bluetoothctl
+    if powered && ! connected; then
+        bluetoothctl connect "$MAC" >/dev/null 2>&1
     fi
     sleep 4
 done
+
