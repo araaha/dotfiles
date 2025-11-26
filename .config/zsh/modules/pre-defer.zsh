@@ -8,10 +8,6 @@ blue="%K{#7DAEA3}"
 PROMPT="%{$red%}%~%f
 %{$black%}%{$green%} I %k%f%{$blue%}█ %k"
 
-if [ -z $DISPLAY ]; then
-    source "$MOD/tty.zsh"
-fi
-
 source "$PLUG/zsh-defer/zsh-defer.plugin.zsh"
 source "$MOD/options.zsh"
 source "$MOD/history.zsh"
