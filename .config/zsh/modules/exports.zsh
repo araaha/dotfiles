@@ -7,11 +7,13 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
 export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
+export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
 
 export GOPATH="$XDG_DATA_HOME/go"
 export BUN_INSTALL="$XDG_DATA_HOME/bun"
 export PATH="$PATH:/usr/local/bin:$HOME/.local/bin:$GOPATH/bin:$BUN_INSTALL/bin:$HOME/.local/share/npm/bin:"
 export GTK_USE_PORTAL=1
+export QT_QPA_PLATFORMTHEME=xdgdesktopportal
 export WORDCHARS="_*?[]~&;!#$%^(){<>=."
 
 export VISUAL=/usr/bin/nvim

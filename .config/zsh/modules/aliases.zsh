@@ -28,3 +28,5 @@ alias packages="ls -lt /var/lib/pacman/local/ --color=never | head -n 30 | tail 
 alias ticker='ticker --sort=user --config="$HOME/.config/.ticker.yaml"'
 alias tree="tree --noreport -C"
 alias ssh='ssh -F "$SSH_HOME"/config -o UserKnownHostsFile="$SSH_HOME"/known_hosts'
+alias reboot="loginctl reboot"
+alias shutdown="loginctl poweroff"
