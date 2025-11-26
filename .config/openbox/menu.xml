@@ -6,22 +6,17 @@
             </item>
             <item label="Suspend">
                 <action name="Execute">
-                    <execute>systemctl suspend</execute>
-                </action>
-            </item>
-            <item label="Hibernate">
-                <action name="Execute">
-                    <execute>systemctl hibernate</execute>
+                    <execute>loginctl suspend</execute>
                 </action>
             </item>
             <item label="Reboot">
                 <action name="Execute">
-                    <execute>systemctl reboot</execute>
+                    <execute>loginctl reboot</execute>
                 </action>
             </item>
             <item label="Shutdown">
                 <action name="Execute">
-                    <execute>systemctl poweroff</execute>
+                    <execute>loginctl poweroff</execute>
                 </action>
             </item>
         </menu>

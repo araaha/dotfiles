@@ -1,11 +1,10 @@
 dbus-daemon --session --nofork --nopidfile --address=unix:path=/run/user/1000/bus &
-dinitctl setenv DISPLAY XAUTHORITY &
+dinitctl setenv DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS &
 light -S 20 &
-pamixer --set-volume 100 &
 ./.config/polybar/launch.sh &
 ./scripts/bluetooth-autoconnect.sh &
 picom -b &
-xwallpaper --stretch "$HOME/.local/share/Wallpapers/Pacman.png" &
+xwallpaper --stretch "$XDG_DATA_HOME/Wallpapers/Pacman.png" &
 xset s off -dpms &
 xsct 4000 &
 xset r rate 150 50 &
@@ -13,6 +12,10 @@ setxkbmap -option caps:ctrl_modifier &
 xmodmap -e "keycode 37 = " &
 udiskie -N &
 greenclip daemon &
-env HOME="$HOME/.local/share/" mega-cmd-server &
+env HOME="$XDG_DATA_HOME" mega-cmd-server &
+pipewire &
+pipewire-pulse &
+wireplumber &
+pamixer --set-volume 100 &
 unclutter --idle 10 &
 dunst
