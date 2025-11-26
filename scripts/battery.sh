@@ -1,6 +1,6 @@
 #!/bin/bash
 
-session_address=$(grep -E -z "DBUS_SESSION_BUS_ADDRESS" /proc/$(pgrep -u "$LOGNAME" openbox)/environ | tr -d "\0")
+session_address=$(grep -E -z "DBUS_SESSION_BUS_ADDRESS" /proc/$(pgrep -u "$LOGNAME" openbox | head -n 1)/environ | tr -d "\0")
 eval "export $session_address"
 
 battery_name="$(upower -e | rg 'battery' | cut -d '_' -f 2)"
