@@ -448,14 +448,19 @@
         <command>pamixer --toggle-mute</command>
       </action>
     </keybind>
-    <keybind key="XF86AudioPlay">
+    <keybind key="0xD0">
       <action name="Execute">
         <command>playerctl play-pause</command>
       </action>
     </keybind>
-    <keybind key="XF86AudioPause">
+    <keybind key="0xD1">
       <action name="Execute">
         <command>playerctl play-pause</command>
+      </action>
+    </keybind>
+    <keybind key="XF86AudioPlay">
+      <action name="Execute">
+      <command>playerctl play-pause</command>
       </action>
     </keybind>
     <keybind key="C-A-l">
