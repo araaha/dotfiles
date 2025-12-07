@@ -46,7 +46,6 @@ libsixel
 lua-language-server
 lxappearance
 lxappearance-obconf
-ly
 man-db
 mdcat
 meson
