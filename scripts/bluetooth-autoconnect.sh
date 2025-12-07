@@ -18,6 +18,6 @@ while true; do
     if powered && ! connected; then
         bluetoothctl connect "$MAC" >/dev/null 2>&1
     fi
-    sleep 4
+    sleep 2
 done
 
