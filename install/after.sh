@@ -21,22 +21,25 @@ crontab ~/dotfiles/install/crontabs/crontab
 sudo crontab ~/dotfiles/install/crontabs/sudo-crontab
 
 # Add user to video group
-usermod -aG video araaha
+usermod -aG video araaha input
 
 # Change default shell to zsh
 chsh -s "/bin/zsh"
 
 # Configure GRUB settings
-sudo sed -i 's/GRUB_CMDLINE_LINUX="[^"]*"/GRUB_CMDLINE_LINUX="idle=nomwait amdgpu.noretry=0 amdgpu.ppfeaturemask=0xffffffff amdgpu.lockup_timeout=0 amdgpu.gpu_recovery=1 quiet splash atkbd.softrepeat=1 vt.cur_default=0x200011 vt.global_cursor_default=0 cpufreq.default_governor=powersave"/' /etc/default/grub
+sudo sed -i 's/GRUB_CMDLINE_LINUX="[^"]*"/GRUB_CMDLINE_LINUX="amdgpu.dcdebugmask=0x10 amdgpu.gpu_recovery=1 quiet splash atkbd.softrepeat=1 vt.cur_default=0x200011 vt.global_cursor_default=0 cpufreq.default_governor=powersave"/' /etc/default/grub
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 
-# Enable and start system services
-systemctl enable --now cronie
-systemctl enable --now cups
-systemctl enable --now ly
-systemctl enable --now bluetooth
-systemctl enable --now systemd-networkd
-systemctl enable --now systemd-resolved
+name=$(awk -F'=' '/^NAME=/{gsub(/"/,""); print $2}' /etc/os-release | awk '{print tolower($1)}')
+if [ "$name" == "arch" ]; then
+    # Enable and start system services
+    systemctl enable --now cronie
+    systemctl enable --now cups
+    systemctl enable --now ly
+    systemctl enable --now bluetooth
+    systemctl enable --now systemd-networkd
+    systemctl enable --now systemd-resolved
+fi
 
 #install compiled/zipped apps
 yay -S chawan /
