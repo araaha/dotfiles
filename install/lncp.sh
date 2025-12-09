@@ -32,7 +32,7 @@ find ~/.local/share/icons/ -mindepth 1 -maxdepth 1 ! -name "Gruvbox-Plus-Dark" -
 
 #binaries
 mkdir -p ~/.local/bin
-find "$HOME/dotfiles/.local/bin" -type f -executable -print0 | xargs -0 -I % ln -srv % ~/.local/bin
+ln -srfv "$HOME/dotfiles/.local/bin" ~/.local/
 
 #/etc/
 sudo cp -rv "$DOTS/etc"/* /etc/
