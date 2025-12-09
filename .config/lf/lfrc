@@ -35,7 +35,7 @@ cmd open ${{
         image/gif|video/*)
            mpv $(echo "$fx") > /dev/null 2> /dev/null & disown;;
         image/*)
-           nsxiv -g 800x600+560+240 -b -a -sf $(echo "$fx") & disown;;
+           sriv $(echo "$fx") & disown;;
         application/octet-stream) $EDITOR $fx;;
         application/json) $EDITOR $fx;;
         application/javascript) $EDITOR $fx;;
@@ -278,7 +278,7 @@ cmd fc &{{
 }}
 
 map fc push :fc<space>
-map sx $nsxiv -g 1200x1000+840+400 -b -a -sf "$fx" & disown
+map sx $sriv "$fx" & disown
 
 cmd edit-config ${{
     $EDITOR ~/.config/lf/lfrc

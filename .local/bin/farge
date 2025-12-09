@@ -24,7 +24,7 @@ MSG=${XDG_CACHE_HOME:-$HOME/.cache}/farge.msg
 COLOR_TYPE="hex"
 WRITE_COLOR_CODE=true
 PREVIEW=true
-IMAGE_VIEWER="nsxiv"
+IMAGE_VIEWER="sriv"
 STDOUT=false
 
 NOTIFICATION=false
