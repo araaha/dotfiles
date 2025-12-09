@@ -25,28 +25,22 @@ static const bool TOP_STATUSBAR = false;
 /* levels (in percent) to use when zooming via '-' and '+':
  * (first/last value is used as min/max zoom level)
  */
-//  12.5,  25.0,  50.0,  75.0,
-// 100.0, 150.0, 200.0, 400.0, 800.0
 static const float zoom_levels[] = {
-    2.5, 5.0, 7.5, 10.0,
-    12.5, 15.0, 17.5, 20.0,
-    22.5, 25.0, 27.5, 30.0,
-    32.5, 35.0, 37.5, 40.0,
-    42.5, 45.0, 47.5, 50.0,
-    52.5, 55.0, 57.5, 60.0,
-    62.5, 65.0, 67.5, 70.0,
-    72.5, 75.0, 77.5, 80.0,
-    82.5, 85.0, 87.5, 90.0,
-    92.5, 95.0, 97.5, 100.0,
-    105.0, 110.0, 115.0, 120.0,
-    125.0, 150.0, 175.0, 200.0,
-    225.0, 250.0, 275.0, 300.0,
-    325.0, 350.0, 375.0, 400.0,
-    500.0, 600.0, 700.0, 800.0,
-    1000.0, 1200.0, 1400.0, 1600.0,
-    1800.0, 2000.0, 3000.0, 4000.0,
-    6000.0, 8000.0, 10000.0, 12000.0,
+    3, 5, 7, 10,
+    12, 15, 17, 20,
+    22, 25, 27, 30,
+    32, 35, 37, 40,
+    42, 45, 47, 50,
+    52, 55, 57, 60,
+    62, 65, 67, 70,
+    72, 75, 77, 80,
+    82, 85, 87, 90,
+    92, 95, 97, 100,
+    100, 110, 120, 133,
+    150, 170, 200, 240,
+    300, 400, 500, 600
 };
+
 /* default slideshow delay (in sec, overwritten via -S option): */
 static const int SLIDESHOW_DELAY = 5;
 
@@ -70,9 +64,9 @@ static const int PAN_FRACTION = 15;
  * NOTE: higher cache size means better image reloading performance, but also
  * higher memory usage.
  */
-static const int CACHE_SIZE_MEM_PERCENTAGE = 3;          /* use 3% of total memory for cache */
-static const int CACHE_SIZE_LIMIT = 256 * 1024 * 1024;   /* but not above 256MiB */
-static const int CACHE_SIZE_FALLBACK = 32 * 1024 * 1024; /* fallback to 32MiB if we can't determine total memory */
+static const int CACHE_SIZE_MEM_PERCENTAGE = 100;          /* use 100% of total memory for cache */
+static const int CACHE_SIZE_LIMIT = 1024 * 1024 * 1024;   /* but not above 1GiB */
+static const int CACHE_SIZE_FALLBACK = 512 * 1024 * 1024; /* fallback to 512MiB if we can't determine total memory */
 
 #endif
 #ifdef INCLUDE_OPTIONS_CONFIG
@@ -86,6 +80,14 @@ static const bool ANTI_ALIAS = true;
  * toggled with 'A' key binding (overwritten via `--alpha-layer` option)
  */
 static const bool ALPHA_LAYER = false;
+
+/* list of whitelisted/blacklisted directory for thumbnail cache
+ * (overwritten via --cache-{allow,deny} option).
+ * see THUMBNAIL CACHING section in nsxiv(1) manpage for more details.
+ */
+static const char TNS_FILTERS[] = "";
+/* set to true to treat `TNS_FILTERS` as a blacklist instead */
+static const bool TNS_FILTERS_IS_BLACKLIST = false;
 
 #endif
 #ifdef INCLUDE_THUMBS_CONFIG
@@ -106,6 +108,7 @@ static const unsigned int USED_MODMASK = ShiftMask | ControlMask | Mod1Mask;
 static const KeySym KEYHANDLER_ABORT = XK_Escape;
 
 /* keyboard mappings for image and thumbnail mode: */
+
 static const keymap_t keys[] = {
 	/* modifiers    key               function              argument */
 	{ 0,            XK_q,             g_quit,               0                      },
@@ -195,6 +198,7 @@ static const keymap_t keys[] = {
 	{ 0,            XK_A,             i_toggle_alpha,       None                   },
 	{ 0,            XK_s,             i_slideshow,          None                   },
 };
+
 
 /* mouse button mappings for image mode: */
 static const button_t buttons_img[] = {
