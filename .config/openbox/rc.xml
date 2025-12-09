@@ -255,7 +255,7 @@
     </keybind>
     <keybind key="C-A-t">
       <action name="Execute">
-        <command>tdrop -A -y 50% -h 50% -s tmux alacritty --title=Dropdown</command>
+        <command>tdrop -A -y 50% -h 50% -s tmux alacritty --title=Dropdown -o 'window.opacity=0.55'</command>
       </action>
     </keybind>
     <keybind key="C-A-a">
