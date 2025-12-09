@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Sioyek
-Icon=sioyek-icon-linux
-Terminal=false
-Exec=env QT_QPA_PLATFORMTHEME=xdgdesktopportal sioyek %F
-Categories=ConsoleOnly;System;FileTools;FileManager
-MimeType=inode/directory;

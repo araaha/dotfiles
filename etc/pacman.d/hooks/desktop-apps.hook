@@ -3,13 +3,12 @@ Operation = Install
 Operation = Upgrade
 Type = Package
 Target = alacritty*
-Target = sioyek*
-Target = rofi*
 Target = firefox*
 Target = zen-browser*
+Target = sioyek*
 Target = localsend*
 
 [Action]
 Description = Deleting desktop applications...
 When = PostTransaction
-Exec = /usr/bin/bash -c "rm -f /usr/share/applications/Alacritty.desktop; rm -f /usr/share/applications/sioyek.desktop; rm -f /usr/share/applications/rofi.desktop; rm -f /usr/share/applications/rofi-theme-selector.desktop; rm -f /usr/share/applications/localsend.desktop; rm -f /usr/share/applications/firefox.desktop; rm -f /usr/share/applications/zen.desktop"
+Exec = /usr/bin/bash -c "rm -f /usr/share/applications/Alacritty.desktop; rm -f /usr/share/applications/sioyek.desktop; rm -f /usr/share/applications/localsend.desktop; rm -f /usr/share/applications/firefox.desktop; rm -f /usr/share/applications/zen.desktop"
