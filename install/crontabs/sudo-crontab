@@ -1,2 +1,0 @@
-@reboot /bin/bash -c /home/araaha/scripts/bat-80.sh
-@reboot /bin/bash -c /home/araaha/scripts/cpu-perf.sh
