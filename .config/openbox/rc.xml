@@ -959,17 +959,6 @@
       <shade>no</shade>
       <keepBorder>yes</keepBorder>
     </application>
-    <application class="st" name="Navigator">
-      <fullscreen>yes</fullscreen>
-    </application>
-    <application name="Alacritty">
-      <decor>no</decor>
-      <keepBorder>no</keepBorder>
-    </application>
-    <application name="tdrop">
-      <decor>no</decor>
-      <keepBorder>no</keepBorder>
-    </application>
   </applications>
   <!--
   # this is an example with comments through out. use these to make your
