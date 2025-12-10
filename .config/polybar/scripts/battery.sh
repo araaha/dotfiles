@@ -1,4 +1,4 @@
-#!/usr/bin bash
+#!/bin/bash
 
 BATTERY=$(ls /sys/class/power_supply/ | grep -E '^BAT' | head -n 1)
 
