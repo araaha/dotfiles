@@ -11,6 +11,8 @@ export FZF_DEFAULT_OPTS="--prompt '' --no-scrollbar --border=bold --no-separator
 export FZF_TMUX=1
 export FZF_TMUX_OPTS="-p 60%,80%"
 
+alias fzflua="nvim -l /home/araaha/.local/share/nvim/lazy/fzf-lua/scripts/cli.lua"
+
 _fzf_compgen_path() {
     fd -E '.cache' -E 'icons' -E 'themes' -E '**pkg' -E '.git' -E 'state' -E 'google-chrome' -E 'opt' -E 'chromium' -E 'firefox' -E 'cargo' --hidden --follow . "$1"
 }
