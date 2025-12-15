@@ -35,7 +35,7 @@ cmd open ${{
         image/gif|video/*)
            mpv $(echo "$fx") > /dev/null 2> /dev/null & disown;;
         image/*)
-           sriv $(echo "$fx") & disown;;
+           nsxiv $(echo "$fx") & disown;;
         application/octet-stream) $EDITOR $fx;;
         application/json) $EDITOR $fx;;
         application/javascript) $EDITOR $fx;;
@@ -212,18 +212,24 @@ cmd link &{{
     set -- $(cat ~/.local/share/lf/files)
     mode="copy"
     shift
+
     if [ "$#" -lt 1 ]; then
         lf -remote "send $id echo no files to link"
         exit 0
     fi
+
+    last="$(basename -- "${@: -1}")"
+
     case "$mode" in
-        # symbolically copy mode is indicating a soft link
         copy) ln -sr -t . -- "$@";;
-        # while a move mode is indicating a hard link
         move) ln -t . -- "$@";;
     esac
-    rm ~/.local/share/lf/files
-    lf -remote "send clear"
+
+    file="$(printf '%s' "$last")"
+
+    lf -remote "send $id reload"
+    lf -remote "send $id select \"$file\""
+    lf -remote "send $id clear"
 }}
 
 map P :link
@@ -278,7 +284,7 @@ cmd fc &{{
 }}
 
 map fc push :fc<space>
-map sx $sriv "$fx" & disown
+map sx $nsxiv "$fx" & disown
 
 cmd edit-config ${{
     $EDITOR ~/.config/lf/lfrc
@@ -287,7 +293,16 @@ cmd edit-config ${{
 
 map R edit-config
 
-map p :paste
+
+cmd paste-select &{{
+    set -- $(cat ~/.local/share/lf/files)
+    last="$(basename -- "${@: -1}")"
+    lf -remote "send $id paste"
+    lf -remote "send $id select \"$last\""
+}}
+
+
+map p :paste-select
 map rr &dragon-drop $fx & disown; lf -remote 'send unselect'
 cmd rfv ${{
   RELOAD='reload:rg --column --color=always --smart-case {q} || :'
