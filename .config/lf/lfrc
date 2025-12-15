@@ -35,7 +35,7 @@ cmd open ${{
         image/gif|video/*)
            mpv $(echo "$fx") > /dev/null 2> /dev/null & disown;;
         image/*)
-           nsxiv $(echo "$fx") & disown;;
+           nsxiv -b -a -sf -g 1200x1000+840+400 $(echo "$fx") & disown;;
         application/octet-stream) $EDITOR $fx;;
         application/json) $EDITOR $fx;;
         application/javascript) $EDITOR $fx;;
@@ -284,7 +284,7 @@ cmd fc &{{
 }}
 
 map fc push :fc<space>
-map sx $nsxiv "$fx" & disown
+map sx $nsxiv -b -a -sf -g 1200x1000+840+400 "$fx" & disown
 
 cmd edit-config ${{
     $EDITOR ~/.config/lf/lfrc
@@ -304,26 +304,9 @@ cmd paste-select &{{
 
 map p :paste-select
 map rr &dragon-drop $fx & disown; lf -remote 'send unselect'
-cmd rfv ${{
-  RELOAD='reload:rg --column --color=always --smart-case {q} || :'
-  OPENER='if [[ $FZF_SELECT_COUNT -eq 0 ]]; then
-            nvim {1} +{2}     # No selection. Open the current line in Vim.
-          else
-            nvim +cw -q {+f}  # Build quickfix list for the selected items.
-          fi'
-  fzf < /dev/null \
-      --disabled --ansi --multi \
-      --bind "start:$RELOAD" --bind "change:$RELOAD" \
-      --bind "enter:become:$OPENER" \
-      --bind "ctrl-o:execute:$OPENER" \
-      --bind 'alt-a:select-all,alt-d:deselect-all,ctrl-/:toggle-preview' \
-      --delimiter : \
-      --height 70% \
-      --preview 'bat --paging=always --color=always --highlight-line {2} {1}' \
-      --preview-window '~0,+{2}+1/2,<80(up)' \
-      --query "$*" || true
-}}
-map <space>rfv rfv
+
+map <space>rfv $nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" live_grep
+
 map su $sudoedit "$f"
 
 map f
