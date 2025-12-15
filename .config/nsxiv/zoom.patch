@@ -1,0 +1,45 @@
+diff --git a/image.c b/image.c
+index 4e0cb21..a9d9042 100644
+--- a/image.c
++++ b/image.c
+@@ -527,24 +527,23 @@ bool img_fit_win(img_t *img, scalemode_t sm)
+ 
+ bool img_zoom_to(img_t *img, float z)
+ {
+-	int x, y;
+-	if (ZOOM_MIN <= z && z <= ZOOM_MAX) {
+-		win_cursor_pos(img->win, &x, &y);
+-		if (x < 0 || (unsigned int)x >= img->win->w ||
+-		    y < 0 || (unsigned int)y >= img->win->h)
+-		{
+-			x = img->win->w / 2;
+-			y = img->win->h / 2;
+-		}
+-		img->x = x - (x - img->x) * z / img->zoom;
+-		img->y = y - (y - img->y) * z / img->zoom;
+-		img->zoom = z;
+-		img->scalemode = SCALE_ZOOM;
+-		img->dirty = img->checkpan = true;
+-		return true;
+-	} else {
++	float oz, cx, cy;
++
++	if (z < ZOOM_MIN || z > ZOOM_MAX)
+ 		return false;
+-	}
++
++	oz = img->zoom;
++
++	cx = img->win->w / 2.0f;
++	cy = img->win->h / 2.0f;
++
++	img->x = cx - (cx - img->x) * z / oz;
++	img->y = cy - (cy - img->y) * z / oz;
++
++	img->zoom = z;
++	img->scalemode = SCALE_ZOOM;
++	img->dirty = img->checkpan = true;
++	return true;
+ }
+ 
+ bool img_zoom(img_t *img, int d)
