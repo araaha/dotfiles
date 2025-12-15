@@ -1,4 +1,4 @@
-acceleration: 4000
+acceleration: 20000
 grid_keys: k l h j
 hint_chars: werasdfcvjlk
 buttons: space , .
@@ -11,3 +11,6 @@ bottom: J
 start: H
 end: L
 cursor_size: 30
+cursor_color: #9cd365
+hint_activation_key: M-x
+activation_key: M-c
