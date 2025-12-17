@@ -1,9 +1,5 @@
 require("fzf-lua").setup({
-    keymap        = {
-        fzf = {
-            ["ctrl-u"] = "half-page-up"
-        },
-    },
+    { "cli" },
     fzf_opts      = {
         ["--height"]         = "70%",
         ["--border"]         = "bold",
@@ -12,6 +8,7 @@ require("fzf-lua").setup({
         ["--no-separator"]   = "",
         ["--preview-window"] = "up,50%,noborder",
         ["--info"]           = "default",
+        ["--tmux"]           = false,
     },
     fzf_colors    = {
         ["gutter"] = "-1",
@@ -27,7 +24,6 @@ require("fzf-lua").setup({
         cmd = os.getenv("FZF_DEFAULT_COMMAND"),
     },
     grep          = {
-        multiline = 1,
         winopts = {
             title = "",
             preview = {
@@ -37,6 +33,24 @@ require("fzf-lua").setup({
                 delay = 4,
             },
         },
+        actions = {
+            ["enter"] = function(selected)
+                if not selected or not selected[1] then return end
+
+                local entry = selected[1]
+                local file, row, col = entry:match("^(.-):(%d+):(%d+)")
+                if not file then return end
+
+                local cmd = string.format(
+                    "nvim +%s %s",
+                    vim.fn.shellescape(string.format("call cursor(%d,%d)", tonumber(row), tonumber(col))),
+                    vim.fn.shellescape(file)
+                )
+                os.execute(cmd)
+            end,
+        },
+
+
         cmd =
         "RIPGREP_CONFIG_PATH=/home/araaha/.config/ripgreprc rg --column --color=always",
     },
@@ -54,10 +68,6 @@ require("fzf-lua").setup({
             vertical = "up:50%",
             delay = 4,
         },
-        border = { "┏", "━", "┓", "┃", "┛", "━", "┗", "┃" },
-        height = 0.8,
-        width = 0.60,
-        col = 0.48,
     },
     previewers    = {
         bat = {
@@ -66,34 +76,30 @@ require("fzf-lua").setup({
         },
     },
     files         = {
+        winopts     = {
+            title = "",
+            title_flags = false,
+            preview = {
+                title = false,
+                border = "none",
+                default = "bat",
+                scrollbar = false,
+                vertical = "up:50%",
+                delay = 4,
+            },
+        },
+        actions     = {
+            ["enter"] = function(selected)
+                if not selected or not selected[1] then return end
+
+                local editor = "nvim"
+
+                os.execute(editor .. " " .. vim.fn.shellescape(selected[1]))
+            end,
+        },
         file_icons  = false,
         git_icons   = false,
         color_icons = false,
         cmd         = os.getenv("FZF_DEFAULT_COMMAND")
     },
-    diagnostics   = {
-        multiline = false,
-        signs = {
-            ["Error"] = { text = "", texthl = "DiagnosticError" },
-            ["Warn"]  = { text = "", texthl = "DiagnosticWarn" },
-            ["Info"]  = { text = "", texthl = "DiagnosticInfo" },
-            ["Hint"]  = { text = "󰌵", texthl = "DiagnosticHint" },
-        },
-    },
-    -- actions       = {
-    --     files = {
-    --         ["default"] = actions.file_edit_or_qf,
-    --         ["ctrl-x"] = actions.file_vsplit,
-    --         ["ctrl-s"] = actions.file_split,
-    --         ["ctrl-t"] = false,
-    --         ["alt-q"] = actions.file_sel_to_qf,
-    --         ["alt-l"] = actions.file_sel_to_ll,
-    --     },
-    --     buffers = {
-    --         ["default"] = actions.buf_edit,
-    --         ["ctrl-s"]  = actions.buf_split,
-    --         ["ctrl-x"]  = actions.buf_vsplit,
-    --         ["ctrl-t"]  = false,
-    --     }
-    -- }
 })

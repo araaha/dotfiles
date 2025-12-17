@@ -8,6 +8,11 @@ return {
             mode = "n"
         },
         {
+            "gt",
+            function() require("fzf-lua").buffers() end,
+            mode = "n"
+        },
+        {
             "<Leader>fz",
             function() require("fzf-lua").zoxide() end,
             mode = "n"
@@ -19,7 +24,7 @@ return {
         },
         {
             "<Leader>rfv",
-            function() require("fzf-lua").live_grep() end,
+            function() require("fzf-lua").live_grep_native() end,
             mode = "n"
         },
         {
@@ -37,12 +42,12 @@ return {
         local actions = require("fzf-lua").actions
 
         return {
-            keymap        = {
+            keymap      = {
                 fzf = {
-                    ["ctrl-u"] = "half-page-up"
+                    ["ctrl-u"] = "half-page-up",
                 },
             },
-            fzf_opts      = {
+            fzf_opts    = {
                 ["--border"]         = "none",
                 ["--padding"]        = "0%",
                 ["--margin"]         = "0%",
@@ -50,26 +55,23 @@ return {
                 ["--preview-window"] = "up,50%,noborder",
                 ["--info"]           = "default",
             },
-            fzf_colors    = {
+            fzf_colors  = {
                 ["gutter"] = "-1",
                 ["bg"]     = "-1",
             },
-            hls           = {
+            hls         = {
                 live_prompt = "Normal",
                 path_linenr = "GruvboxGreen",
                 buf_name = "FloatBorder",
                 border = "FloatBorder"
             },
-            complete_file = {
-                cmd = os.getenv("FZF_DEFAULT_COMMAND"),
-            },
-            grep          = {
+            grep        = {
                 multiline = 1,
             },
-            blines        = {
+            blines      = {
                 rg_opts = "--line-number --colors=line:none",
             },
-            winopts       = {
+            winopts     = {
                 title_flags = false,
                 preview = {
                     border = "none",
@@ -83,19 +85,19 @@ return {
                 width = 0.60,
                 col = 0.48,
             },
-            previewers    = {
+            previewers  = {
                 bat = {
                     cmd  = "bat",
                     args = "--style=plain --color=always",
                 },
             },
-            files         = {
+            files       = {
                 file_icons  = false,
                 git_icons   = false,
                 color_icons = false,
                 cmd         = os.getenv("FZF_DEFAULT_COMMAND")
             },
-            diagnostics   = {
+            diagnostics = {
                 multiline = false,
                 signs = {
                     ["Error"] = { text = "", texthl = "DiagnosticError" },
@@ -104,7 +106,7 @@ return {
                     ["Hint"]  = { text = "󰌵", texthl = "DiagnosticHint" },
                 },
             },
-            actions       = {
+            actions     = {
                 files = {
                     ["default"] = actions.file_edit_or_qf,
                     ["ctrl-x"] = actions.file_vsplit,

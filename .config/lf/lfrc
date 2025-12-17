@@ -305,7 +305,7 @@ cmd paste-select &{{
 map p :paste-select
 map rr &dragon-drop $fx & disown; lf -remote 'send unselect'
 
-map <space>rfv $nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" live_grep
+map <space>rfv $nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" live_grep_native
 
 map su $sudoedit "$f"
 
