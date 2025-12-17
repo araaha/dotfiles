@@ -1,5 +1,6 @@
 return {
-    "araaha/hop.nvim",
+    "wsdjeg/hop.nvim",
+    cmd = "Hop",
     keys = {
         {
             "<M-c>",
