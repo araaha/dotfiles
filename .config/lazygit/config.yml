@@ -355,9 +355,8 @@ promptToReturnFromSubprocess: true
 keybinding:
   universal:
     quit: q
-    quit-alt1: <c-c>
     suspendApp: <c-z>
-    return: <esc>
+    return: <c-c>
     quitWithoutChangingDirectory: Q
     togglePanel: <tab>
     prevItem: <up>
