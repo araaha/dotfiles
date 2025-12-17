@@ -1,0 +1,70 @@
+diff --git a/internal/pager.go b/internal/pager.go
+index d1b4f32..9941968 100644
+--- a/internal/pager.go
++++ b/internal/pager.go
+@@ -480,7 +480,7 @@ func (p *Pager) StartPaging(screen twin.Screen, chromaStyle *chroma.Style, chrom
+ 			PanicHandler("StartPaging()/goroutine", recover(), debug.Stack())
+ 		}()
+ 
+-		spinnerFrames := [...]string{"/.\\", "-o-", "\\O/", "| |"}
++		spinnerFrames := [...]string{}
+ 		spinnerIndex := 0
+ 		spinnerTicker := time.NewTicker(200 * time.Millisecond)
+ 		lastSpinnerFrame := "UNSET" // Track the last spinner frame to avoid unnecessary redraws
+diff --git a/internal/pagermode-search.go b/internal/pagermode-search.go
+index 94b2f9f..0bf5599 100644
+--- a/internal/pagermode-search.go
++++ b/internal/pagermode-search.go
+@@ -49,7 +49,7 @@ func (m PagerModeSearch) drawFooter(_ string, _ string, _ string) {
+ 	if m.direction == SearchDirectionBackward {
+ 		prompt = "Search backwards: "
+ 	}
+-	m.inputBox.draw(m.pager.screen, "Type to search, 'ENTER' submits, 'ESC' cancels, '↑↓' navigate history", prompt)
++	m.inputBox.draw(m.pager.screen, "", prompt)
+ }
+ 
+ func (m *PagerModeSearch) moveSearchHistoryIndex(delta int) {
+@@ -82,7 +82,7 @@ func (m *PagerModeSearch) onKey(key twin.KeyCode) {
+ 	}
+ 
+ 	switch key {
+-	case twin.KeyEnter:
++	case twin.KeyEnter, twin.KeyCtrlC:
+ 		m.pager.searchHistory.addEntry(m.inputBox.text)
+ 		m.pager.mode = PagerModeViewing{pager: m.pager}
+ 		m.pager.setTargetLine(nil) // Viewing doesn't need all lines
+diff --git a/internal/screenLines.go b/internal/screenLines.go
+index 33d0655..b907517 100644
+--- a/internal/screenLines.go
++++ b/internal/screenLines.go
+@@ -61,7 +61,7 @@ func (p *Pager) redraw(spinner string) {
+ 	eofSpinner := spinner
+ 	if eofSpinner == "" {
+ 		// This happens when we're done
+-		eofSpinner = "---"
++		eofSpinner = ""
+ 	}
+ 	spinnerLine := textstyles.StyledRunesFromString(statusbarStyle, eofSpinner, nil, 0).StyledRunes
+ 	column := 0
+diff --git a/twin/keys.go b/twin/keys.go
+index 7eaabcb..389d347 100644
+--- a/twin/keys.go
++++ b/twin/keys.go
+@@ -6,6 +6,8 @@ const (
+ 	KeyEscape KeyCode = iota
+ 	KeyEnter
+ 
++	KeyCtrlC
++
+ 	KeyBackspace
+ 	KeyDelete
+ 
+@@ -46,6 +48,8 @@ var escapeSequenceToKeyCode = map[string]KeyCode{
+ 	"\x7f":    KeyBackspace,
+ 	"\x1b[3~": KeyDelete,
+ 
++	"\x03": KeyCtrlC,
++
+ 	"\x1b[A": KeyUp,
+ 	"\x1b[B": KeyDown,
+ 	"\x1b[C": KeyRight,
