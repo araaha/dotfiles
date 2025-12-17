@@ -1,4 +1,4 @@
-acceleration: 20000
+acceleration: 16000
 grid_keys: k l h j
 hint_chars: werasdfcvjlk
 buttons: space , .
