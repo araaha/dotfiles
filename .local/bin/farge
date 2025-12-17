@@ -54,7 +54,7 @@ EOF
 
 
 hex_to_rgb() {
-    # Convert a hex value WITHOUT the hashtag (#)
+    # magick a hex value WITHOUT the hashtag (#)
     R=$(printf "%d" 0x"${1:0:2}")
     G=$(printf "%d" 0x"${1:2:2}")
     B=$(printf "%d" 0x"${1:4:2}")
@@ -79,7 +79,7 @@ check_dependencies() {
 
     ! command -v bc &>/dev/null &&
         echo "bc needs to be installed" && exit 1
-    ! command -v convert &>/dev/null &&
+    ! command -v magick &>/dev/null &&
         echo "imagemagick needs to be installed" && exit 1
 
     # We are using the variable $IMAGE_VIEWER because we also have to check if
@@ -141,7 +141,7 @@ image_preview(){
 main() {
     if [ "$WAYLAND_DISPLAY" ]; then
         HEX_COLOR=$(grim -g "$(slurp -p)" -t ppm - |
-            convert - -format '%[pixel:p{0,0}]' txt:- | tail -n1 |
+            magick - -format '%[pixel:p{0,0}]' txt:- | tail -n1 |
             grep '#' | awk '{print $3}')
     else
         HEX_COLOR=$(xcolor --format hex)
@@ -165,7 +165,7 @@ main() {
     calculate_text_color
 
     # Create a 100x100 image, filled with the selected color
-    convert -size 100x100 xc:"$HEX_COLOR" "$FNAME"
+    magick -size 100x100 xc:"$HEX_COLOR" "$FNAME"
 
     if [ $COLOR_TYPE == "rgb" ]; then
         COLOR_CODE="($R,$G,$B)"
@@ -176,7 +176,7 @@ main() {
 
     if [ $WRITE_COLOR_CODE == true ]; then
         # Write the color code in the center of the image
-        convert "$FNAME" -gravity Center -pointsize 10 -fill "$TEXT_COLOR" -annotate 0 "$COLOR_CODE" -font "Comfortaa" "$FNAME"
+        magick "$FNAME" -gravity Center -pointsize 10 -fill "$TEXT_COLOR" -annotate 0 "$COLOR_CODE" -font "Comfortaa" "$FNAME"
     fi
 
     # Save the color code to clipboard
