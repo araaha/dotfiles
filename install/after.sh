@@ -58,7 +58,7 @@ openssh-dotconfig-bin /
 pulseaudio-ctl /
 rofi-greenclip /
 shellcheck-bin /
-sioyek /
+sioyek-appimage /
 tb.go /
 tdrop /
 ticker /
