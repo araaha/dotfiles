@@ -17,6 +17,8 @@ set noanchorfind
 set info size
 set sortby ctime
 
+set scrolloff 16
+
 set shellopts '-eu'
 set shellflag '-c'
 
@@ -182,7 +184,13 @@ cmd edir ${{
     lf -remote "send reload"
 }}
 
+cmd sedir ${{
+    printf '%s\n' $fx | sudo -E edir
+    lf -remote "send reload"
+}}
+
 map <space>rn :edir
+map <space>srn :sedir
 map cl :clear; unselect
 
 map cd :push ''
