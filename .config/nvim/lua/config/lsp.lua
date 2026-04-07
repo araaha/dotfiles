@@ -36,7 +36,7 @@ au("LspAttach", {
         vim.keymap.set({ "n", "v" }, "<space>ca",
             function() vim.lsp.buf.code_action { only = { "quickfix" } } end, opts)
         vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-        vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, opts)
+        -- vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, opts)
         vim.keymap.set("n", "[d", function()
             vim.diagnostic.jump({ count = 1, float = false })
         end, opts)

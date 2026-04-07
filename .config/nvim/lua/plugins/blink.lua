@@ -1,9 +1,8 @@
 return {
     "saghen/blink.cmp",
     event = { "InsertEnter" },
-    enabled = true,
-    version = "*",
     dependencies = { 'L3MON4D3/LuaSnip', version = 'v2.*' },
+    sem_version = "1.*",
     opts = {
         keymap = {
             ["<C-Space>"]  = { "select_and_accept" },

@@ -91,7 +91,6 @@ vim.o.qftf = '{info -> v:lua._G.qftf(info)}'
 
 return {
     "kevinhwang91/nvim-bqf",
-    version = false,
     ft = "qf",
     opts = {
         auto_enable = true,

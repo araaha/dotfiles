@@ -102,18 +102,18 @@ return {
                 -- Must be one of the sections declared above
                 default_section = "scopes",
             },
-            windows = {
-                height = math.floor(vim.o.lines * 0.33),
-                position = "below",
-                terminal = {
-                    position = "right",
-                    width = 0.3,
-                    -- List of debug adapters for which the terminal should be ALWAYS hidden
-                    hide = {},
-                    -- Hide the terminal when starting a new session
-                    start_hidden = false,
-                },
-            },
+            -- windows = {
+            --     height = math.floor(vim.o.lines * 0.33),
+            --     position = "below",
+            --     terminal = {
+            --         position = "right",
+            --         width = 0.3,
+            --         -- List of debug adapters for which the terminal should be ALWAYS hidden
+            --         hide = {},
+            --         -- Hide the terminal when starting a new session
+            --         start_hidden = false,
+            --     },
+            -- },
             help = {
                 border = nil,
             },

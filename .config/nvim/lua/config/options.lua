@@ -1,6 +1,6 @@
 local options = {
     report        = 100,
-    cmdheight     = 1,
+    cmdheight     = 0,
     laststatus    = 2,
     undofile      = true,
     undolevels    = 100,

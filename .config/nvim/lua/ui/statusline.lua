@@ -162,19 +162,97 @@ local function modified()
     return " %{&modified?\"\":\"\"} "
 end
 
-local function lsp()
-    local count = {}
-    local levels = {
-        errors = 1,
-        warnings = 2,
-        info = 3,
-        hints = 4,
-    }
+local lsp_status = {
+    msg = "",
+    title = "",
+    percentage = 0,
+    active = false,
+}
 
-    for k, level in pairs(levels) do
-        count[k] = vim.tbl_count(vim.diagnostic.get(0, { severity = level }))
+local last_redraw = 0
+
+local function safe_redraw()
+    local now = vim.loop.now()
+    if now - last_redraw > 50 then -- 50ms throttle
+        vim.cmd.redrawstatus()
+        last_redraw = now
+    end
+end
+
+vim.api.nvim_create_autocmd("LspProgress", {
+    callback = function(ev)
+        local value = ev.data.params.value
+        if not value then return end
+
+        if lsp_status.msg ~= value.message or lsp_status.percentage ~= value.percentage then
+            lsp_status.title = value.title or ""
+            lsp_status.msg = value.message or ""
+            lsp_status.percentage = value.percentage or 0
+        end
+
+        lsp_status.msg = lsp_status.msg:gsub("%s*%d+/%d+", "")
+
+        if value.kind == "end" then
+            lsp_status.percentage = 100
+            lsp_status.active = true
+
+            vim.defer_fn(function()
+                lsp_status.active = false
+                safe_redraw()
+            end, 800)
+        else
+            lsp_status.active = true
+        end
+
+        vim.cmd.redrawstatus()
+    end,
+})
+
+local function lsp_progress()
+    if vim.o.columns < 70 or vim.bo.filetype == "go" then
+        return ""
     end
 
+    if not lsp_status.active then
+        return ""
+    end
+
+    local percent = lsp_status.percentage or 0
+
+    local icon
+    local spinners = { "", "󰪞", "󰪟", "󰪠", "󰪢", "󰪣", "󰪤", "󰪥" }
+    if percent >= 100 then
+        icon = ""
+    else
+        local frame = math.floor(percent / (100 / #spinners))
+        frame = math.min(frame, #spinners - 1)
+        icon = spinners[frame + 1]
+    end
+
+    local content = string.format(
+        " %%<%s %d%%%%",
+        icon,
+        percent
+    )
+
+    return " %#StatuslineAccent#" .. content
+end
+
+local function lsp()
+    local diagnostics = vim.diagnostic.get(0)
+    local count = { errors = 0, warnings = 0, info = 0, hints = 0 }
+
+    for _, d in ipairs(diagnostics) do
+        if d.severity == vim.diagnostic.severity.ERROR then
+            count.errors = count.errors + 1
+        elseif d.severity == vim.diagnostic.severity.WARN then
+            count.warnings = count.warnings + 1
+        elseif d.severity == vim.diagnostic.severity.INFO then
+            count.info = count.info + 1
+        elseif d.severity == vim.diagnostic.severity.HINT then
+            count.hints = count.hints + 1
+        end
+    end
     local errors = ""
     local warnings = ""
     local hints = ""
@@ -266,6 +344,7 @@ Statusline.active = function()
         modified(),
         "%=",
         countdown,
+        lsp_progress(),
         lsp(),
         get_lsp_clients(),
         filetype(),

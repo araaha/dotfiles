@@ -1,6 +1,5 @@
 return {
     "nvim-treesitter/nvim-treesitter-textobjects",
-    -- remove branch once master is deprecated
     branch = "main",
     keys = {
         {
