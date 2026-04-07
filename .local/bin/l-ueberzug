@@ -10,7 +10,7 @@ if [ -n "$DISPLAY" ]; then
   }
 
   mkfifo "$FIFO_UEBERZUG"
-  ueberzug layer -s <"$FIFO_UEBERZUG" &
+  ueberzug layer --no-cache -s <"$FIFO_UEBERZUG" &
   exec 3>"$FIFO_UEBERZUG"
   trap cleanup EXIT
 
