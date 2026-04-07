@@ -33,8 +33,47 @@ index 94b2f9f..0bf5599 100644
  		m.pager.searchHistory.addEntry(m.inputBox.text)
  		m.pager.mode = PagerModeViewing{pager: m.pager}
  		m.pager.setTargetLine(nil) // Viewing doesn't need all lines
+diff --git a/internal/pagermode-viewing.go b/internal/pagermode-viewing.go
+index 042a5d9..a3639f9 100644
+--- a/internal/pagermode-viewing.go
++++ b/internal/pagermode-viewing.go
+@@ -60,10 +60,10 @@ func (m PagerModeViewing) onKey(keyCode twin.KeyCode) {
+ 		p.scrollPosition = p.scrollPosition.NextLine(1)
+ 		p.handleScrolledDown()
+ 
+-	case twin.KeyRight:
++	case twin.KeyRight, 'l':
+ 		p.moveRight(p.SideScrollAmount)
+ 
+-	case twin.KeyLeft:
++	case twin.KeyLeft, 'h':
+ 		p.moveRight(-p.SideScrollAmount)
+ 
+ 	case twin.KeyAltRight:
+@@ -102,21 +102,6 @@ func (m PagerModeViewing) onRune(char rune) {
+ 	case 'v':
+ 		handleEditingRequest(p)
+ 
+-	case 'h':
+-		if p.isShowingHelp {
+-			break
+-		}
+-
+-		p.preHelpState = &_PreHelpState{
+-			scrollPosition:      p.scrollPosition,
+-			leftColumnZeroBased: p.leftColumnZeroBased,
+-			targetLine:          p.TargetLine,
+-		}
+-		p.scrollPosition = newScrollPosition("Pager scroll position")
+-		p.leftColumnZeroBased = 0
+-		p.setTargetLine(nil)
+-		p.isShowingHelp = true
+-
+ 	case '=':
+ 		p.ShowStatusBar = !p.ShowStatusBar
+ 
 diff --git a/internal/screenLines.go b/internal/screenLines.go
-index 33d0655..b907517 100644
+index 33d0655..bca2447 100644
 --- a/internal/screenLines.go
 +++ b/internal/screenLines.go
 @@ -61,7 +61,7 @@ func (p *Pager) redraw(spinner string) {
@@ -46,6 +85,66 @@ index 33d0655..b907517 100644
  	}
  	spinnerLine := textstyles.StyledRunesFromString(statusbarStyle, eofSpinner, nil, 0).StyledRunes
  	column := 0
+@@ -295,7 +295,6 @@ func (p *Pager) decorateLine(lineNumberToShow *linemetadata.Number, numberPrefix
+ 	lastVisibleScreenColumn := p.leftColumnZeroBased + width - 1
+ 	cutOffRuneToTheLeft := false
+ 	cutOffRuneToTheRight := false
+-	canScrollRight := false
+ 	for i, char := range contents {
+ 		if firstVisibleRuneIndex == nil && screenColumn >= p.leftColumnZeroBased {
+ 			// Found the first fully visible rune. We need to point to a copy of
+@@ -319,7 +318,6 @@ func (p *Pager) decorateLine(lineNumberToShow *linemetadata.Number, numberPrefix
+ 				lastVisibleRuneIndex = i
+ 			} else {
+ 				// We're just outside the screen on the right
+-				canScrollRight = true
+ 
+ 				currentCharLeftEdge := screenColumn
+ 				if currentCharLeftEdge <= lastVisibleScreenColumn {
+@@ -350,43 +348,6 @@ func (p *Pager) decorateLine(lineNumberToShow *linemetadata.Number, numberPrefix
+ 		newLine = append(newLine, textstyles.CellWithMetadata{Rune: ' ', Style: p.ScrollRightHint.Style})
+ 	}
+ 
+-	// Add scroll left indicator
+-	canScrollLeft := p.leftColumnZeroBased > 0
+-	if canScrollLeft && len(contents) > 0 {
+-		if len(newLine) == 0 {
+-			// Make room for the scroll left indicator
+-			newLine = make([]textstyles.CellWithMetadata, 1)
+-		}
+-
+-		if newLine[0].Width() > 1 {
+-			// Replace the first rune with two spaces so we can replace the
+-			// leftmost cell with a scroll left indicator. First, convert to one
+-			// space...
+-			newLine[0] = textstyles.CellWithMetadata{Rune: ' ', Style: p.ScrollLeftHint.Style}
+-			// ...then prepend another space:
+-			newLine = append([]textstyles.CellWithMetadata{{Rune: ' ', Style: p.ScrollLeftHint.Style}}, newLine...)
+-
+-			// Prepending ref: https://stackoverflow.com/a/53737602/473672
+-		}
+-
+-		// Set can-scroll-left marker
+-		newLine[0] = p.ScrollLeftHint
+-	}
+-
+-	// Add scroll right indicator
+-	if canScrollRight {
+-		if newLine[len(newLine)-1].Width() > 1 {
+-			// Replace the last rune with two spaces so we can replace the
+-			// rightmost cell with a scroll right indicator. First, convert to one
+-			// space...
+-			newLine[len(newLine)-1] = textstyles.CellWithMetadata{Rune: ' ', Style: p.ScrollRightHint.Style}
+-			// ...then append another space:
+-			newLine = append(newLine, textstyles.CellWithMetadata{Rune: ' ', Style: p.ScrollRightHint.Style})
+-		}
+-
+-		newLine[len(newLine)-1] = p.ScrollRightHint
+-	}
+-
+ 	return newLine
+ }
+ 
 diff --git a/twin/keys.go b/twin/keys.go
 index 7eaabcb..389d347 100644
 --- a/twin/keys.go
