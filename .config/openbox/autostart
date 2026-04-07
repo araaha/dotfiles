@@ -8,7 +8,7 @@ xwallpaper --stretch "$XDG_DATA_HOME/Wallpapers/Pacman.png" &
 xset s off -dpms &
 xsct 4000 &
 xset r rate 150 50 &
-setxkbmap -option caps:ctrl_modifier &
+setxkbmap -option caps:ctrl_modifier -option compose:ralt &
 xmodmap -e "keycode 37 = " &
 udiskie -N &
 greenclip daemon &
@@ -16,6 +16,8 @@ env HOME="$XDG_DATA_HOME" mega-cmd-server &
 pipewire &
 pipewire-pulse &
 wireplumber &
-pamixer --set-volume 100 &
+pamixer --set-volume 80 &
 unclutter --idle 10 &
+mpris-proxy &
+warpd &
 dunst
