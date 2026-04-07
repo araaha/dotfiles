@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Exec=env GTK_USE_PORTAL=1 /usr/lib/firefox/firefox --private-window %u
+Exec=env GTK_USE_PORTAL=1 /usr/lib/firefox/firefox %u
 Terminal=false
 X-MultipleArgs=false
 Icon=firefox

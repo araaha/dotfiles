@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Sioyek
+Comment=PDF viewer for reading research papers and technical books
+Keywords=pdf;viewer;reader;research;
+TryExec=sioyek
+Exec=env DESKTOPINTEGRATION=0 APPIMAGELAUNCHER_DISABLE=1 sioyek --qwindowgeometry 2880x1800 %f
+StartupNotify=true
+Terminal=false
+Type=Application
+Icon=sioyek-icon-linux
+Categories=Development;Viewer;
+MimeType=application/pdf;
+X-AppImage-Version=7cb948f
