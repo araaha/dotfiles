@@ -1,0 +1,13 @@
+#compdef uairctl
+
+# zsh completions for 'uairctl'
+# automatically generated with http://github.com/RobSis/zsh-completion-generator
+local arguments
+
+arguments=(
+  {-s,--socket}'[specifies the socket file.]'
+  '--help[help      display usage information]'
+  '*:filename:_files'
+)
+
+_arguments -s $arguments

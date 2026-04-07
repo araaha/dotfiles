@@ -44,7 +44,7 @@ def cut_option(line):
     if len(opt) > 0:
         newline = line.replace(opt[0], "", 1).strip(STRIP_CHARS)
         # return without parameter
-        return newline, re.split('[ [=]', opt[0], 1)[0]
+        return newline, re.split('[ [=]', opt[0], maxsplit=1)[0]
     else:
         return newline, None
 

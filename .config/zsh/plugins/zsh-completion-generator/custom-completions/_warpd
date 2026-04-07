@@ -1,0 +1,26 @@
+#compdef warpd
+
+# zsh completions for 'warpd'
+# automatically generated with http://github.com/RobSis/zsh-completion-generator
+local arguments
+
+arguments=(
+  {-f,--foreground}'[run warpd in the foreground (useful for debugging).]'
+  {-h,--help}'[print this help message.]'
+  {-v,--version}'[print the version and exit.]'
+  {-c,--config}'[file>  Use the supplied config file.]'
+  {-l,--list-keys}'[print all valid keys.]'
+  '--list-options[print all available config options.]'
+  '--hint[start warpd in hint mode and exit after the end of the session.]'
+  '--hint2[start warpd in two pass hint mode and exit after the end of the session.]'
+  '--normal[start warpd in normal mode and exit after the end of the session.]'
+  '--grid[start warpd in hint grid and exit after the end of the session.]'
+  '--oneshot[when paired with one of the mode flags, exit warpd as soon as the mode is complete (i.e dont drop into normal mode). Principally useful for scripting.]'
+  '--move[<y>            Move the pointer to the specified coordinates.]'
+  '--click[send a mouse click corresponding to the supplied button and exit. May be paired with --move.]'
+  {-q,--query}'[consumes a list of hints from stdin and presents a one off hint selection.]'
+  '--record[when used with --click, records the event in warpds hint history.]'
+  '*:filename:_files'
+)
+
+_arguments -s $arguments
