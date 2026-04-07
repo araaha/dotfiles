@@ -12,7 +12,7 @@ export FZF_TMUX=1
 export FZF_TMUX_OPTS="-p 60%,80%"
 
 _fzf_compgen_path() {
-    fd -E '.cache' -E 'icons' -E 'themes' -E '**pkg' -E '.git' -E 'state' -E 'google-chrome' -E 'opt' -E 'chromium' -E 'firefox' -E 'cargo' --hidden --follow . "$1"
+    RIPGREP_CONFIG_PATH=$HOME/.config/ripgreprc rg --files --hidden --follow --no-messages --no-ignore --color=never "$1"
 }
 
 # # Use fd to generate the list for directory completion

@@ -10,8 +10,9 @@ export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
 export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
 
 export GOPATH="$XDG_DATA_HOME/go"
+export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export BUN_INSTALL="$XDG_DATA_HOME/bun"
-export PATH="$PATH:/usr/local/bin:$HOME/.local/bin:$GOPATH/bin:$BUN_INSTALL/bin:$HOME/.local/share/npm/bin:"
+export PATH="$PATH:/usr/local/bin:$HOME/.local/bin:$GOPATH/bin:$BUN_INSTALL/bin:$HOME/.local/share/npm/bin:$CARGO_HOME/bin:"
 export GTK_USE_PORTAL=1
 export QT_QPA_PLATFORMTHEME=xdgdesktopportal
 export WORDCHARS="_*?[]~&;!#$%^(){<>=."
@@ -26,7 +27,7 @@ export SYSTEMD_PAGER="moar"
 export SYSTEMD_PAGERSECURE=true
 
 export LESS="--tilde --save-marks --shift 2 -g --ignore-case --incsearch -j.5 -m -R -n --use-color -g"
-export MOAR="-terminal-fg -no-linenumbers -no-statusbar -style algol_nu -wrap -colors 16M"
+export MOAR="-terminal-fg -no-search-line-highlight -no-linenumbers -no-statusbar -style algol_nu -wrap -colors 16M"
 
 export LESSHISTSIZE=1000
 
@@ -40,7 +41,6 @@ export LS_COLORS="*#=00;90:*~=00;90:*.7z=05;31:*.aac=00;36:*.ace=05;31:*.alz=05;
 export JQ_COLORS="0;90:0;39:0;39:1;33:0;32:1;39:1;39:1;34"
 export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
 
-export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 export PYTHON_HISTORY="$XDG_STATE_HOME/python_history"
 export PYTHONPYCACHEPREFIX="$XDG_CACHE_HOME/python"
