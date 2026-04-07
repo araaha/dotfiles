@@ -3,6 +3,7 @@ grid_keys: k l h j
 hint_chars: werasdfcvjlk
 buttons: space , .
 exit: C-c
+hint_exit: C-c
 hint_bgcolor: #83a598
 hint_fgcolor: #242424
 hint_size: 22
