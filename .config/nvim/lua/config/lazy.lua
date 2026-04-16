@@ -12,6 +12,10 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 vim.g.mapleader = " "
+
+vim.cmd.packadd("nvim.undotree")
+vim.keymap.set({ "n" }, "<Leader>u", require("undotree").open)
+
 require("lazy").setup({
     spec = {
         { import = "plugins" },
