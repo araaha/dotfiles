@@ -334,8 +334,8 @@ pomo()
 
 local function searchcount()
     local sc = vim.fn.searchcount()
-    return vim.v.hlsearch == 1 and sc.total > 0 and
-        string.format("%%#StatuslineTerminalAccent# %s/%s ", sc.current, sc.total) or ""
+    return vim.v.hlsearch == 1 and (sc.total or 0) > 0 and
+        string.format("%%#StatuslineTerminalAccent# %s/%s ", sc.current or 0, sc.total) or ""
 end
 
 Statusline = {}
