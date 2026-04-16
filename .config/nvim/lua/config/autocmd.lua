@@ -23,7 +23,9 @@ au({ "BufRead" }, {
 
 au({ "CursorMoved" }, {
     callback = function()
-        vim.cmd("norm! zz")
+        if vim.fn.mode() == "n" then
+            vim.cmd("norm! zz")
+        end
     end
 })
 
