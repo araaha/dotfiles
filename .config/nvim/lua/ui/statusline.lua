@@ -101,16 +101,14 @@ local function update_mode_colors()
     return mode_color
 end
 
-local sep_icon = ""
-
 local function mode()
     local current_mode = vim.api.nvim_get_mode().mode
 
     if vim.o.columns < 50 then
-        return string.format(" %s %s%s", current_mode:upper(), sep_icon, update_mode_colors_foreground())
+        return string.format(" %s %s", current_mode:upper(), update_mode_colors_foreground())
     end
 
-    return string.format(" %s %s%s", modes[current_mode], sep_icon, update_mode_colors_foreground())
+    return string.format(" %s %s", modes[current_mode], update_mode_colors_foreground())
 end
 
 local function filetype()
@@ -230,12 +228,12 @@ local function lsp_progress()
     end
 
     local content = string.format(
-        " %%<%s %d%%%%",
+        " %%<%s %d%%%% ",
         icon,
         percent
     )
 
-    return " %#StatuslineAccent#" .. content
+    return "%#StatuslineAccent#" .. content
 end
 
 local function lsp()
@@ -253,28 +251,28 @@ local function lsp()
             count.hints = count.hints + 1
         end
     end
-    local errors = ""
-    local warnings = ""
-    local hints = ""
-    local info = ""
 
-    if count["errors"] ~= 0 then
-        errors = string.format(" %s %d", "%#LspDiagnosticError# ", count["errors"])
+    local parts = {}
+
+    if count.errors ~= 0 then
+        table.insert(parts, string.format("%%#LspDiagnosticError#  %d ", count.errors))
     end
-    if count["warnings"] ~= 0 then
-        warnings = string.format(" %s %d", "%#LspDiagnosticWarn# ", count["warnings"])
+    if count.warnings ~= 0 then
+        table.insert(parts, string.format("%%#LspDiagnosticWarn#  %d ", count.warnings))
     end
-    if count["hints"] ~= 0 then
-        hints = string.format(" %s %d", "%#LspDiagnosticHint# ", count["hints"])
+    if count.hints ~= 0 then
+        table.insert(parts, string.format("%%#LspDiagnosticHint#  %d ", count.hints))
     end
-    if count["info"] ~= 0 then
-        info = string.format(" %s %d", "%#LspDiagnosticInfo# ", count["info"])
+    if count.info ~= 0 then
+        table.insert(parts, string.format("%%#LspDiagnosticInfo#  %d ", count.info))
     end
 
-    if vim.o.columns < 50 then
+    if #parts == 0 or vim.o.columns < 50 then
         return ""
     end
-    return string.format("%s%s%s%s ", errors, warnings, hints, info)
+
+    -- one leading space, no trailing space
+    return table.concat(parts)
 end
 
 local function get_lsp_clients()
@@ -300,7 +298,7 @@ local function pomo()
     local timer = vim.uv.new_timer()
 
     local function getTime()
-        local time = vim.fn.system("uairctl fetch {time}\n")
+        local time = vim.fn.trim(vim.fn.system("uairctl fetch {time}"))
         local res = ""
         if time and #time > 0 and vim.v.shell_error == 0 then
             res = time
@@ -315,7 +313,7 @@ local function pomo()
             timer:stop()
             return
         else
-            countdown = string.format("%%#StatuslineInsertAccent# %s", time)
+            countdown = string.format("%%#StatuslineInsertAccent# %s ", time)
         end
 
         vim.cmd.redrawstatus()
@@ -334,6 +332,12 @@ end
 
 pomo()
 
+local function searchcount()
+    local sc = vim.fn.searchcount()
+    return vim.v.hlsearch == 1 and sc.total > 0 and
+        string.format("%%#StatuslineTerminalAccent# %s/%s ", sc.current, sc.total) or ""
+end
+
 Statusline = {}
 
 Statusline.active = function()
@@ -343,6 +347,7 @@ Statusline.active = function()
         filepath(" "),
         modified(),
         "%=",
+        searchcount(),
         countdown,
         lsp_progress(),
         lsp(),
