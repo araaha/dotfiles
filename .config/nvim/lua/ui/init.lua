@@ -1,6 +1,7 @@
 require("ui.gruvbox")
 require("ui.indentmini")
-require('vim._core.ui2').enable()
+require("ui.treesitter")
 vim.schedule(function()
+    require("ui.experimental")
     require("ui.statusline")
 end)
