@@ -1,3 +1,6 @@
+local functions = {
+    ["lua"] = { "function() ", " end" }
+}
 return {
     "kylechui/nvim-surround",
     keys = {
@@ -6,5 +9,22 @@ return {
         "cs",
         "ds"
     },
-    opts = {},
+    opts = {
+        -- aliases = {
+        --     ["a"] = ">",
+        --     ["b"] = ")",
+        --     ["B"] = "}",
+        --     ["r"] = "]",
+        --     ["q"] = { '"', "'", "`" },
+        --     ["s"] = { "}", "]", ")", ">", '"', "'", "`" },
+        -- },
+        surrounds = {
+            ["F"] = {
+                add = function()
+                    return functions[vim.bo.ft]
+                end,
+                -- delete=
+            }
+        }
+    },
 }
