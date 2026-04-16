@@ -31,10 +31,6 @@ map("n", "X", ":bdelete!<CR>", { silent = true })
 map({ "i" }, "<C-s>", "<C-o>:silent! w<CR>", { silent = true })
 map({ "n" }, "<C-s>", ":silent! w<CR>", { silent = true })
 
-map("n", "<Leader>lf", ":vert term lf %<CR>", { silent = true })
-map("n", "<Leader>lg", ":vert term lazygit<CR>", { silent = true })
-map("n", "<Leader>lp", ":silent! Lazy profile<CR>", { silent = true })
-
 map("n", "<M-PageDown>", ":silent! cnext<CR>", { silent = true })
 map("n", "<M-PageUp>", ":silent! cprevious<CR>", { silent = true })
 map("n", "<PageDown>", ":silent! lnext<CR>", { silent = true })
@@ -53,20 +49,36 @@ map("t", "<esc>", "<C-\\>", {})
 
 map({ "n", "v" }, "<Leader>y", [["+y]], {})
 map({ "n", "v" }, "<Leader>p", [["+p]], {})
+map("o", "ir", "i[")
+map("o", "ar", "a[")
+map("o", "ia", "i<")
+map("o", "aa", "a<")
 
---treesitter
-map({ "n", "x", "o" }, "<Tab>", function()
-    if vim.treesitter.get_parser(nil, nil, { error = false }) then
-        require("vim.treesitter._select").select_parent(vim.v.count1)
-    else
-        vim.lsp.buf.selection_range(vim.v.count1)
-    end
-end, { desc = "Select parent treesitter node or outer incremental lsp selections" })
+map("n", "<leader>lf", function()
+    local tmp = vim.fn.tempname()
 
-map({ "n", "x", "o" }, "<S-Tab>", function()
-    if vim.treesitter.get_parser(nil, nil, { error = false }) then
-        require("vim.treesitter._select").select_child(vim.v.count1)
-    else
-        vim.lsp.buf.selection_range(-vim.v.count1)
-    end
-end, { desc = "Select child treesitter node or inner incremental lsp selections" })
+    vim.cmd.vsplit()
+    vim.cmd.enew()
+
+    vim.fn.jobstart({ "lf", "-selection-path=" .. tmp }, {
+        term = true,
+        on_exit = function()
+            vim.schedule(function()
+                local f = io.open(tmp, "r")
+                if f then
+                    local file = f:read("*l")
+                    f:close()
+                    os.remove(tmp)
+
+                    if file and file ~= "" then
+                        vim.cmd("vsplit " .. vim.fn.fnameescape(file))
+                    end
+                end
+            end)
+        end,
+    })
+
+    vim.cmd.startinsert()
+end)
+map("n", "<Leader>lg", ":vert term lazygit<CR>", { silent = true })
+map("n", "<Leader>lp", ":silent! Lazy profile<CR>", { silent = true })
