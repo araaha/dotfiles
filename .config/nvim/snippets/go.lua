@@ -1,14 +1,14 @@
 local ls = require("luasnip")
 local s = ls.s
 local i = ls.i
-local t = ls.t
+-- local t = ls.t
 
 local d = ls.dynamic_node
-local c = ls.choice_node
-local f = ls.function_node
+-- local c = ls.choice_node
+-- local f = ls.function_node
 local sn = ls.snippet_node
-
-local fmt = require("luasnip.extras.fmt").fmt
+--
+-- local fmt = require("luasnip.extras.fmt").fmt
 local fmta = require("luasnip.extras.fmt").fmta
 local rep = require("luasnip.extras").rep
 
@@ -32,6 +32,14 @@ func main() {
             snippetType = "autosnippet",
             wordTrig = true,
             hidden = true,
+            condition = function(matched_trigger)
+                local cursor_pos = vim.api.nvim_win_get_cursor(0)
+                local row, col = cursor_pos[1] - 1, cursor_pos[2] - #matched_trigger
+                local node = vim.treesitter.get_node({
+                    pos = { row, col },
+                })
+                return node and node:type() ~= "comment"
+            end,
         }, fmta([[for <> := <>; <> << <>; <>++ {
     <>
 }]], {
@@ -56,12 +64,21 @@ func main() {
     ),
     s(
         {
+            trig = "prng",
+            snippetType = "autosnippet",
+            desc = "Range",
+            hidden = false
+        }, fmta("for <> := range <> {\n\t<>\n}", {
+            i(1, "i"), i(2), i(3) })
+    ),
+    s(
+        {
             trig = "rng",
             snippetType = "autosnippet",
             desc = "Range",
             hidden = false
         }, fmta("for <>, <> := range <> {\n\t<>\n}", {
-            i(1), i(2), i(3), i(4)
+            i(1, "_"), i(2, "v"), i(3), i(4)
         })
     ),
     s(
@@ -155,6 +172,14 @@ func main() {
             trig = "and",
             snippetType = "autosnippet",
             hidden = true,
+            condition = function(matched_trigger)
+                local cursor_pos = vim.api.nvim_win_get_cursor(0)
+                local row, col = cursor_pos[1] - 1, cursor_pos[2] - #matched_trigger
+                local node = vim.treesitter.get_node({
+                    pos = { row, col },
+                })
+                return node and node:type() ~= "comment"
+            end,
         }, fmta(" && <>", { i(1) })
     ),
 }
