@@ -1,6 +1,5 @@
 return {
     "backdround/improved-ft.nvim",
-    lazy = true,
     keys = {
         "f",
         "t",
