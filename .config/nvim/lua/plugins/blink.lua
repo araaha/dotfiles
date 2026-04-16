@@ -1,8 +1,11 @@
 return {
     "saghen/blink.cmp",
     event = { "InsertEnter" },
+    keys = {
+        { ":", mode = "n" },
+    },
     dependencies = { 'L3MON4D3/LuaSnip', version = 'v2.*' },
-    sem_version = "1.*",
+    version = "1.*",
     opts = {
         keymap = {
             ["<C-Space>"]  = { "select_and_accept" },
@@ -20,10 +23,33 @@ return {
         -- Disables keymaps, completions and signature help for these filetypes
         -- enabled = function() return vim.bo.buftype ~= "prompt" end,
 
-        snippets = { preset = 'luasnip' },
+        snippets = { preset = "luasnip" },
 
         cmdline = {
-            enabled = false
+            enabled = true,
+            keymap = {
+                ["<C-Space>"]  = { "select_and_accept" },
+                ["<CR>"]       = { 'accept_and_enter', 'fallback' },
+                -- ["<C-n>"]      = { "show", "select_next", "fallback" },
+                -- ["<C-p>"]      = { "show", "select_prev", "fallback" },
+                ["<C-e>"]      = { "hide", "fallback" },
+                ["<C-y>"]      = { "show", "show_documentation", "hide_documentation" },
+                ["<Down>"]     = { "select_next", "fallback" },
+                ["<Up>"]       = { "select_prev", "fallback" },
+                ["<PageDown>"] = { "scroll_documentation_down", "fallback" },
+                ["<PageUp>"]   = { "scroll_documentation_up", "fallback" },
+                ["<Tab>"]      = { "show_and_insert", "select_and_accept", "select_next" },
+                ["<S-Tab>"]    = { "show_and_insert", "select_and_accept", "select_prev" }
+            },
+            completion = {
+                menu = {
+                    auto_show = function()
+                        return vim.fn.getcmdtype() == ':'
+                        -- enable for inputs as well, with:
+                        -- or vim.fn.getcmdtype() == '@'
+                    end,
+                },
+            },
         },
 
         completion = {
@@ -111,7 +137,7 @@ return {
             menu = {
                 enabled = true,
                 min_width = 15,
-                max_height = 10,
+                max_height = 7,
                 border = 'none',
                 winblend = 0,
                 winhighlight =
@@ -267,16 +293,12 @@ return {
                 treesitter_highlighting = false,
             },
         },
-
-
         fuzzy = {
             -- when enabled, allows for a number of typos relative to the length of the query
             -- disabling this matches the behavior of fzf
             -- proximity bonus boosts the score of items matching nearby words
             use_proximity = false,
             -- controls which sorts to use and in which order, these three are currently the only allowed options
-            sorts = { 'score', 'kind', 'label' },
-
             prebuilt_binaries = {
                 -- Whether or not to automatically download a prebuilt binary from github. If this is set to `false`
                 -- you will need to manually build the fuzzy binary dependencies by running `cargo build --release`
@@ -318,14 +340,14 @@ return {
 
             -- Function to use when transforming the items before they're returned for all providers
             -- The default will lower the score for snippets to sort them lower in the list
-            transform_items = function(_, items)
-                for _, item in ipairs(items) do
-                    if item.kind == require('blink.cmp.types').CompletionItemKind.Snippet then
-                        item.score_offset = item.score_offset - 3
-                    end
-                end
-                return items
-            end,
+            -- transform_items = function(_, items)
+            --     for _, item in ipairs(items) do
+            --         if item.kind == require('blink.cmp.types').CompletionItemKind.Snippet then
+            --             item.score_offset = item.score_offset - 3
+            --         end
+            --     end
+            --     return items
+            -- end,
             -- Minimum number of characters in the keyword to trigger all providers
             -- May also be `function(ctx: blink.cmp.Context): number`
             min_keyword_length = 0,
