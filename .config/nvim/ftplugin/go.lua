@@ -1,1 +1,1 @@
-vim.bo.makeprg = "go run %"
+vim.bo.makeprg = "go build"
