@@ -1,26 +1,38 @@
 return {
-    "echasnovski/mini.pairs",
+    "m4xshen/autoclose.nvim",
     keys = {
-        { "{",     mode = "i" },
-        { "}",     mode = "i" },
-        { "(",     mode = "i" },
-        { ")",     mode = "i" },
-        { "[",     mode = "i" },
-        { "]",     mode = "i" },
-        { "<CR>",  mode = "i" },
-        { "<C-w>", "v:lua.MiniPairs.bs('\23')", mode = "i", expr = true, replace_keycodes = false }
+        { "{",    mode = "i" },
+        { "}",    mode = "i" },
+        { "(",    mode = "i" },
+        { ")",    mode = "i" },
+        { "[",    mode = "i" },
+        { "]",    mode = "i" },
+        { "\"",   mode = "i" },
+        { "<CR>", mode = "i" },
+        { ":",    mode = "n" },
     },
     opts = {
-        modes = { insert = true, command = false, terminal = false },
+        keys = {
+            ["("] = { escape = false, close = true, pair = "()" },
+            ["["] = { escape = false, close = true, pair = "[]" },
+            ["{"] = { escape = false, close = true, pair = "{}" },
 
-        mappings = {
-            ["("] = { action = "open", pair = "()", neigh_pattern = "[^\\]." },
-            ["["] = { action = "open", pair = "[]", neigh_pattern = "[^\\]." },
-            ["{"] = { action = "open", pair = "{}", neigh_pattern = "[^\\].", register = { cr = true } },
+            [">"] = { escape = true, close = false, pair = "<>" },
+            [")"] = { escape = true, close = false, pair = "()" },
+            ["]"] = { escape = true, close = false, pair = "[]" },
+            ["}"] = { escape = true, close = false, pair = "{}" },
 
-            [")"] = { action = "close", pair = "()", neigh_pattern = "[^\\]." },
-            ["]"] = { action = "close", pair = "[]", neigh_pattern = "[^\\]." },
-            ["}"] = { action = "close", pair = "{}", neigh_pattern = "[^\\].", register = { cr = true } },
+            ['"'] = { escape = true, close = true, pair = '""' },
+            ["'"] = { escape = true, close = true, pair = "''" },
+            ["`"] = { escape = true, close = true, pair = "``" },
+        },
+        options = {
+            disabled_filetypes = { "text" },
+            disable_when_touch = false,
+            touch_regex = "[%w(%[{]",
+            pair_spaces = true,
+            auto_indent = true,
+            disable_command_mode = false,
         },
     }
 }
