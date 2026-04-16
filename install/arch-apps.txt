@@ -77,7 +77,6 @@ ripgrep
 ripgrep-all
 rofi
 rofi-calc
-rofi-pass
 ruff
 rust
 scrot
