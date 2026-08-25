@@ -45,6 +45,9 @@ export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 export PYTHON_HISTORY="$XDG_STATE_HOME/python_history"
 export PYTHONPYCACHEPREFIX="$XDG_CACHE_HOME/python"
 export PYTHONUSERBASE="$XDG_DATA_HOME/python"
+export ECLIPSE_HOME="$XDG_CONFIG_HOME/eclipse"
+export PSQL_HISTORY="$XDG_STATE_HOME/psql_history"
+export CODEX_HOME="$XDG_CONFIG_HOME/codex"
 export SSH_HOME="$XDG_CONFIG_HOME/ssh"
 
 export GPG_TTY=$(tty)
