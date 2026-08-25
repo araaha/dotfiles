@@ -5,7 +5,7 @@ STATEFILE="/tmp/grid_state"
 
 # if argument given, choose new grid
 if [ "$1" = "select" ]; then
-    GRID=$(printf "4x2\n4x3\n4x4\n6x2\n3x3\n2x2\n" | rofi -dmenu -p "Grid ")
+    GRID=$(printf "5x3\n4x2\n4x3\n4x4\n6x2\n3x3\n2x2\n" | rofi -dmenu -p "Grid ")
     [ -z "$GRID" ] && exit
     echo "$GRID" > "$GRIDFILE"
 fi
