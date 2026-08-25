@@ -12,6 +12,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
 vim.cmd.packadd("nvim.undotree")
 vim.keymap.set({ "n" }, "<Leader>u", require("undotree").open)
