@@ -32,13 +32,15 @@ func main() {
             snippetType = "autosnippet",
             wordTrig = true,
             hidden = true,
-            condition = function(matched_trigger)
-                local cursor_pos = vim.api.nvim_win_get_cursor(0)
-                local row, col = cursor_pos[1] - 1, cursor_pos[2] - #matched_trigger
-                local node = vim.treesitter.get_node({
-                    pos = { row, col },
-                })
-                return node and node:type() ~= "comment"
+            condition = function()
+                local line = vim.api.nvim_get_current_line()
+                local col = vim.api.nvim_win_get_cursor(0)[2]
+
+                local before_cursor = line:sub(1, col)
+
+                local comment_start = before_cursor:find("//", 1, true)
+
+                return comment_start == nil
             end,
         }, fmta([[for <> := <>; <> << <>; <>++ {
     <>
@@ -172,14 +174,16 @@ func main() {
             trig = "and",
             snippetType = "autosnippet",
             hidden = true,
-            condition = function(matched_trigger)
-                local cursor_pos = vim.api.nvim_win_get_cursor(0)
-                local row, col = cursor_pos[1] - 1, cursor_pos[2] - #matched_trigger
-                local node = vim.treesitter.get_node({
-                    pos = { row, col },
-                })
-                return node and node:type() ~= "comment"
-            end,
+            condition = function()
+                local line = vim.api.nvim_get_current_line()
+                local col = vim.api.nvim_win_get_cursor(0)[2]
+
+                local before_cursor = line:sub(1, col)
+
+                local comment_start = before_cursor:find("//", 1, true)
+
+                return comment_start == nil
+            end
         }, fmta(" && <>", { i(1) })
     ),
 }
