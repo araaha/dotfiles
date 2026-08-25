@@ -4,6 +4,7 @@ vim.lsp.enable({
     "ruff",
     "pyright",
     "lua_ls",
+    "jdtls",
     "clangd"
 }, true)
 
@@ -85,6 +86,13 @@ au("LspAttach", {
 
         au("DiagnosticChanged", {
             callback = update_list_if_visible,
+        })
+
+        au("FileType", {
+            pattern = "qf",
+            callback = function()
+                vim.bo.buflisted = false
+            end,
         })
 
         for _, client in pairs(vim.lsp.get_clients()) do
