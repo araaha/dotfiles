@@ -36,3 +36,4 @@ ln -srfv "$HOME/dotfiles/.local/bin" ~/.local/
 
 #/etc/
 sudo cp -rv "$DOTS/etc"/* /etc/
+sudo cp -rv "$DOTS/usr"/* /usr/

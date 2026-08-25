@@ -1,0 +1,2 @@
+ACTION=="add", SUBSYSTEM=="block", ENV{DEVTYPE}=="partition", SUBSYSTEMS=="usb", RUN+="/usr/local/bin/automount %k add"
+ACTION=="remove", SUBSYSTEM=="block", ENV{DEVTYPE}=="partition", SUBSYSTEMS=="usb", RUN+="/usr/local/bin/automount %k remove"

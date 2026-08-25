@@ -10,7 +10,6 @@ xsct 4000 &
 xset r rate 150 50 &
 setxkbmap -option caps:ctrl_modifier -option compose:ralt &
 xmodmap -e "keycode 37 = " &
-udiskie -N &
 greenclip daemon &
 env HOME="$XDG_DATA_HOME" mega-cmd-server &
 pipewire &
