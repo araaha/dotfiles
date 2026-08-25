@@ -148,7 +148,7 @@ return {
                 scrollbar = true,
                 -- Which directions to show the window,
                 -- falling back to the next direction when there's not enough space
-                direction_priority = { 's', 'n' },
+                direction_priority = { 's' },
                 -- Controls how the completion items are rendered on the popup window
                 auto_show = true,
 

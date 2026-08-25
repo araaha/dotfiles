@@ -52,12 +52,12 @@ return {
         {
             "<leader>dt",
             function()
-                if vim.api.nvim_get_option_value("signcolumn", { scope = "local" }) == "yes" then
-                    vim.api.nvim_set_option_value("signcolumn", "no", { scope = "local" })
-                else
-                    vim.api.nvim_set_option_value("signcolumn", "yes", { scope = "local" })
-                end
                 require("dap-view").toggle()
+                local current = vim.api.nvim_get_option_value("signcolumn", { scope = "local" })
+                vim.api.nvim_set_option_value(
+                    "signcolumn", current == "yes" and "no" or "yes",
+                    { scope = "local" }
+                )
             end,
             desc = "Debug: Toggle UI",
         },
