@@ -38,6 +38,7 @@ ifuse
 imagemagick
 impala
 iwd
+jdtls
 jless
 jq
 lazygit
@@ -89,7 +90,6 @@ ttf-arphic-uming
 ttf-dejavu
 ttf-liberation
 typst
-udiskie
 ueberzug
 unclutter
 unrar
