@@ -34,13 +34,13 @@ if [ "$save" = "1" ]; then
     cmd="gum confirm $GUM_STYLE 'Save to  ${path/$HOME/\~}?' && ( printf '%s' \"$path\" > $out)"
     ~/.local/bin/st -T "Filepicker" -g 80x6+600+720 -e sh -c "$cmd > $out"
 elif [ "$directory" = "1" ]; then
-    cmd="rg --files ~ --glob 'Downloads/**' --glob 'Screenshots/**' --null | xargs -0 dirname | sort -u | ~/.local/bin/fzf-preview.sh $FZF_DEFAULT_OPTS --prompt 'Select directories > '"
+    cmd="rg --files ~ --glob 'Books/**' --glob 'Downloads/**' --glob 'Screenshots/**' --null | xargs -0 dirname | sort -u | ~/.local/bin/fzf-preview.sh $FZF_DEFAULT_OPTS --prompt 'Select directories > '"
     ~/.local/bin/st -T "Filepicker" -g 80x24+600+360 -e sh -c "$cmd > $out"
 elif [ "$multiple" = "1" ]; then
-    cmd="rg --files ~ --glob 'Downloads/**' --glob 'Screenshots/**' | ~/.local/bin/fzf-preview.sh $FZF_DEFAULT_OPTS --prompt 'Select files > '"
+    cmd="rg --files ~ --glob 'Books/**' --glob 'Downloads/**' --glob 'Screenshots/**' | ~/.local/bin/fzf-preview.sh $FZF_DEFAULT_OPTS --prompt 'Select files > '"
     ~/.local/bin/st -T "Filepicker" -g 80x24+600+360 -e sh -c "$cmd > $out"
 else
-    cmd="rg --files ~ --glob 'Downloads/**' --glob 'Screenshots/**' | ~/.local/bin/fzf-preview.sh +m $FZF_DEFAULT_OPTS --prompt 'Select file > '"
+    cmd="rg --files ~ --glob 'Books/**' --glob 'Downloads/**' --glob 'Screenshots/**' | ~/.local/bin/fzf-preview.sh +m $FZF_DEFAULT_OPTS --prompt 'Select file > '"
     ~/.local/bin/st -T "Filepicker" -g 80x24+600+360 -e sh -c "$cmd > $out"
 fi
 
