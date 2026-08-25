@@ -5,7 +5,7 @@ return {
         {
             "<Leader>gf",
             "<cmd>GrugFar<cr>",
-            mode = "n"
+            mode = { "n" }
         }
     },
     opts = {
@@ -18,6 +18,11 @@ return {
         showInputsBottomPadding = false,
         showStatusIcon = false,
         showEngineInfo = false,
-        showStatusInfo = false
+        showStatusInfo = false,
+        startInInsertMode = false,
+        keymaps = {
+            nextInput = { i = "<Tab>" },
+            prevInput = { i = "<S-Tab>" },
+        }
     }
 }
