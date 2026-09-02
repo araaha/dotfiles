@@ -1,0 +1,242 @@
+diff --git a/commands.c b/commands.c
+index 3257b1e..48946c7 100644
+--- a/commands.c
++++ b/commands.c
+@@ -24,6 +24,8 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <errno.h>
++#include <sys/stat.h>
+ #include <sys/wait.h>
+ #include <unistd.h>
+ 
+@@ -415,6 +417,190 @@ bool ct_move_sel(arg_t dir)
+ 	return tns_move_selection(&tns, dir, prefix);
+ }
+ 
++/* Move the selected file in the displayed order. Reinitializing the thumbnail
++ * state is deliberately conservative: it keeps partially loaded grids correct,
++ * while nsxiv's on-disk thumbnail cache makes the refresh inexpensive. */
++bool ct_move_file(arg_t delta)
++{
++	fileinfo_t tmp;
++	int dst, i;
++
++	if (delta == DIR_UP) {
++		dst = MAX(fileidx - tns.cols, fileidx % tns.cols);
++	} else if (delta == DIR_DOWN) {
++		int max = tns.cols * ((filecnt - 1) / tns.cols) +
++		          MIN((filecnt - 1) % tns.cols, fileidx % tns.cols);
++		dst = MIN(fileidx + tns.cols, max);
++	} else {
++		dst = fileidx + delta;
++	}
++
++	if (dst < 0 || dst >= filecnt || dst == fileidx)
++		return false;
++
++	/* Invalidate only the two affected slots. Swapping decoded thumb_t objects
++	 * interferes with nsxiv's incremental loader; loading these two again from
++	 * the on-disk cache is cheap and keeps every thumbnail correctly paired. */
++	tns_unload(&tns, fileidx);
++	tns_unload(&tns, dst);
++	tmp = files[fileidx];
++	files[fileidx] = files[dst];
++	files[dst] = tmp;
++	if (alternate == fileidx)
++		alternate = dst;
++	else if (alternate == dst)
++		alternate = fileidx;
++	if (markidx == fileidx)
++		markidx = dst;
++	else if (markidx == dst)
++		markidx = fileidx;
++	fileidx = dst;
++
++	/* A move can cross the frontier of thumbnails initialized in the
++	 * background. Recalculate the frontier without discarding loaded images. */
++	for (i = 0; i < filecnt && (files[i].flags & FF_TN_INIT); i++)
++		;
++	tns.initnext = i;
++	tns.loadnext = MIN(tns.loadnext, MIN(fileidx, dst));
++	tns.dirty = true;
++	return true;
++}
++
++static char *order_name(const char *dir, int number, int width, const char *ext)
++{
++	int len = snprintf(NULL, 0, "%s/%0*d%s", dir, width, number, ext) + 1;
++	char *name = emalloc(len);
++	snprintf(name, len, "%s/%0*d%s", dir, width, number, ext);
++	return name;
++}
++
++static bool path_in_list(const char *path, char **list, int len)
++{
++	int i;
++	for (i = 0; i < len; i++) {
++		if (strcmp(path, list[i]) == 0)
++			return true;
++	}
++	return false;
++}
++
++/* Rename through unique temporary names, so swaps never overwrite a file.
++ * All inputs must share one directory; unrelated existing targets are refused. */
++bool ct_rename_ordered(arg_t _)
++{
++	char **src, **tmp, **dst;
++	char *dir = NULL, *slash, *base, *ext;
++	const char *real;
++	struct stat st;
++	int i, j, width = 3;
++	bool ok = false;
++
++	for (i = filecnt; i >= 1000; i /= 10)
++		width++;
++	src = ecalloc(filecnt, sizeof(*src));
++	tmp = ecalloc(filecnt, sizeof(*tmp));
++	dst = ecalloc(filecnt, sizeof(*dst));
++
++	for (i = 0; i < filecnt; i++) {
++		if ((real = file_realpath(&files[i], 0)) == NULL) {
++			error(0, errno, "could not resolve: %s", files[i].name);
++			goto cleanup;
++		}
++		src[i] = estrdup(real);
++		slash = strrchr(src[i], '/');
++		if (slash == NULL) {
++			error(0, 0, "not an absolute path: %s", src[i]);
++			goto cleanup;
++		}
++		if (i == 0) {
++			dir = estrdup(src[i]);
++			dir[slash - src[i]] = '\0';
++		} else if ((size_t)(slash - src[i]) != strlen(dir) ||
++		           strncmp(src[i], dir, strlen(dir)) != 0)
++		{
++			error(0, 0, "ordered rename requires one directory");
++			goto cleanup;
++		}
++		base = slash + 1;
++		ext = strrchr(base, '.');
++		if (ext == NULL)
++			ext = base + strlen(base);
++		dst[i] = order_name(dir, i + 1, width, ext);
++		if (path_in_list(dst[i], dst, i)) {
++			error(0, 0, "duplicate target: %s", dst[i]);
++			goto cleanup;
++		}
++	}
++
++	for (i = 0; i < filecnt; i++) {
++		if (lstat(dst[i], &st) == 0) {
++			if (!path_in_list(dst[i], src, filecnt)) {
++				error(0, 0, "refusing to overwrite: %s", dst[i]);
++				goto cleanup;
++			}
++		} else if (errno != ENOENT) {
++			error(0, errno, "%s", dst[i]);
++			goto cleanup;
++		}
++		j = snprintf(NULL, 0, "%s/.nsxiv-order-%ld-%d", dir, (long)getpid(), i) + 1;
++		tmp[i] = emalloc(j);
++		snprintf(tmp[i], j, "%s/.nsxiv-order-%ld-%d", dir, (long)getpid(), i);
++		if (lstat(tmp[i], &st) == 0) {
++			error(0, 0, "temporary path exists: %s", tmp[i]);
++			goto cleanup;
++		} else if (errno != ENOENT) {
++			error(0, errno, "%s", tmp[i]);
++			goto cleanup;
++		}
++	}
++
++	for (i = 0; i < filecnt; i++) {
++		if (rename(src[i], tmp[i]) != 0) {
++			error(0, errno, "rename: %s", src[i]);
++			while (--i >= 0)
++				rename(tmp[i], src[i]);
++			goto cleanup;
++		}
++	}
++	for (i = 0; i < filecnt; i++) {
++		if (rename(tmp[i], dst[i]) != 0) {
++			error(0, errno, "rename: %s", dst[i]);
++			for (j = i - 1; j >= 0; j--)
++				rename(dst[j], tmp[j]);
++			for (j = 0; j < filecnt; j++)
++				rename(tmp[j], src[j]);
++			goto cleanup;
++		}
++	}
++
++	for (i = 0; i < filecnt; i++) {
++		free((void *)files[i].name);
++		free((void *)files[i].path);
++		files[i].name = estrdup(dst[i]);
++		files[i].path = NULL;
++		files[i].flags |= FF_TN_NEEDS_UPDATE;
++	}
++	tns_free(&tns);
++	tns_init(&tns, files, &filecnt, &fileidx, &win);
++	/* A target filename may already have a cache entry for the image that used
++	 * to own that number. Rebuild cache entries under their new paths now. */
++	for (i = 0; i < filecnt; i++)
++		(void)tns_load(&tns, i, true, true);
++	tns.dirty = ok = true;
++
++cleanup:
++	free(dir);
++	for (i = 0; i < filecnt; i++) {
++		free(src[i]);
++		free(tmp[i]);
++		free(dst[i]);
++	}
++	free(src);
++	free(tmp);
++	free(dst);
++	return ok;
++}
++
+ bool ct_reload_all(arg_t _)
+ {
+ 	tns_free(&tns);
+diff --git a/commands.h b/commands.h
+index 4e694f0..ea2eaff 100644
+--- a/commands.h
++++ b/commands.h
+@@ -42,6 +42,8 @@ bool ci_toggle_animation(arg_t);
+ bool ci_toggle_antialias(arg_t);
+ /* thumbnails mode */
+ bool ct_move_sel(arg_t);
++bool ct_move_file(arg_t);
++bool ct_rename_ordered(arg_t);
+ bool ct_reload_all(arg_t);
+ bool ct_scroll(arg_t);
+ bool ct_drag_mark_image(arg_t);
+@@ -90,6 +92,8 @@ bool ct_select(arg_t);
+ 
+ /* thumbnails mode */
+ #define t_move_sel { ct_move_sel, MODE_THUMB }
++#define t_move_file { ct_move_file, MODE_THUMB }
++#define t_rename_ordered { ct_rename_ordered, MODE_THUMB }
+ #define t_reload_all { ct_reload_all, MODE_THUMB }
+ #define t_scroll { ct_scroll, MODE_THUMB }
+ #define t_drag_mark_image { ct_drag_mark_image, MODE_THUMB }
+diff --git a/config.def.h b/config.def.h
+index ead1509..826ff78 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -143,6 +143,11 @@ static const keymap_t keys[] = {
+ 	{ 0,            XK_Up,            t_move_sel,           DIR_UP },
+ 	{ 0,            XK_l,             t_move_sel,           DIR_RIGHT },
+ 	{ 0,            XK_Right,         t_move_sel,           DIR_RIGHT },
++	{ 0,            XK_H,             t_move_file,          -1 },
++	{ 0,            XK_J,             t_move_file,          DIR_DOWN },
++	{ 0,            XK_K,             t_move_file,          DIR_UP },
++	{ 0,            XK_L,             t_move_file,          +1 },
++	{ ControlMask,  XK_r,             t_rename_ordered,     None },
+ 	{ 0,            XK_R,             t_reload_all,         None },
+ 
+ 	{ 0,            XK_n,             i_navigate,           +1 },
