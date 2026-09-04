@@ -18,6 +18,7 @@ dmidecode
 docker
 dunst
 erdtree
+fd
 ffmpegthumbnailer
 firefox
 foomatic-db-gutenprint-ppds
@@ -42,14 +43,13 @@ jdtls
 jless
 jq
 lazygit
-lf
 libnotify
 libsixel
 lua-language-server
 lxappearance
 lxappearance-obconf
 man-db
-mdcat
+mdcat-bin
 meson
 mpv
 neovim
@@ -74,6 +74,7 @@ playerctl
 polybar
 pyright
 qpdf
+resvg
 ripgrep
 ripgrep-all
 rofi
@@ -110,6 +111,7 @@ xorg-xev
 xorg-xinit
 xorg-xrandr
 xwallpaper
+yazi
 yt-dlp
 zola
 zoxide
