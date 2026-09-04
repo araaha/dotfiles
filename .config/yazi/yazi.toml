@@ -22,8 +22,8 @@ wrap            = "no"
 tab_size        = 2
 max_width       = 600
 max_height      = 900
-cache_dir       = ""
-image_delay     = 30
+cache_dir       = "~/.cache/yazi"
+image_delay     = 10
 image_filter    = "triangle"
 image_quality   = 75
 ueberzug_scale  = 1
@@ -31,7 +31,7 @@ ueberzug_offset = [ 0, 0, 0, 0 ]
 
 [opener]
 edit = [
-	{ run = "${EDITOR:-vi} %s", desc = "$EDITOR",      for = "unix", block = true },
+	{ run = "${EDITOR:-vi} %s", desc = "nvim",      for = "unix", block = true },
 	{ run = "code %s",          desc = "code",         for = "windows", orphan = true },
 	{ run = "code -w %s",       desc = "code (block)", for = "windows", block = true },
 ]
@@ -57,8 +57,11 @@ reveal = [
 	{ run = "clear; exiftool %s1; echo 'Press enter to exit'; read _", desc = "Show EXIF", for = "unix", block = true },
 ]
 extract = [
-	{ run = "ya pub extract --list %s", desc = "Extract here" },
+	{ run = 'ouch d -y "$@"', desc = "Extract here with ouch", for = "unix" },
 ]
+# extract = [
+# 	{ run = "ya pub extract --list %s", desc = "Extract here" },
+# ]
 download = [
 	{ run = "ya emit download --open %S", desc = "Download and open" },
 	{ run = "ya emit download %S",        desc = "Download" },
@@ -66,6 +69,9 @@ download = [
 trash = [
 	{ run = "ya pub trash-restore --list %S", desc = "Restore selected files" },
 	{ run = "ya pub trash-empty --list %S",   desc = "Empty trash bin" },
+]
+image = [
+    { run = "nsxiv -g 800x600+560+240 -b -a -sf %s", desc = "nsxiv" },
 ]
 
 [open]
@@ -75,7 +81,7 @@ rules = [
 	# Text
 	{ mime = "text/*", use = [ "edit", "reveal" ] },
 	# Image
-	{ mime = "image/*", use = [ "open", "reveal" ] },
+	{ mime = "image/*", use = [ "image", "open", "reveal" ] },
 	# Media
 	{ mime = "{audio,video}/*", use = [ "play", "reveal" ] },
 	# Code
@@ -186,6 +192,9 @@ previewers = [
 	{ mime = "null/*", run = "null" },
 	# Fallback
 	{ url = "*", run = "file" },
+]
+prepend_previewers = [
+    { mime = "application/{*zip,tar,bzip2,7z*,rar,xz,zstd,java-archive}", run  = "ouch" }
 ]
 
 [input]
