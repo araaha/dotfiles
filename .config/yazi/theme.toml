@@ -24,23 +24,23 @@ overall = {}
 # cwd = {}
 
 # Find
-find_keyword  = { fg = "yellow", bold = true, italic = true, underline = true }
+find_keyword  = { fg = "yellow", bold = true, italic = false, underline = false }
 find_position = { fg = "magenta", bg = "reset", bold = true, italic = true }
 
 # Symlink
 symlink_target = { italic = true, fg = "green" }
 
 # Marker
-marker_copied   = { fg = "lightgreen",  bg = "lightgreen" }
-marker_cut      = { fg = "lightred",    bg = "lightred" }
-marker_marked   = { fg = "lightcyan",   bg = "lightcyan" }
-marker_selected = { fg = "lightyellow", bg = "lightyellow" }
+marker_copied   = { bg = "yellow" }
+marker_cut      = { bg = "red" }
+marker_marked   = { bg = "magenta" }
+marker_selected = { bg = "white" }
 marker_symbol   = "│"
 
 # Count
-count_copied   = { fg = "white", bg = "green" }
-count_cut      = { fg = "white", bg = "red" }
-count_selected = { fg = "black", bg = "yellow" }
+count_copied   = { fg = "black", bg = "yellow" }
+count_cut      = { fg = "black", bg = "red" }
+count_selected = { fg = "black", bg = "white" }
 
 # Border
 border_style  = {
@@ -97,7 +97,7 @@ padding = { open = "█", close = "█" }
 # : Status bar {{{
 
 [status]
-overall   = {}
+overall   = {bg = "black"}
 sep_left  = { open = "", close = "" }
 sep_right = { open = "", close = "" }
 
@@ -234,7 +234,7 @@ hovered = { reversed = true, bold = true }
 
 [filetype]
 rules = [
-#shell
+    #Shell
     {mime = "text/shellscript", fg = "green", bold = true},
 	# Image
 	{ mime = "**/image/*", fg = "yellow" },
@@ -251,10 +251,11 @@ rules = [
 	{ url = "*.lua", fg = "yellow" },
 	# Virtual file system
 	{ url = "*/", is = "link", fg = "cyan", bold = true },
+	{ url = "*", is = "link", fg = "cyan", bold = false },
 	{ mime = "vfs/{absent,stale}", fg = "gray" },
 	# Special file
-	{ url = "*", is = "orphan", bg = "red" },
-	{ url = "*", is = "exec"  , fg = "green" },
+	{ url = "*", is = "orphan", fg = "black", bg = "lightred" },
+	{ url = "*", is = "exec"  , fg = "cyan", dim = true, bold = true },
 	# Dummy file
 	{ url = "*", is = "dummy", bg = "red" },
 	{ url = "*/", is = "dummy", bg = "red" },
@@ -604,7 +605,7 @@ exts = [
 conds = [
   { if = "link", text = "" },
   { if = "dir", text = "" },
-  { if = "exec", text = "" },
+  { if = "exec", text = "" },
   { if = "!dir", text = "" },
 ]
 # : }}}
