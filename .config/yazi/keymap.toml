@@ -135,6 +135,7 @@ keymap = [
 	{ on = [ "g", "h" ],       run = "cd ~",             desc = "Go to home" },
 	{ on = [ "g", "r" ],       run = "cd /",             desc = "Go to root" },
 	{ on = [ "g", "e" ],       run = "cd /etc",             desc = "Go to etc" },
+	{ on = [ "g", "u" ],       run = "cd /usr",             desc = "Go to etc" },
 	{ on = [ "g", "c" ],       run = "cd ~/.config",     desc = "Go to ~/.config" },
 	{ on = [ "g", "d" ],       run = "cd ~/dotfiles",     desc = "Go to dotfiles" },
 	{ on = [ "g", "p" ],       run = "cd ~/dotfiles-private",     desc = "Go to private dotfiles" },
@@ -532,3 +533,13 @@ desc = "Go back in jumplist"
 on = [ "<A-i>"]
 run = "plugin jumplist -- --direction=forward"
 desc = "Go forward in jumplist"
+
+[[mgr.prepend_keymap]]
+on   = "T"
+run  = "plugin omni-trash"
+desc = "Open Omni Trash"
+
+[[mgr.prepend_keymap]]
+on   = [ "s", "x" ]
+run  = [ "shell --orphan -- nsxiv -g 800x600+560+240 -b -a -sf %s", "toggle_all --state=off" ]
+desc = "Open Nsxiv"
