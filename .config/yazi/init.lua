@@ -18,6 +18,6 @@ require("statusline"):setup({
     mode_normal = "#7daea3",
     position = "#7daea3",
     separator_open = " ",
-    mode_select = "yellow",
+    mode_select = "white",
     mode_unset = "white"
 })
