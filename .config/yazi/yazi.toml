@@ -7,14 +7,14 @@
 ratio          = [ 1, 3, 2 ]
 sort_by        = "alphabetical"
 sort_sensitive = false
-sort_reverse 	 = false
+sort_reverse   = false
 sort_dir_first = true
 sort_translit  = false
 sort_fallback  = "alphabetical"
 linemode       = "none"
 show_hidden    = true
 show_symlink   = false
-scrolloff      = 5
+scrolloff      = 50
 mouse_events   = [ "click", "scroll", "drag" ]
 
 [preview]
@@ -31,15 +31,12 @@ ueberzug_offset = [ 0, 0, 0, 0 ]
 
 [opener]
 edit = [
-	{ run = "${EDITOR:-vi} %s", desc = "nvim",      for = "unix", block = true },
-	{ run = "code %s",          desc = "code",         for = "windows", orphan = true },
-	{ run = "code -w %s",       desc = "code (block)", for = "windows", block = true },
+	{ run = "nvim %s", desc = "nvim",      for = "unix", block = true },
 ]
 play = [
+    { run = "mpv %s", orphan = true, desc = "Play with mpv", for = "unix" },
 	{ run = "xdg-open %s1",    desc = "Play", for = "linux", orphan = true },
-	{ run = "open %s",         desc = "Play", for = "macos" },
 	{ run = 'start "" %s1',    desc = "Play", for = "windows", orphan = true },
-	{ run = "termux-open %s1", desc = "Play", for = "android" },
 	{ run = "mediainfo %s1; echo 'Press enter to exit'; read _", block = true, desc = "Show media info", for = "unix" },
 	{ run = "mediainfo %s1 & pause", block = true, desc = "Show media info", for = "windows" },
 ]
@@ -57,7 +54,7 @@ reveal = [
 	{ run = "clear; exiftool %s1; echo 'Press enter to exit'; read _", desc = "Show EXIF", for = "unix", block = true },
 ]
 extract = [
-	{ run = 'ouch d -y "$@"', desc = "Extract here with ouch", for = "unix" },
+	{ run = "ouch d -y %s", desc = "Extract here with ouch", for = "unix" },
 ]
 # extract = [
 # 	{ run = "ya pub extract --list %s", desc = "Extract here" },
@@ -71,7 +68,7 @@ trash = [
 	{ run = "ya pub trash-empty --list %S",   desc = "Empty trash bin" },
 ]
 image = [
-    { run = "nsxiv -g 800x600+560+240 -b -a -sf %s", desc = "nsxiv" },
+    { run = "nsxiv -g 800x600+560+240 -b -a -sf %s", orphan = true, desc = "nsxiv" },
 ]
 
 [open]
@@ -202,38 +199,38 @@ cursor_blink = false
 
 # cd
 cd_title  = "Change directory:"
-cd_origin = "top-center"
-cd_offset = [ 0, 2, 50, 3 ]
+cd_origin = "center"
+cd_offset = [ 0, -1, 50, 3 ]
 
 # create
 create_title  = [ "Create:", "Create (dir):" ]
-create_origin = "top-center"
-create_offset = [ 0, 2, 50, 3 ]
+create_origin = "center"
+create_offset = [ 0, -1, 50, 3 ]
 
 # rename
-rename_title  = "Rename:"
-rename_origin = "hovered"
-rename_offset = [ 0, 1, 50, 3 ]
+rename_title  = "RENAME"
+rename_origin = "center"
+rename_offset = [ 0, -1, 50, 3 ]
 
 # filter
 filter_title  = "Filter:"
-filter_origin = "top-center"
-filter_offset = [ 0, 2, 50, 3 ]
+filter_origin = "center"
+filter_offset = [ 0, -1, 50, 3 ]
 
 # find
 find_title  = [ "Find next:", "Find previous:" ]
-find_origin = "top-center"
-find_offset = [ 0, 2, 50, 3 ]
+find_origin = "center"
+find_offset = [ 0, -1, 50, 3 ]
 
 # search
 search_title  = "Search via {n}:"
-search_origin = "top-center"
-search_offset = [ 0, 2, 50, 3 ]
+search_origin = "center"
+search_offset = [ 0, -1, 50, 3 ]
 
 # shell
 shell_title  = [ "Shell:", "Shell (block):" ]
-shell_origin = "top-center"
-shell_offset = [ 0, 2, 50, 3 ]
+shell_origin = "center"
+shell_offset = [ 0, -1, 50, 3 ]
 
 [confirm]
 # trash
