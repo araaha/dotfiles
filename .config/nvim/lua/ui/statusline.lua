@@ -4,10 +4,10 @@ local modes = {
     ["no"] = "NORMAL",
     ["v"] = "VISUAL",
     ["V"] = "VISUAL LINE",
-    [""] = "VISUAL BLOCK",
+    ["\x16"] = "VISUAL BLOCK",
+    ["\x13"] = "SELECT BLOCK",
     ["s"] = "SELECT",
     ["S"] = "SELECT LINE",
-    [""] = "SELECT BLOCK",
     ["i"] = "INSERT",
     ["ic"] = "INSERT",
     ["R"] = "REPLACE",
@@ -70,7 +70,7 @@ local function update_mode_colors_foreground()
         mode_color = "%#StatuslineAccentF#"
     elseif current_mode == "i" or current_mode == "ic" or current_mode == "niI" then
         mode_color = "%#StatuslineInsertAccentF#"
-    elseif current_mode == "v" or current_mode == "V" or current_mode == "" then
+    elseif current_mode == "v" or current_mode == "V" or current_mode == "\x16" then
         mode_color = "%#StatuslineVisualAccentF#"
     elseif current_mode == "R" then
         mode_color = "%#StatuslineReplaceAccentF#"
@@ -89,7 +89,7 @@ local function update_mode_colors()
         mode_color = "%#StatuslineAccent#"
     elseif current_mode == "i" or current_mode == "ic" or current_mode == "niI" then
         mode_color = "%#StatuslineInsertAccent#"
-    elseif current_mode == "v" or current_mode == "V" or current_mode == "" then
+    elseif current_mode == "v" or current_mode == "V" or current_mode == "\x16" then
         mode_color = "%#StatuslineVisualAccent#"
     elseif current_mode == "R" then
         mode_color = "%#StatuslineReplaceAccent#"
