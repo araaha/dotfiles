@@ -60,7 +60,7 @@ map("n", "<leader>lf", function()
     vim.cmd.vsplit()
     vim.cmd.enew()
 
-    vim.fn.jobstart({ "lf", "-selection-path=" .. tmp }, {
+    vim.fn.jobstart({ "yazi", "--chooser-file", tmp }, {
         term = true,
         on_exit = function()
             vim.schedule(function()

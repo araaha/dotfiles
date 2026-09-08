@@ -1,3 +1,5 @@
 [filechooser]
-cmd         = /home/araaha/.local/share/xdg-filechooser/fzf-wrapper.sh
-default_dir = /home/araaha/Downloads
+cmd=/home/araaha/.config/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh
+default_dir=$HOME/Downloads
+open_mode = suggested
+save_mode = last
