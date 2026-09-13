@@ -40,18 +40,6 @@ function line_pre_redraw {
 }
 add-zle-hook-widget zle-line-pre-redraw line_pre_redraw
 
-function lf-prompt {
-    if [[ "$LF_LEVEL" == "1" ]]
-    then
-        echo -n "LF "
-    elif [ "$LF_LEVEL" -ge 1 ]
-    then
-        echo -n "LF $LF_LEVEL "
-    else
-        echo -n ""
-    fi
-}
-
 function generate_prompt {
     local TMP_RET=$?
     local prompt_segment
@@ -77,4 +65,4 @@ function generate_prompt {
 }
 
 # Set PS1 using the generate_prompt function
-PROMPT='$(generate_prompt)$(lf-prompt)'
+PROMPT='$(generate_prompt)'

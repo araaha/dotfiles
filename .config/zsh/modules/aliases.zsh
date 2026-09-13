@@ -14,7 +14,7 @@ alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %
 alias gp="git push"
 alias grep="grep --color=always"
 alias gs="git status"
-alias lf="yazi"
+alias lf="[ -n '$YAZI_LEVEL' ] && exit || yazi"
 alias lg="lazygit"
 alias ls="ls --color=always"
 alias lsusb="sudo cyme --hide-buses -b icon -b name -b speed -t"
