@@ -8,6 +8,7 @@ bluez-utils
 bottom
 bun
 calcurse
+chawan
 clang
 cronie
 cups
@@ -45,15 +46,14 @@ jq
 lazygit
 libnotify
 libsixel
+light
 lua-language-server
 lxappearance
 lxappearance-obconf
 man-db
-mdcat-bin
 meson
 mpv
 neovim
-nim
 ninja
 noto-fonts-cjk
 noto-fonts-emoji
@@ -82,6 +82,7 @@ rofi-calc
 ruff
 rust
 scrot
+shellcheck-bin
 sudo
 terminus-font
 tickrs
@@ -91,7 +92,7 @@ ttf-arphic-uming
 ttf-dejavu
 ttf-liberation
 typst
-ueberzug
+ueberzugpp
 unclutter
 unrar
 unzip
