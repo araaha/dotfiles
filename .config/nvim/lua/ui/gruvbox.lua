@@ -468,6 +468,7 @@ local groups = {
     ["@module"] = { link = "GruvboxBlue" },
     ["@function.builtin.lua"] = { link = "GruvboxGreenBold" },
     ["@lsp.type.comment.lua"] = { link = "None" },
+    ["@lsp.type.comment.cpp"] = { link = "None" },
 
     FzfLuaBufLineNr = { link = "GruvboxBlue" },
 
