@@ -9,6 +9,7 @@ bottom
 bun
 calcurse
 chawan
+chrony
 clang
 cronie
 cups
