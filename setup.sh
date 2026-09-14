@@ -140,15 +140,6 @@ configure_grub() {
     sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 
-install_crontab() {
-    # Replace the current user crontab with these jobs.
-    crontab - <<'JOBS'
-*/10 * * * * "$HOME/scripts/notify-event.sh"
-*/5 * * * * "$HOME/scripts/bluetooth-battery.sh"
-*/5 * * * * "$HOME/scripts/battery.sh"
-JOBS
-}
-
 configure_services() {
     local service
     if [[ "$ID" == arch ]]; then
@@ -175,7 +166,6 @@ main() {
     configure_user
     configure_sudo
     configure_grub
-    install_crontab
     configure_services
     refresh_caches
     echo "Setup complete. Log out and back in for your shell and groups to take effect."

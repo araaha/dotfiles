@@ -3,6 +3,8 @@ dinitctl setenv DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS &
 light -S 20 &
 ./.config/polybar/launch.sh &
 ./scripts/bluetooth-autoconnect.sh &
+./scripts/bluetooth-battery.sh &
+./scripts/battery.sh &
 picom -b &
 xwallpaper --stretch "$XDG_DATA_HOME/Wallpapers/Pacman.png" &
 xset s off -dpms &
