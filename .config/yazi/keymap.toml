@@ -136,6 +136,7 @@ keymap = [
 	{ on = [ "g", "r" ],       run = "cd /",             desc = "Go to root" },
 	{ on = [ "g", "e" ],       run = "cd /etc",             desc = "Go to etc" },
 	{ on = [ "g", "u" ],       run = "cd /usr",             desc = "Go to etc" },
+	{ on = [ "g", "s" ],       run = "cd ~/scripts",             desc = "Go to scripts" },
 	{ on = [ "g", "c" ],       run = "cd ~/.config",     desc = "Go to ~/.config" },
 	{ on = [ "g", "d" ],       run = "cd ~/dotfiles",     desc = "Go to dotfiles" },
 	{ on = [ "g", "p" ],       run = "cd ~/dotfiles-private",     desc = "Go to private dotfiles" },
