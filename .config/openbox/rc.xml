@@ -204,13 +204,13 @@
     <!-- Increase backlight 1% -->
     <keybind key="XF86MonBrightnessUp">
       <action name="Execute">
-        <command>~/dotfiles/scripts/backlight-inc.sh</command>
+        <command>~/dotfiles/scripts/backlight.sh --inc</command>
       </action>
     </keybind>
     <!-- Decrease backlight 1% -->
     <keybind key="XF86MonBrightnessDown">
       <action name="Execute">
-        <command>~/dotfiles/scripts/backlight-dec.sh</command>
+        <command>~/dotfiles/scripts/backlight.sh --dec</command>
       </action>
     </keybind>
     <keybind key="XF86AudioPrev">
