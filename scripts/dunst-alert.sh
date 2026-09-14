@@ -1,3 +1,3 @@
 #!/bin/bash
 
-mpv /home/araaha/scripts/out.mp3
+mpv ./out.mp3
