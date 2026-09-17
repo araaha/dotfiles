@@ -7,9 +7,9 @@ bluez
 bluez-utils
 bottom
 bun
-calcurse
 chawan
 chrony
+chrony-dinit
 clang
 cronie
 cups
@@ -25,6 +25,7 @@ ffmpegthumbnailer
 firefox
 foomatic-db-gutenprint-ppds
 fzf
+gdu
 git
 gnome-epub-thumbnailer
 gnome-keyring
@@ -100,13 +101,13 @@ unzip
 upower
 usbutils
 uv
+vulkan-radeon
 wget
 wireless_tools
 xcape
 xclip
 xcolor
 xdg-desktop-portal
-xf86-video-amdgpu
 xorg-server
 xorg-xdpyinfo
 xorg-xev

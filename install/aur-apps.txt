@@ -4,12 +4,10 @@ cyme-bin
 djvu2pdf
 downgrade
 dragon-drop
-gdu-bin
 lazydocker-bin
 localsend-bin
 mdcat-bin
 megacmd-bin
-pulseaudio-ctl
 rofi-greenclip
 sioyek-dev
 tdrop
