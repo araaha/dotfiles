@@ -145,7 +145,7 @@ configure_services() {
     if [[ "$ID" == arch ]]; then
         sudo systemctl enable --now cronie cups bluetooth iwd
     else
-        for service in cronie cupsd bluetoothd iwd; do
+        for service in cronie cupsd bluetoothd iwd chronyd chrony; do
             sudo dinitctl enable "$service"
         done
     fi
@@ -168,7 +168,7 @@ main() {
     configure_grub
     configure_services
     refresh_caches
-    echo "Setup complete. Log out and back in for your shell and groups to take effect."
+    echo "Setup complete. Reboot."
 }
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
