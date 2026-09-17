@@ -1,0 +1,447 @@
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -8,18 +8,20 @@
+ lib_fonts_1 = -lXft -lfontconfig
+ lib_exif_0 =
+ lib_exif_1 = -lexif
++lib_xrender_0 =
++lib_xrender_1 = -lXrender
+ 
+ nsxiv_cppflags = -D_XOPEN_SOURCE=700 \
+   -DHAVE_LIBEXIF=$(HAVE_LIBEXIF) -DHAVE_LIBFONTS=$(HAVE_LIBFONTS) \
+-  -DHAVE_INOTIFY=$(HAVE_INOTIFY) $(inc_fonts_$(HAVE_LIBFONTS)) \
++  -DHAVE_INOTIFY=$(HAVE_INOTIFY) -DHAVE_XRENDER=$(HAVE_XRENDER) $(inc_fonts_$(HAVE_LIBFONTS)) \
+   $(CPPFLAGS)
+ 
+ nsxiv_ldlibs = -lImlib2 -lX11 \
+-  $(lib_exif_$(HAVE_LIBEXIF)) $(lib_fonts_$(HAVE_LIBFONTS)) \
++  $(lib_exif_$(HAVE_LIBEXIF)) $(lib_fonts_$(HAVE_LIBFONTS)) $(lib_xrender_$(HAVE_XRENDER)) \
+   $(LDLIBS)
+ 
+ objs = autoreload.o commands.o image.o main.o options.o \
+-  thumbs.o util.o window.o
++  thumbs.o util.o window.o render.o
+ 
+ .SUFFIXES:
+ .SUFFIXES: .c .o
+@@ -105,4 +107,3 @@
+ 	rm -f $(DESTDIR)$(PREFIX)/share/applications/nsxiv.desktop
+ 	@echo "REMOVE share/nsxiv/"
+ 	rm -rf $(DESTDIR)$(EGPREFIX)
+-
+diff --git a/README.md b/README.md
+--- a/README.md
++++ b/README.md
+@@ -77,6 +77,8 @@
+     Disabled via `HAVE_LIBFONTS=0`.
+   * `libexif`: Used for auto-orientation and exif thumbnails.
+     Disable via `HAVE_LIBEXIF=0`.
++  * `libXrender`: Used for cached, server-side image scaling, accelerated by
++    the GPU when supported by the X server. Disable via `HAVE_XRENDER=0`.
+ 
+ Please make sure to install the corresponding development packages in case that
+ you want to build nsxiv on a distribution with separate runtime and development
+@@ -105,6 +107,15 @@
+ will disable `libexif` support. Alternatively they can be disabled via editing
+ `config.mk`. `OPT_DEP_DEFAULT=0` can be used to disable all optional
+ dependencies.
++
++With XRender enabled, static images are uploaded once and reused for zooming
++and panning. Anti-aliasing stays enabled during interaction; filtered smaller
++versions are cached as needed for zooming out. Initial uploads and the first
++visit to a smaller resolution can take longer. Interpolation may differ from
++Imlib2's software renderer. Animated images, images over 48 megapixels or
++32767 pixels on either side, unavailable XRender support, and allocation
++failures use the software renderer. To select software rendering at runtime,
++launch with `NSXIV_NO_XRENDER=1 nsxiv ...`.
+ 
+ Installing nsxiv:
+ 
+diff --git a/config.mk b/config.mk
+--- a/config.mk
++++ b/config.mk
+@@ -15,6 +15,7 @@
+ # optional dependencies, see README for more info
+ HAVE_LIBFONTS = $(OPT_DEP_DEFAULT)
+ HAVE_LIBEXIF  = $(OPT_DEP_DEFAULT)
++HAVE_XRENDER  = $(OPT_DEP_DEFAULT)
+ 
+ # CFLAGS, any additional compiler flags goes here
+ CFLAGS = -Wall -pedantic -O2 -DNDEBUG
+diff --git a/image.c b/image.c
+--- a/image.c
++++ b/image.c
+@@ -64,6 +64,7 @@
+ 	imlib_set_cache_size(calc_cache_size());
+ 
+ 	img->im = NULL;
++	img->accel = NULL;
+ 	img->win = win;
+ 	img->scalemode = options->scalemode;
+ 	img->zoom = options->zoom;
+@@ -331,6 +332,7 @@
+ {
+ 	unsigned int i;
+ 
++	img_free_accel(img);
+ 	if (img->multi.cnt > 0) {
+ 		const char *curpath = NULL;
+ 		for (i = 0; i < img->multi.cnt; i++)
+@@ -469,6 +471,11 @@
+ 		dh = MAX(img->h * img->zoom, 1);
+ 	}
+ 
++	if (img_render_accel(img, sx, sy, sw, sh, dx, dy, dw, dh)) {
++		img->dirty = false;
++		return;
++	}
++
+ 	win_clear(win);
+ 
+ 	imlib_context_set_image(img->im);
+@@ -539,24 +546,20 @@
+ 
+ bool img_zoom_to(img_t *img, float z)
+ {
+-	int x, y;
+-	if (ZOOM_MIN <= z && z <= ZOOM_MAX) {
+-		win_cursor_pos(img->win, &x, &y);
+-		if (x < 0 || (unsigned int)x >= img->win->w ||
+-		    y < 0 || (unsigned int)y >= img->win->h)
+-		{
+-			x = img->win->w / 2;
+-			y = img->win->h / 2;
+-		}
+-		img->x = x - (x - img->x) * z / img->zoom;
+-		img->y = y - (y - img->y) * z / img->zoom;
+-		img->zoom = z;
+-		img->scalemode = SCALE_ZOOM;
+-		img->dirty = img->checkpan = true;
+-		return true;
+-	} else {
+-		return false;
+-	}
++	float oz, cx, cy;
++
++	if (z < ZOOM_MIN || z > ZOOM_MAX)
++		return false;
++
++	oz = img->zoom;
++	cx = img->win->w / 2.0f;
++	cy = img->win->h / 2.0f;
++	img->x = cx - (cx - img->x) * z / oz;
++	img->y = cy - (cy - img->y) * z / oz;
++	img->zoom = z;
++	img->scalemode = SCALE_ZOOM;
++	img->dirty = img->checkpan = true;
++	return true;
+ }
+ 
+ bool img_zoom(img_t *img, int d)
+@@ -663,6 +666,7 @@
+ 	unsigned int i, tmp;
+ 	float ox, oy;
+ 
++	img_invalidate_accel(img);
+ 	imlib_context_set_image(img->im);
+ 	imlib_image_orientate(d);
+ 
+@@ -701,6 +705,7 @@
+ 	if (d < 0 || d >= ARRLEN(imlib_flip_op))
+ 		return;
+ 
++	img_invalidate_accel(img);
+ 	imlib_context_set_image(img->im);
+ 	imlib_flip_op[d]();
+ 
+diff --git a/nsxiv.h b/nsxiv.h
+--- a/nsxiv.h
++++ b/nsxiv.h
+@@ -188,6 +188,7 @@
+ } multi_img_t;
+ 
+ struct img {
++	struct img_accel *accel;
+ 	Imlib_Image im;
+ 	int w;
+ 	int h;
+@@ -223,6 +224,9 @@
+ CLEANUP void img_free(Imlib_Image, bool);
+ CLEANUP void img_close(img_t*, bool);
+ void img_render(img_t*);
++bool img_render_accel(img_t*, int, int, int, int, int, int, int, int);
++void img_free_accel(img_t*);
++void img_invalidate_accel(img_t*);
+ bool img_fit_win(img_t*, scalemode_t);
+ bool img_zoom(img_t*, int);
+ bool img_zoom_to(img_t*, float);
+diff --git a/render.c b/render.c
+new file mode 100644
+--- /dev/null
++++ b/render.c
+@@ -0,0 +1,264 @@
++/* XRender image scaling. The X server may accelerate these operations on the GPU. */
++#include "nsxiv.h"
++#include <stdint.h>
++#include <stdlib.h>
++#include <string.h>
++
++#if HAVE_XRENDER
++#include <X11/extensions/Xrender.h>
++
++enum { LEVELS = 16, MAX_PIXELS = 48 * 1024 * 1024 };
++
++typedef struct {
++	Pixmap pixmap;
++	Picture picture;
++	int w, h;
++} render_level_t;
++
++struct img_accel {
++	render_level_t levels[LEVELS];
++	render_level_t checker;
++	Imlib_Image source;
++	int w, h, gamma, brightness, contrast;
++	bool failed, alpha;
++};
++
++static int render_error;
++
++static int catch_error(Display *dpy, XErrorEvent *event)
++{
++	(void)dpy;
++	(void)event;
++	render_error = 1;
++	return 0;
++}
++
++void img_invalidate_accel(img_t *img)
++{
++	unsigned int i;
++	struct img_accel *a = img->accel;
++
++	if (a == NULL)
++		return;
++	for (i = 0; i < LEVELS; i++) {
++		if (a->levels[i].picture)
++			XRenderFreePicture(img->win->env.dpy, a->levels[i].picture);
++		if (a->levels[i].pixmap)
++			XFreePixmap(img->win->env.dpy, a->levels[i].pixmap);
++	}
++	memset(a->levels, 0, sizeof(a->levels));
++	if (a->checker.picture)
++		XRenderFreePicture(img->win->env.dpy, a->checker.picture);
++	if (a->checker.pixmap)
++		XFreePixmap(img->win->env.dpy, a->checker.pixmap);
++	memset(&a->checker, 0, sizeof(a->checker));
++	a->source = NULL;
++}
++
++void img_free_accel(img_t *img)
++{
++	img_invalidate_accel(img);
++	free(img->accel);
++	img->accel = NULL;
++}
++
++static bool available(img_t *img)
++{
++	Display *dpy = img->win->env.dpy;
++	XFilters *filters;
++	int event, error, major, minor, i;
++	bool bilinear = false;
++	const char *disable = getenv("NSXIV_NO_XRENDER");
++
++	if (disable != NULL && *disable && strcmp(disable, "0") != 0)
++		return false;
++	if (!XRenderQueryExtension(dpy, &event, &error) ||
++	    !XRenderQueryVersion(dpy, &major, &minor) || (major == 0 && minor < 10))
++		return false;
++	if (XRenderFindStandardFormat(dpy, PictStandardARGB32) == NULL ||
++	    XRenderFindVisualFormat(dpy, img->win->env.vis) == NULL)
++		return false;
++	filters = XRenderQueryFilters(dpy, img->win->xwin);
++	if (filters == NULL)
++		return false;
++	for (i = 0; i < filters->nfilter; i++)
++		bilinear |= strcmp(filters->filter[i], FilterBilinear) == 0;
++	XFree(filters);
++	return bilinear;
++}
++
++static bool upload(img_t *img, unsigned int level)
++{
++	win_t *win = img->win;
++	Display *dpy = win->env.dpy;
++	struct img_accel *a = img->accel;
++	render_level_t *l = &a->levels[level];
++	Imlib_Image scaled = NULL;
++	const uint32_t *pixels;
++	XImage *image;
++	XRenderPictureAttributes attr = { .repeat = RepeatPad };
++	XRenderPictFormat *format = XRenderFindStandardFormat(dpy, PictStandardARGB32);
++	uint8_t red[256], green[256], blue[256], alpha[256];
++	unsigned int x, y, r, g, b, opacity;
++	uint32_t pixel;
++	GC gc;
++	int (*previous)(Display*, XErrorEvent*);
++
++	l->w = MAX(1, img->w >> level);
++	l->h = MAX(1, img->h >> level);
++	imlib_context_set_image(img->im);
++	if (level != 0) {
++		/* Cache filtered reductions so zooming out does not alias fine detail. */
++		imlib_context_set_anti_alias(1);
++		imlib_context_set_color_modifier(NULL);
++		scaled = imlib_create_cropped_scaled_image(0, 0, img->w, img->h, l->w, l->h);
++		imlib_context_set_color_modifier(img->cmod);
++		if (scaled == NULL)
++			return false;
++		imlib_context_set_image(scaled);
++	}
++	pixels = imlib_image_get_data_for_reading_only();
++	image = XCreateImage(dpy, win->env.vis, 32, ZPixmap, 0, NULL, l->w, l->h, 32, 0);
++	if (image == NULL || pixels == NULL) {
++		if (image != NULL)
++			XDestroyImage(image);
++		if (scaled != NULL)
++			imlib_free_image();
++		imlib_context_set_image(img->im);
++		return false;
++	}
++	image->data = malloc((size_t)image->bytes_per_line * l->h);
++	if (image->data == NULL) {
++		XDestroyImage(image);
++		if (scaled != NULL)
++			imlib_free_image();
++		imlib_context_set_image(img->im);
++		return false;
++	}
++	imlib_context_set_color_modifier(img->cmod);
++	imlib_get_color_modifier_tables(red, green, blue, alpha);
++	for (y = 0; y < (unsigned int)l->h; y++) {
++		for (x = 0; x < (unsigned int)l->w; x++) {
++			pixel = pixels[(size_t)y * l->w + x];
++			opacity = a->alpha ? alpha[pixel >> 24] : 255;
++			r = (red[(pixel >> 16) & 255] * opacity + 127) / 255;
++			g = (green[(pixel >> 8) & 255] * opacity + 127) / 255;
++			b = (blue[pixel & 255] * opacity + 127) / 255;
++			XPutPixel(image, x, y, (opacity << 24) | (r << 16) | (g << 8) | b);
++		}
++	}
++	if (scaled != NULL)
++		imlib_free_image();
++	imlib_context_set_image(img->im);
++
++	/* Resource exhaustion must fall back instead of terminating the viewer. */
++	XSync(dpy, False);
++	render_error = 0;
++	previous = XSetErrorHandler(catch_error);
++	l->pixmap = XCreatePixmap(dpy, win->xwin, l->w, l->h, 32);
++	l->picture = XRenderCreatePicture(dpy, l->pixmap, format, CPRepeat, &attr);
++	gc = XCreateGC(dpy, l->pixmap, 0, NULL);
++	XPutImage(dpy, l->pixmap, gc, image, 0, 0, 0, 0, l->w, l->h);
++	XFreeGC(dpy, gc);
++	XDestroyImage(image);
++	if (!a->checker.picture) {
++		XRenderColor dark = {0x6666, 0x6666, 0x6666, 0xffff};
++		XRenderColor light = {0x9999, 0x9999, 0x9999, 0xffff};
++		attr.repeat = RepeatNormal;
++		a->checker.pixmap = XCreatePixmap(dpy, win->xwin, 16, 16, 32);
++		a->checker.picture = XRenderCreatePicture(dpy, a->checker.pixmap, format, CPRepeat, &attr);
++		XRenderFillRectangle(dpy, PictOpSrc, a->checker.picture, &dark, 0, 0, 16, 16);
++		XRenderFillRectangle(dpy, PictOpSrc, a->checker.picture, &light, 8, 0, 8, 8);
++		XRenderFillRectangle(dpy, PictOpSrc, a->checker.picture, &light, 0, 8, 8, 8);
++	}
++	XSync(dpy, False);
++	if (render_error) {
++		img_invalidate_accel(img);
++		XSync(dpy, False);
++	}
++	XSetErrorHandler(previous);
++	return !render_error;
++}
++
++bool img_render_accel(img_t *img, int sx, int sy, int sw, int sh,
++                      int dx, int dy, int dw, int dh)
++{
++	win_t *win = img->win;
++	Display *dpy = win->env.dpy;
++	struct img_accel *a;
++	render_level_t *l;
++	Picture dest;
++	XTransform transform = {{{0}}};
++	int width, height;
++	unsigned int level = 0;
++
++	if (img->w <= 0 || img->h <= 0 || img->w > 32767 || img->h > 32767 ||
++	    (int64_t)img->w * img->h > MAX_PIXELS || img->multi.cnt > 1 ||
++	    sw <= 0 || sh <= 0 || dw <= 0 || dh <= 0)
++		return false;
++	if (img->accel == NULL) {
++		img->accel = calloc(1, sizeof(*img->accel));
++		if (img->accel == NULL)
++			return false;
++		img->accel->failed = !available(img);
++	}
++	a = img->accel;
++	if (a->failed)
++		return false;
++	if (a->source != img->im || a->w != img->w || a->h != img->h ||
++	    a->gamma != img->gamma || a->brightness != img->brightness ||
++	    a->contrast != img->contrast)
++	{
++		img_invalidate_accel(img);
++		a->source = img->im;
++		a->w = img->w;
++		a->h = img->h;
++		a->gamma = img->gamma;
++		a->brightness = img->brightness;
++		a->contrast = img->contrast;
++		imlib_context_set_image(img->im);
++		a->alpha = imlib_image_has_alpha();
++	}
++	while (img->anti_alias && level + 1 < LEVELS &&
++	       img->zoom * (1U << (level + 1)) <= 1.0 &&
++	       (img->w >> (level + 1)) > 0 && (img->h >> (level + 1)) > 0)
++		level++;
++	l = &a->levels[level];
++	if (!l->picture && !upload(img, level)) {
++		a->failed = true;
++		return false;
++	}
++	width = MIN(dw, (int)win->w - dx);
++	height = MIN(dh, (int)win->h - dy + (win->bar.top ? (int)win->bar.h : 0));
++	if (width <= 0 || height <= 0)
++		return false;
++
++	win_clear(win);
++	dest = XRenderCreatePicture(dpy, win->buf.pm,
++	                           XRenderFindVisualFormat(dpy, win->env.vis), 0, NULL);
++	if (a->alpha && img->alpha_layer)
++		XRenderComposite(dpy, PictOpSrc, a->checker.picture, None, dest,
++		                 0, 0, 0, 0, dx, dy, width, height);
++	transform.matrix[0][0] = XDoubleToFixed((double)sw * l->w / img->w / dw);
++	transform.matrix[1][1] = XDoubleToFixed((double)sh * l->h / img->h / dh);
++	transform.matrix[0][2] = XDoubleToFixed((double)sx * l->w / img->w);
++	transform.matrix[1][2] = XDoubleToFixed((double)sy * l->h / img->h);
++	transform.matrix[2][2] = XDoubleToFixed(1);
++	XRenderSetPictureTransform(dpy, l->picture, &transform);
++	XRenderSetPictureFilter(dpy, l->picture, img->anti_alias ? FilterBilinear : FilterNearest, NULL, 0);
++	XRenderComposite(dpy, PictOpOver, l->picture, None, dest, 0, 0, 0, 0, dx, dy, width, height);
++	XRenderFreePicture(dpy, dest);
++	return true;
++}
++
++#else
++bool img_render_accel(img_t *img, int sx, int sy, int sw, int sh,
++                      int dx, int dy, int dw, int dh)
++{
++	(void)img; (void)sx; (void)sy; (void)sw; (void)sh;
++	(void)dx; (void)dy; (void)dw; (void)dh;
++	return false;
++}
++void img_invalidate_accel(img_t *img) { (void)img; }
++void img_free_accel(img_t *img) { (void)img; }
++#endif
