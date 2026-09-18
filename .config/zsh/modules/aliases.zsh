@@ -26,6 +26,6 @@ alias nv="nvim"
 alias packages="ls -lt /var/lib/pacman/local/ --color=never | head -n 30 | tail -n +2 | tac | awk '{ print \$9}'"
 alias ticker='ticker --sort=user --config="$HOME/.config/.ticker.yaml"'
 alias tree="tree --noreport -C"
-alias ssh='ssh -F "$SSH_HOME"/config -o UserKnownHostsFile="$SSH_HOME"/known_hosts'
+alias ssh='ssh -F "$SSH_HOME"/config -i "$SSH_HOME"/id_ed25519 -o UserKnownHostsFile="$SSH_HOME"/known_hosts'
 alias reboot="loginctl reboot"
 alias shutdown="loginctl poweroff"
