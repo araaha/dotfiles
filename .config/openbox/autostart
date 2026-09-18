@@ -1,7 +1,8 @@
 dbus-daemon --session --nofork --nopidfile --address=unix:path=/run/user/1000/bus &
 dinitctl setenv DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS &
+dinit &
 light -S 20 &
-./.config/polybar/launch.sh &
+polybar --quiet main &
 ./scripts/bluetooth-autoconnect.sh &
 ./scripts/bluetooth-battery.sh &
 ./scripts/battery.sh &
