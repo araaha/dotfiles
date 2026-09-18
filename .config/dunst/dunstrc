@@ -23,7 +23,7 @@
     #separator_height = 4
 
     ignore_dbusclose = true
-    timeout = 3
+    timeout = 5
 
 [urgency_low]
     highlight = "#83a598"
