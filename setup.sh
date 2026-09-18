@@ -2,47 +2,53 @@
 set -euo pipefail
 
 DOTS="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-staging=""
+TEMP_DIR=""
+OS_ID=""
+
+readonly -a REQUIRED_COMMANDS=(yay git)
+readonly -a DINIT_SERVICES=(cronie cupsd bluetoothd iwd chronyd chrony)
+
+die() {
+    echo "error: $*" >&2
+    exit 1
+}
+
+require_command() {
+    command -v "$1" >/dev/null || die "Required command missing: $1"
+}
 
 cleanup() {
-    if [[ -n "$staging" ]]; then
-        rm -rf -- "$staging"
-    fi
+    [[ -z "$TEMP_DIR" ]] || rm -rf -- "$TEMP_DIR"
 }
 
 check_prerequisites() {
     local command manifest
-    if (( EUID == 0 )); then
-        echo "Run as your ordinary user, not root." >&2
-        exit 1
-    fi
-    for command in yay sudo git unzip; do
-        command -v "$command" >/dev/null || { echo "Required command missing: $command" >&2; exit 1; }
+    (( EUID != 0 )) || die "Run as your ordinary user, not root."
+
+    for command in "${REQUIRED_COMMANDS[@]}"; do
+        require_command "$command"
     done
 
-    # Check the supported platform before changing anything.
     # shellcheck source=/dev/null
     source /etc/os-release
-    case "$ID" in arch|artix) ;; *) echo "Only Arch and Artix are supported." >&2; exit 1 ;; esac
-
-    if [[ "$ID" == artix ]]; then
-        command -v dinitctl >/dev/null || { echo "Artix setup requires dinit." >&2; exit 1; }
-    fi
+    OS_ID=${ID:-}
+    case "$OS_ID" in
+        arch) ;;
+        artix) require_command dinitctl ;;
+        *) die "Only Arch and Artix are supported." ;;
+    esac
 
     for manifest in arch-apps.txt aur-apps.txt; do
-        test -s "$DOTS/install/$manifest" || { echo "Missing manifest: $manifest" >&2; exit 1; }
+        [[ -s "$DOTS/install/$manifest" ]] || die "Missing manifest: $manifest"
     done
 }
 
 install_packages() {
-    local manifest
     yay -Syu
-    for manifest in arch-apps.txt aur-apps.txt; do
-        yay --needed -S - < "$DOTS/install/$manifest"
-    done
+    yay --needed -S - < <(cat "$DOTS/install/arch-apps.txt" "$DOTS/install/aur-apps.txt")
 }
 
-link_item() {
+replace_with_link() {
     local source=$1 target=$2
     if [[ -L "$target" ]] && [[ "$(readlink -f -- "$target")" == "$(readlink -f -- "$source")" ]]; then
         return
@@ -51,7 +57,7 @@ link_item() {
     ln -s -- "$source" "$target"
 }
 
-link_dotfiles() {
+install_dotfiles() {
     local directory source
     # Replace directory symlinks before installing children, so writes stay outside the repo.
     for directory in "$HOME/.config" "$HOME/.local" "$HOME/.local/share"; do
@@ -61,26 +67,27 @@ link_dotfiles() {
         mkdir -p "$directory"
     done
     mkdir -p "$HOME/Downloads" "$HOME/Books" "$HOME/Screenshots"
-    link_item "$DOTS/scripts" "$HOME/scripts"
+    replace_with_link "$DOTS/scripts" "$HOME/scripts"
     shopt -s dotglob nullglob
     for source in "$DOTS/.config/"*; do
-        link_item "$source" "$HOME/.config/${source##*/}"
+        replace_with_link "$source" "$HOME/.config/${source##*/}"
     done
     for source in "$DOTS/.local/share/"*; do
         case "${source##*/}" in themes|icons) continue ;; esac
-        link_item "$source" "$HOME/.local/share/${source##*/}"
+        replace_with_link "$source" "$HOME/.local/share/${source##*/}"
     done
-    link_item "$DOTS/.local/bin" "$HOME/.local/bin"
+    replace_with_link "$DOTS/.local/bin" "$HOME/.local/bin"
 }
 
-install_themes_and_icons() {
+install_themes() {
     local archive category destination source target
     # Stage downloaded assets before replacing any existing theme/icon directories.
-    staging=$(mktemp -d)
-    for archive in "$DOTS/.local/share/themes/"*.zip; do
-        unzip -q -o "$archive" -d "$staging/themes"
+    TEMP_DIR=$(mktemp -d)
+    mkdir -p "$TEMP_DIR/themes"
+    for archive in "$DOTS/.local/share/themes/"*.tar.gz; do
+        tar -xzf "$archive" -C "$TEMP_DIR/themes"
     done
-    git clone --depth 1 https://github.com/SylEleuth/gruvbox-plus-icon-pack "$staging/icons"
+    git clone --depth 1 https://github.com/SylEleuth/gruvbox-plus-icon-pack "$TEMP_DIR/icons"
     for category in themes icons; do
         destination="$HOME/.local/share/$category"
         if [[ -L "$destination" || ( -e "$destination" && ! -d "$destination" ) ]]; then
@@ -88,10 +95,10 @@ install_themes_and_icons() {
         fi
         mkdir -p "$destination"
     done
-    for source in "$staging/themes/"* "$staging/icons/Gruvbox-Plus-Dark"; do
-        [[ -e "$source" ]] || { echo "Missing staged asset: $source" >&2; exit 1; }
+    for source in "$TEMP_DIR/themes/"* "$TEMP_DIR/icons/Gruvbox-Plus-Dark"; do
+        [[ -e "$source" ]] || die "Missing staged asset: $source"
         category=themes
-        [[ "$source" == "$staging/icons/"* ]] && category=icons
+        [[ "$source" == "$TEMP_DIR/icons/"* ]] && category=icons
         target="$HOME/.local/share/$category/${source##*/}"
         rm -rf -- "$target"
         cp -a -- "$source" "$target"
@@ -99,7 +106,6 @@ install_themes_and_icons() {
 }
 
 install_system_files() {
-    local directory
     for directory in etc usr; do
         sudo cp -r --remove-destination -- "$DOTS/$directory/." "/$directory/"
     done
@@ -109,7 +115,7 @@ configure_user() {
     local username shell
     username=$(id -un)
     shell=$(command -v zsh)
-    grep -Fxq "$shell" /etc/shells || { echo "zsh is not listed in /etc/shells" >&2; exit 1; }
+    grep -Fxq "$shell" /etc/shells || die "zsh is not listed in /etc/shells"
     sudo usermod -aG video,input "$username"
     sudo chsh -s "$shell" "$username"
 }
@@ -142,13 +148,14 @@ configure_grub() {
 
 configure_services() {
     local service
-    if [[ "$ID" == arch ]]; then
+    if [[ "$OS_ID" == arch ]]; then
         sudo systemctl enable --now cronie cups bluetooth iwd
-    else
-        for service in cronie cupsd bluetoothd iwd chronyd chrony; do
-            sudo dinitctl enable "$service"
-        done
+        return
     fi
+
+    for service in "${DINIT_SERVICES[@]}"; do
+        sudo dinitctl enable "$service"
+    done
 }
 
 refresh_caches() {
@@ -160,8 +167,8 @@ main() {
     trap cleanup EXIT
     check_prerequisites
     install_packages
-    link_dotfiles
-    install_themes_and_icons
+    install_dotfiles
+    install_themes
     install_system_files
     configure_user
     configure_sudo
