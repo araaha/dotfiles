@@ -2,7 +2,7 @@ vim.lsp.enable({
     "gopls",
     "bashls",
     "ruff",
-    "pyright",
+    "ty",
     "lua_ls",
     "jdtls",
     "clangd"
