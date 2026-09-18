@@ -20,3 +20,4 @@ warpd
 webtorrent-cli
 xdg-desktop-portal-termfilechooser-nosystemd-git
 zen-browser-bin
+jid-bin
