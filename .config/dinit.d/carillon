@@ -1,0 +1,6 @@
+type = process
+command = /home/araaha/.local/bin/carillon watch
+restart = true
+restart-delay = 1
+restart-limit-count = 0
+log-type = none
