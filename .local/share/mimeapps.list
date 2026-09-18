@@ -1,7 +1,7 @@
 [Default Applications]
 text/html=cha;
 application/x-shellscript=nvim.desktop;
-inode/directory=lf.desktop;
+inode/directory=yazi.desktop;
 application/eps=org.pwmt.zathura-ps.desktop;
 application/epub+zip=sioyek.desktop;
 application/illustrator=org.inkscape.Inkscape.desktop;
@@ -270,6 +270,7 @@ x-scheme-handler/www=firefox.desktop;
 x-scheme-handler/about=firefox.desktop;
 x-scheme-handler/unknown=firefox.desktop;
 x-terminal-emulator=Alacritty.desktop;
+x-scheme-handler/codex=chatgpt.desktop
 
 [Added Associations]
 application/x-shellscript=nvim.desktop;
