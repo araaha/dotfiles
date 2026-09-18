@@ -1,0 +1,27 @@
+[accounts.gmail-1]
+default = true
+
+email = "arashahady2001@gmail.com"
+
+imap.server = "imaps://imap.gmail.com:993"
+imap.sasl.plain.authcid = "arashahady2001@gmail.com"
+imap.sasl.plain.passwd.command = "pass Gmail/arashahady2001@gmail.com | tail -n 1"
+
+smtp.server = "smtps://smtp.gmail.com:465"
+smtp.sasl.plain.authcid = "arashahady2001@gmail.com"
+smtp.sasl.plain.passwd.command = "pass Gmail/arashahady2001@gmail.com | tail -n 1"
+
+mailbox.alias.inbox = "INBOX"
+
+[accounts.gmail-2]
+email = "ara.ahady@gmail.com"
+
+imap.server = "imaps://imap.gmail.com:993"
+imap.sasl.plain.authcid = "ara.ahady@gmail.com"
+imap.sasl.plain.passwd.command = "pass Gmail/ara.ahady@gmail.com | tail -n 1"
+
+smtp.server = "smtps://smtp.gmail.com:465"
+smtp.sasl.plain.authcid = "arashahady2001@gmail.com"
+smtp.sasl.plain.passwd.command = "pass Gmail/ara.ahady@gmail.com | tail -n 1"
+
+mailbox.alias.inbox = "INBOX"
