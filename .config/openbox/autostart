@@ -1,12 +1,11 @@
 dbus-daemon --session --nofork --nopidfile --address=unix:path=/run/user/1000/bus &
-dinitctl setenv DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS &
-dinit &
 light -S 20 &
 polybar --quiet main &
 ./scripts/bluetooth-autoconnect.sh &
 ./scripts/bluetooth-battery.sh &
 ./scripts/battery.sh &
 picom -b &
+carillon watch &
 xwallpaper --stretch "$XDG_DATA_HOME/Wallpapers/Pacman.png" &
 xset s off -dpms &
 xsct 4000 &
