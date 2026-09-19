@@ -4,7 +4,7 @@ path="/org/freedesktop/UPower/devices/battery_BAT0"
 interface="org.freedesktop.UPower.Device"
 
 notified_low=0
-notified_high=0
+notified_high_at=-1
 
 check_battery() {
     level="$(
@@ -24,14 +24,13 @@ check_battery() {
     )"
 
     level="${level#* }"
+    level="${level%.*}"
     state="${state#* }"
 
-    # Remove decimal part if Percentage is e.g. 74.000000
-    level="${level%.*}"
-
-    if (( level <= 10 && state != 1 )); then
+    # Low battery
+    if (( level <= 20 && state != 1 )); then
         if (( ! notified_low )); then
-            dunstify -u CRITICAL -t 1000 \
+            DISPLAY=:0 dunstify -u CRITICAL -t 1000 \
                 "Battery level is ${level}%!"
             notified_low=1
         fi
@@ -39,21 +38,21 @@ check_battery() {
         notified_low=0
     fi
 
+    # High battery while charging.
+    # Notify again whenever the percentage increases.
     if (( level >= 80 && state == 1 )); then
-        if (( ! notified_high )); then
-            dunstify -u CRITICAL -t 1000 \
+        if (( level != notified_high_at )); then
+            DISPLAY=:0 dunstify -u CRITICAL -t 1000 \
                 "Battery level is ${level}%! Unplug"
-            notified_high=1
+            notified_high_at=$level
         fi
     else
-        notified_high=0
+        notified_high_at=-1
     fi
 }
 
-# Check immediately on startup.
 check_battery
 
-# Then react whenever UPower reports any battery property change.
 gdbus monitor \
     --system \
     --dest org.freedesktop.UPower \
@@ -65,4 +64,3 @@ while IFS= read -r line; do
             ;;
     esac
 done
-

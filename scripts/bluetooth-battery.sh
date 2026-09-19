@@ -34,7 +34,7 @@ check_battery() {
 
     connected="${connected#* }"
 
-    if (( percent <= 80 )) && [[ "$connected" == "true" ]]; then
+    if (( percent <= 10 )) && [[ "$connected" == "true" ]]; then
         if (( ! notified_low )); then
             dunstify -u CRITICAL -t 1000 \
                 "Headset at ${percent}%"
