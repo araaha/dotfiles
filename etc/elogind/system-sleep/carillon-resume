@@ -1,0 +1,31 @@
+#!/bin/sh
+
+case "$1" in
+    post)
+        /usr/bin/pkill -TERM -u araaha -x carillon 2>/dev/null || true
+
+        attempts=0
+        while /usr/bin/pgrep -u araaha -x carillon >/dev/null 2>&1; do
+            attempts=$((attempts + 1))
+            if [ "$attempts" -ge 20 ]; then
+                /usr/bin/pkill -KILL -u araaha -x carillon 2>/dev/null || true
+                break
+            fi
+            /usr/bin/sleep 0.1
+        done
+
+        /usr/bin/runuser -u araaha -- \
+            /usr/bin/env \
+            HOME=/home/araaha \
+            PATH=/usr/local/bin:/usr/bin \
+            XDG_DATA_HOME=/home/araaha/.local/share \
+            GNUPGHOME=/home/araaha/.local/share/.gnupg \
+            PASSWORD_STORE_DIR=/home/araaha/.local/share/pass \
+            XDG_RUNTIME_DIR=/run/user/1000 \
+            DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus \
+            DISPLAY=:0 \
+            /usr/bin/setsid -f \
+            /home/araaha/.local/bin/carillon \
+            -c /home/araaha/.config/carillon/config.toml watch
+        ;;
+esac
