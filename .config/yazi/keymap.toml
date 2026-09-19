@@ -147,6 +147,7 @@ keymap = [
 	{ on = [ "g", "l", "b" ],       run = "cd ~/.local/bin",   desc = "Go to ~/.local/bin" },
 	{ on = [ "g", "b" ],       run = "cd ~/Books",   desc = "Go to books" },
 	{ on = [ "g", "m" ],       run = "cd ~/Downloads/ok",   desc = "Go to mega" },
+	{ on = [ "g", "l", "m" ],       run = "cd ~/.local/share/mail",   desc = "Go to mail" },
 	{ on = [ "g", "T" ],       run = "cd /tmp/",   desc = "Go to tmp" },
 	{ on = [ "g", "t" ],       run = "plugin trash",     desc = "Go to trash bin" },
 	{ on = [ "g", "<Space>" ], run = "cd --interactive", desc = "Jump interactively" },
@@ -465,7 +466,7 @@ desc = "sudo paste"
 [[mgr.prepend_keymap]]
 on = ["s", "P"]
 run = "plugin sudo -- paste --force"
-desc = "sudo paste"
+desc = "sudo paste --force"
 
 # sudo mv
 [[mgr.prepend_keymap]]
@@ -475,19 +476,19 @@ desc = "sudo rename/bulk-rename"
 
 # sudo ln -s (absolute-path)
 [[mgr.prepend_keymap]]
-on = ["s", "p", "l"]
+on = ["s", "-"]
 run = "plugin sudo -- link"
-desc = "sudo link"
+desc = "sudo link absolute path"
 
 # sudo ln -s (relative-path)
 [[mgr.prepend_keymap]]
-on = ["s", "p", "r"]
+on = ["s", "_"]
 run = "plugin sudo -- link --relative"
 desc = "sudo link relative path"
 
 # sudo ln
 [[mgr.prepend_keymap]]
-on = ["s", "p", "L"]
+on = ["s", "<C-->"]
 run = "plugin sudo -- hardlink"
 desc = "sudo hardlink"
 
