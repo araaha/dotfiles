@@ -6,7 +6,7 @@ TEMP_DIR=""
 OS_ID=""
 
 readonly -a REQUIRED_COMMANDS=(yay git)
-readonly -a DINIT_SERVICES=(cronie cupsd bluetoothd iwd chronyd chrony)
+readonly -a DINIT_SERVICES=(cronie bluetoothd iwd chronyd chrony)
 
 die() {
     echo "error: $*" >&2
@@ -149,7 +149,7 @@ configure_grub() {
 configure_services() {
     local service
     if [[ "$OS_ID" == arch ]]; then
-        sudo systemctl enable --now cronie cups bluetooth iwd
+        sudo systemctl enable --now cronie bluetooth iwd
         return
     fi
 
