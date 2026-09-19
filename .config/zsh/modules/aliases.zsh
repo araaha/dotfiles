@@ -1,7 +1,7 @@
 alias \#='sudo'
 alias \$=''
-alias bdisc="pkill -STOP -f /bin/bash\ ./scripts/bluetooth-autoconnect.sh; bluetoothctl disconnect 34:09:C9:68:FB:A3"
 alias bconn="pkill -CONT -f /bin/bash\ ./scripts/bluetooth-autoconnect.sh; bluetoothctl connect 34:09:C9:68:FB:A3"
+alias bdisc="pkill -STOP -f /bin/bash\ ./scripts/bluetooth-autoconnect.sh; bluetoothctl disconnect 34:09:C9:68:FB:A3"
 alias cat="bat -pp --color=auto"
 alias catt="/usr/bin/cat"
 alias copy="xclip -r -sel clip"
@@ -24,8 +24,9 @@ alias nerdfetch="nitch -a"
 alias nsxiv="nsxiv -g 800x600+560+240 -b -a -sf"
 alias nv="nvim"
 alias packages="ls -lt /var/lib/pacman/local/ --color=never | head -n 30 | tail -n +2 | tac | awk '{ print \$9}'"
-alias ticker='ticker --sort=user --config="$HOME/.config/.ticker.yaml"'
-alias tree="tree --noreport -C"
-alias ssh='ssh -F "$SSH_HOME"/config -i "$SSH_HOME"/id_ed25519 -o UserKnownHostsFile="$SSH_HOME"/known_hosts'
+alias pick="xcolor -S 16 -s clipboard"
 alias reboot="loginctl reboot"
 alias shutdown="loginctl poweroff"
+alias ssh='ssh -F "$SSH_HOME"/config -i "$SSH_HOME"/id_ed25519 -o UserKnownHostsFile="$SSH_HOME"/known_hosts'
+alias ticker='ticker --sort=user --config="$HOME/.config/.ticker.yaml"'
+alias tree="tree --noreport -C"
