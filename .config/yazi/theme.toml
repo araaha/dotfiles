@@ -249,13 +249,13 @@ rules = [
 	{ url = "*.go", fg = "cyan"  },
 	{ url = "*.py", fg = "lightblue" },
 	{ url = "*.lua", fg = "yellow" },
+	# Special file
+	{ url = "*", is = "orphan", fg = "black", bg = "lightred" },
+	{ url = "*", is = "exec"  , fg = "cyan", dim = true, bold = true },
 	# Virtual file system
 	{ url = "*/", is = "link", fg = "cyan", bold = true },
 	{ url = "*", is = "link", fg = "cyan", bold = false },
 	{ mime = "vfs/{absent,stale}", fg = "gray" },
-	# Special file
-	{ url = "*", is = "orphan", fg = "black", bg = "lightred" },
-	{ url = "*", is = "exec"  , fg = "cyan", dim = true, bold = true },
 	# Dummy file
 	{ url = "*", is = "dummy", bg = "red" },
 	{ url = "*/", is = "dummy", bg = "red" },
