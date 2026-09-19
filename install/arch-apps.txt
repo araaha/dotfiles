@@ -33,6 +33,7 @@ imagemagick
 impala
 iwd
 jdtls
+jless
 jq
 lazygit
 light
@@ -56,7 +57,7 @@ pipewire
 pipewire-pulse
 playerctl
 polybar
-pyright
+postgresql-dinit
 qpdf
 resvg
 ripgrep
@@ -67,7 +68,6 @@ rust
 scrot
 shellcheck-bin
 terminus-font
-tickrs
 tmux
 tree-sitter-cli
 ttf-arphic-uming
