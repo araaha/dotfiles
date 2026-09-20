@@ -1,7 +1,4 @@
-*cron-test.txt
 *lazy-lock.json
 *.zcompdump
 *.zcompdump.zwc
-*weather.sh
-.gnupg
 *-lock.json
