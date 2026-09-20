@@ -9,7 +9,6 @@ bottom
 bun
 chawan
 chrony
-chrony-dinit
 clang
 cronie
 delve
