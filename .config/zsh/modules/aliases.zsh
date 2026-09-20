@@ -1,7 +1,7 @@
 alias \#='sudo'
 alias \$=''
 alias bconn="bluetoothctl connect 34:09:C9:68:FB:A3"
-alias bdisc="bluetoothctl disconnect 34:09:C9:68:FB:A3; sleep 3"
+alias bdisc="bluetoothctl disconnect 34:09:C9:68:FB:A3"
 alias cat="bat -pp --color=auto"
 alias catt="/usr/bin/cat"
 alias copy="xclip -r -sel clip"
