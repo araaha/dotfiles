@@ -30,7 +30,7 @@ hyperfine
 ifuse
 imagemagick
 impala
-iwd
+iwd-dinit
 jdtls
 jless
 jq
