@@ -6,9 +6,9 @@ options=$(printf "Select\nWindow" | rofi -no-show-icons -dmenu -i -p "Select scr
 
 case "$options" in
     "Select")
-        scrot "$output" --select --line mode=edge -q 100 --exec "notify-send -t 300 'Screenshot taken'";;
+        scrot "$output" --select --line mode=edge -q 100 --exec "notify-send -t 1000 'Screenshot taken'";;
     "Window")
-        scrot "$output" --focused --border -q 100 --exec "notify-send -t 300 'Screenshot taken'";;
+        scrot "$output" --focused --border -q 100 --exec "notify-send -t 1000 'Screenshot taken'";;
     *)
         exit;;
 esac
