@@ -48,6 +48,16 @@ install_packages() {
     yay --needed -S - < <(cat "$DOTS/install/arch-apps.txt" "$DOTS/install/aur-apps.txt")
 }
 
+configure_package_repositories() {
+    [[ "$OS_ID" == artix ]] || return
+
+    sudo pacman -Syu --needed --noconfirm artix-archlinux-support
+    sudo install -d -m 0755 /etc/pacman.d
+    sudo install -m 0644 "$DOTS/etc/pacman.conf" /etc/pacman.conf
+    sudo install -m 0644 "$DOTS/etc/pacman.d/mirrorlist" /etc/pacman.d/mirrorlist
+    sudo install -m 0644 "$DOTS/etc/pacman.d/mirrorlist-arch" /etc/pacman.d/mirrorlist-arch
+}
+
 replace_with_link() {
     local source=$1 target=$2
     if [[ -L "$target" ]] && [[ "$(readlink -f -- "$target")" == "$(readlink -f -- "$source")" ]]; then
@@ -166,6 +176,7 @@ refresh_caches() {
 main() {
     trap cleanup EXIT
     check_prerequisites
+    configure_package_repositories
     install_packages
     install_dotfiles
     install_themes
