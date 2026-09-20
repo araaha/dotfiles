@@ -39,10 +39,14 @@ check_prerequisites() {
 
 install_packages() {
     yay -Syu
-    yay --needed -S - < <(cat "$DOTS/install/arch-apps.txt" "$DOTS/install/aur-apps.txt")
+    yay --needed -S - < "$DOTS/install/arch-apps.txt"
 }
 
+install_aur_packages() {
+    yay --needed -S - < "$DOTS/install/aur-apps.txt"
+}
 
+configure_package_repositories() {
     sudo pacman -Syu --needed --noconfirm artix-archlinux-support
     sudo install -d -m 0755 /etc/pacman.d
     sudo install -m 0644 "$DOTS/etc/pacman.conf" /etc/pacman.conf
@@ -161,6 +165,7 @@ main() {
     configure_user
     configure_sudo
     configure_services
+    install_aur_packages
     refresh_caches
     echo "Setup complete. Reboot."
 }
