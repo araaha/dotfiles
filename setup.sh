@@ -2,14 +2,42 @@
 set -euo pipefail
 
 DOTS="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+readonly DOTS
 TEMP_DIR=""
 
 readonly -a REQUIRED_COMMANDS=(yay git dinitctl)
 readonly -a DINIT_SERVICES=(cronie bluetoothd iwd chronyd chrony)
 
 die() {
-    echo "error: $*" >&2
+    if [[ -t 2 && -z "${NO_COLOR:-}" ]]; then
+        printf '\033[1;31merror:\033[0m %s\n' "$*" >&2
+    else
+        printf 'error: %s\n' "$*" >&2
+    fi
     exit 1
+}
+
+step() {
+    if [[ -t 1 && -z "${NO_COLOR:-}" ]]; then
+        printf '\033[1;34m==>\033[0m \033[1m%s\033[0m\n' "$*"
+    else
+        printf '==> %s\n' "$*"
+    fi
+}
+
+success() {
+    if [[ -t 1 && -z "${NO_COLOR:-}" ]]; then
+        printf '\033[1;32m==> %s\033[0m\n' "$*"
+    else
+        printf '==> %s\n' "$*"
+    fi
+}
+
+print_readonly_variables() {
+    step "Read-only configuration"
+    printf '  DOTS=%s\n' "$DOTS"
+    printf '  REQUIRED_COMMANDS=%s\n' "${REQUIRED_COMMANDS[*]}"
+    printf '  DINIT_SERVICES=%s\n' "${DINIT_SERVICES[*]}"
 }
 
 require_command() {
@@ -156,18 +184,30 @@ refresh_caches() {
 
 main() {
     trap cleanup EXIT
+    print_readonly_variables
+    step "Checking prerequisites"
     check_prerequisites
+    step "Configuring Artix and Arch package repositories"
     configure_package_repositories
+    step "Installing repository packages"
     install_packages
+    step "Installing dotfiles"
     install_dotfiles
+    step "Installing themes and icons"
     install_themes
+    step "Installing system files"
     install_system_files
+    step "Configuring the user account"
     configure_user
+    step "Configuring sudo"
     configure_sudo
+    step "Enabling dinit services"
     configure_services
+    step "Installing AUR packages"
     install_aur_packages
+    step "Refreshing caches"
     refresh_caches
-    echo "Setup complete. Reboot."
+    success "Setup complete. Reboot."
 }
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then

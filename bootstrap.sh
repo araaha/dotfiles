@@ -43,8 +43,40 @@ MICROCODE_IMAGE=""
 MOUNTED=false
 
 die() {
-    echo "error: $*" >&2
+    if [[ -t 2 && -z "${NO_COLOR:-}" ]]; then
+        printf '\033[1;31merror:\033[0m %s\n' "$*" >&2
+    else
+        printf 'error: %s\n' "$*" >&2
+    fi
     exit 1
+}
+
+step() {
+    if [[ -t 1 && -z "${NO_COLOR:-}" ]]; then
+        printf '\033[1;34m==>\033[0m \033[1m%s\033[0m\n' "$*"
+    else
+        printf '==> %s\n' "$*"
+    fi
+}
+
+success() {
+    if [[ -t 1 && -z "${NO_COLOR:-}" ]]; then
+        printf '\033[1;32m==> %s\033[0m\n' "$*"
+    else
+        printf '==> %s\n' "$*"
+    fi
+}
+
+print_readonly_variables() {
+    step "Read-only configuration"
+    printf '  USERNAME=%s\n' "$USERNAME"
+    printf '  TIMEZONE=%s\n' "$TIMEZONE"
+    printf '  LOCALE=%s\n' "$LOCALE"
+    printf '  REPOSITORY=%s\n' "$REPOSITORY"
+    printf '  TARGET=%s\n' "$TARGET"
+    printf '  PACMAN_PARALLEL_DOWNLOADS=%s\n' "$PACMAN_PARALLEL_DOWNLOADS"
+    printf '  KERNEL_PARAMETERS=%s\n' "${KERNEL_PARAMETERS[*]}"
+    printf '  PREREQUISITE_PACKAGES=%s\n' "${PREREQUISITE_PACKAGES[*]}"
 }
 
 require_command() {
@@ -86,7 +118,6 @@ enable_pacman_parallel_downloads() {
 
 install_prerequisites() {
     enable_pacman_parallel_downloads /etc/pacman.conf
-    echo "Installing live-environment prerequisites..."
     pacman -Sy --needed --noconfirm "${PREREQUISITE_PACKAGES[@]}"
 }
 
@@ -263,21 +294,34 @@ create_efi_entry() {
 
 main() {
     trap cleanup EXIT
+    print_readonly_variables
+    step "Checking invocation and live environment"
     check_invocation
+    step "Installing live-environment prerequisites"
     install_prerequisites
+    step "Checking installation prerequisites"
     check_prerequisites
+    step "Selecting partition sizes"
     prompt_partition_sizes
+    step "Confirming target disk erasure"
     confirm_disk_erasure
+    step "Partitioning and formatting $DISK"
     partition_disk
+    step "Mounting target filesystems"
     mount_filesystems
+    step "Installing the Artix base system"
     install_base_system
+    step "Configuring the installed system"
     configure_system
+    step "Installing dotfiles and yay"
     install_dotfiles_and_yay
+    step "Enabling first-boot dinit services"
     enable_boot_services
+    step "Creating the EFISTUB firmware entry"
     create_efi_entry
 
     echo
-    echo "Artix is installed with a direct EFISTUB boot entry."
+    success "Artix is installed with a direct EFISTUB boot entry."
     echo "After rebooting, connect to the network and run:"
     echo "  /home/$USERNAME/dotfiles/setup.sh"
 }
