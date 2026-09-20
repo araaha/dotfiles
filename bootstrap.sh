@@ -10,6 +10,17 @@ readonly LOCALE=en_CA.UTF-8
 readonly REPOSITORY=https://github.com/araaha/dotfiles
 readonly TARGET=/mnt
 readonly PACMAN_PARALLEL_DOWNLOADS=100
+readonly -a KERNEL_PARAMETERS=(
+    rw
+    quiet
+    splash
+    amdgpu.dcdebugmask=0x10
+    amdgpu.gpu_recovery=1
+    atkbd.softrepeat=1
+    vt.cur_default=0x200011
+    vt.global_cursor_default=0
+    cpufreq.default_governor=powersave
+)
 readonly -a PREREQUISITE_PACKAGES=(
     artools-base
     dosfstools
@@ -238,7 +249,7 @@ create_efi_entry() {
 
     root_uuid=$(blkid -s UUID -o value "$ROOT")
     [[ -n "$root_uuid" ]] || die "Could not read the root filesystem UUID."
-    kernel_parameters="root=UUID=$root_uuid rw quiet splash amdgpu.dcdebugmask=0x10 amdgpu.gpu_recovery=1 atkbd.softrepeat=1 vt.cur_default=0x200011 vt.global_cursor_default=0 cpufreq.default_governor=powersave initrd=\\$MICROCODE_IMAGE initrd=\\initramfs-linux.img"
+    kernel_parameters="root=UUID=$root_uuid ${KERNEL_PARAMETERS[*]} initrd=\\$MICROCODE_IMAGE initrd=\\initramfs-linux.img"
 
     efibootmgr \
         --create \

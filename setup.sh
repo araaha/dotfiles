@@ -146,16 +146,6 @@ POLICY
     sudo visudo -c
 }
 
-configure_grub() {
-    if [[ ! -f /etc/default/grub || ! -f /boot/grub/grub.cfg ]]; then
-        echo "GRUB installation not found; skipping GRUB configuration."
-        return
-    fi
-    sudo sed -i '/^[[:space:]]*GRUB_CMDLINE_LINUX=/d' /etc/default/grub
-    echo 'GRUB_CMDLINE_LINUX="amdgpu.dcdebugmask=0x10 amdgpu.gpu_recovery=1 quiet splash atkbd.softrepeat=1 vt.cur_default=0x200011 vt.global_cursor_default=0 cpufreq.default_governor=powersave"' | sudo tee -a /etc/default/grub > /dev/null
-    sudo grub-mkconfig -o /boot/grub/grub.cfg
-}
-
 configure_services() {
     local service
     if [[ "$OS_ID" == arch ]]; then
@@ -183,7 +173,6 @@ main() {
     install_system_files
     configure_user
     configure_sudo
-    configure_grub
     configure_services
     refresh_caches
     echo "Setup complete. Reboot."
