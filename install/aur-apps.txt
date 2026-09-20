@@ -1,7 +1,6 @@
 chroncal-bin
 codelldb-bin
 cyme-bin
-djvu2pdf
 downgrade
 dragon-drop
 lazydocker-bin
