@@ -3,9 +3,8 @@ set -euo pipefail
 
 DOTS="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 TEMP_DIR=""
-OS_ID=""
 
-readonly -a REQUIRED_COMMANDS=(yay git)
+readonly -a REQUIRED_COMMANDS=(yay git dinitctl)
 readonly -a DINIT_SERVICES=(cronie bluetoothd iwd chronyd chrony)
 
 die() {
@@ -31,12 +30,7 @@ check_prerequisites() {
 
     # shellcheck source=/dev/null
     source /etc/os-release
-    OS_ID=${ID:-}
-    case "$OS_ID" in
-        arch) ;;
-        artix) require_command dinitctl ;;
-        *) die "Only Arch and Artix are supported." ;;
-    esac
+    [[ "${ID:-}" == artix ]] || die "Only Artix is supported."
 
     for manifest in arch-apps.txt aur-apps.txt; do
         [[ -s "$DOTS/install/$manifest" ]] || die "Missing manifest: $manifest"
@@ -48,8 +42,6 @@ install_packages() {
     yay --needed -S - < <(cat "$DOTS/install/arch-apps.txt" "$DOTS/install/aur-apps.txt")
 }
 
-configure_package_repositories() {
-    [[ "$OS_ID" == artix ]] || return
 
     sudo pacman -Syu --needed --noconfirm artix-archlinux-support
     sudo install -d -m 0755 /etc/pacman.d
@@ -148,11 +140,6 @@ POLICY
 
 configure_services() {
     local service
-    if [[ "$OS_ID" == arch ]]; then
-        sudo systemctl enable --now cronie bluetooth iwd
-        return
-    fi
-
     for service in "${DINIT_SERVICES[@]}"; do
         sudo dinitctl enable "$service"
     done
