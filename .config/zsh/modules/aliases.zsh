@@ -1,18 +1,15 @@
 alias \#='sudo'
 alias \$=''
-alias bconn="pkill -CONT -f /bin/bash\ ./scripts/bluetooth-autoconnect.sh; bluetoothctl connect 34:09:C9:68:FB:A3"
-alias bdisc="pkill -STOP -f /bin/bash\ ./scripts/bluetooth-autoconnect.sh; bluetoothctl disconnect 34:09:C9:68:FB:A3"
+alias bconn="bluetoothctl connect 34:09:C9:68:FB:A3"
+alias bdisc="bluetoothctl disconnect 34:09:C9:68:FB:A3; sleep 3"
 alias cat="bat -pp --color=auto"
 alias catt="/usr/bin/cat"
 alias copy="xclip -r -sel clip"
 alias cp='cp -v'
 alias cyme="sudo cyme --hide-buses -b icon -b name -b speed -t"
-alias ga="git add"
-alias gc="git commit"
 alias gdu="gdu -c"
 alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gp="git push"
-alias grep="grep --color=always"
 alias gs="git status"
 alias lf="[ -n '$YAZI_LEVEL' ] && exit || yazi"
 alias lg="lazygit"
