@@ -2,7 +2,6 @@ alacritty
 amd-ucode
 bash-language-server
 bat
-bc
 bluez
 bluez-utils
 bottom

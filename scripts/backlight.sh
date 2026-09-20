@@ -1,6 +1,8 @@
 #!/bin/bash
 
-bright="$(light -G)"
+light="$(light -G)"
+light="${light%%.*}" #strip decimals
+light=$((10#$light)) #avoid values like 08
 
 inc=0
 dec=0
@@ -13,14 +15,14 @@ for arg in "$@"; do
 done
 
 if (( inc )); then
-    if (( $(echo "$bright < 13" | bc -l) )); then
+    if (( light < 13 )); then
         light -A 1
     else
         light -A 2
     fi
 
 elif (( dec )); then
-    if (( $(echo "$bright < 17" | bc -l) )); then
+    if (( light < 17 )); then
         light -U 1
     else
         light -U 2
