@@ -225,9 +225,7 @@ install_dotfiles_and_yay() {
     echo '%wheel ALL=(ALL:ALL) NOPASSWD: ALL' > "$TARGET/etc/sudoers.d/bootstrap"
     chmod 0440 "$TARGET/etc/sudoers.d/bootstrap"
     artix-chroot "$TARGET" runuser -u "$USERNAME" -- \
-        git clone https://aur.archlinux.org/yay.git /tmp/yay
-    artix-chroot "$TARGET" runuser -u "$USERNAME" -- \
-        bash -c 'cd /tmp/yay && makepkg -si --noconfirm'
+        bash -c 'git clone https://aur.archlinux.org/yay.git /tmp/yay && cd /tmp/yay && makepkg -si --noconfirm'
     rm -f "$TARGET/etc/sudoers.d/bootstrap"
 }
 
