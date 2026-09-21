@@ -2,24 +2,46 @@
 
 set -o pipefail
 
+LATITUDE="43.5168"
+LONGITUDE="-79.8829"
+TIMEZONE="America/Toronto"
+SYMBOL="°"
+
+API="https://api.open-meteo.com/v1/forecast"
+
 get_icon() {
-    case "$1" in
-        01d) icon="" ;;
-        01n) icon="" ;;
-        02d) icon="" ;;
-        02n) icon="" ;;
-        03*) icon="" ;;
-        04*) icon="" ;;
-        09*) icon="" ;;
-        10d) icon="" ;;
-        10n) icon="" ;;
-        11d) icon="" ;;
-        11n) icon="" ;;
-        13d) icon="" ;;
-        13n) icon="" ;;
-        50d) icon="" ;;
-        50n) icon="" ;;
-        *)   icon="" ;;
+    local code="$1"
+    local is_day="$2"
+    local icon
+
+    case "$code" in
+        0)
+            (( is_day )) && icon="" || icon=""
+            ;;
+        1|2)
+            (( is_day )) && icon="" || icon=""
+            ;;
+        3)
+            icon=""
+            ;;
+        45|48)
+            (( is_day )) && icon="" || icon=""
+            ;;
+        51|53|55|56|57|80|81|82)
+            icon=""
+            ;;
+        61|63|65|66|67)
+            (( is_day )) && icon="" || icon=""
+            ;;
+        71|73|75|77|85|86)
+            (( is_day )) && icon="" || icon=""
+            ;;
+        95|96|99)
+            (( is_day )) && icon="" || icon=""
+            ;;
+        *)
+            icon=""
+            ;;
     esac
 
     printf '%s\n' "$icon"
@@ -37,46 +59,24 @@ round_temperature() {
     printf '%s\n' "$rounded"
 }
 
-CITY="${1:-}"
-UNITS="metric"
-SYMBOL="°"
-API="https://api.openweathermap.org/data/2.5"
-
-if [[ -z $CITY ]]; then
-    printf 'Usage: %s CITY_OR_ID\n' "$0" >&2
-    exit 1
-fi
-
-if ! KEY=$(pass OpenWeather); then
-    echo "Unable to retrieve the OpenWeather API key from pass." >&2
-    exit 1
-fi
-
-if [[ -z $KEY ]]; then
-    echo "The OpenWeather password-store entry is empty." >&2
-    exit 1
-fi
-
-curl_args=(
-    --fail
-    --silent
-    --show-error
-    --get
-    --connect-timeout 5
-    --max-time 15
-    --retry 2
-    "$API/weather"
-    --data-urlencode "appid=$KEY"
-    --data-urlencode "units=$UNITS"
-)
-
-if [[ $CITY =~ ^[0-9]+$ ]]; then
-    curl_args+=(--data-urlencode "id=$CITY")
-else
-    curl_args+=(--data-urlencode "q=$CITY")
-fi
-
-if ! weather=$(curl "${curl_args[@]}"); then
+if ! weather=$(
+    curl \
+        --fail \
+        --silent \
+        --show-error \
+        --get \
+        --connect-timeout 5 \
+        --max-time 15 \
+        --retry 2 \
+        "$API" \
+        --data-urlencode "latitude=$LATITUDE" \
+        --data-urlencode "longitude=$LONGITUDE" \
+        --data-urlencode \
+            "current=temperature_2m,apparent_temperature,weather_code,is_day,precipitation_probability" \
+        --data-urlencode "daily=sunset" \
+        --data-urlencode "timezone=$TIMEZONE" \
+        --data-urlencode "forecast_days=1"
+); then
     echo "Unable to retrieve weather data." >&2
     exit 1
 fi
@@ -84,10 +84,12 @@ fi
 if ! weather_values=$(
     jq -er '
         [
-            .main.temp,
-            .main.feels_like,
-            .sys.sunset,
-            .weather[0].icon
+            .current.temperature_2m,
+            .current.apparent_temperature,
+            .current.weather_code,
+            .current.is_day,
+            .current.precipitation_probability,
+            .daily.sunset[0]
         ]
         | if any(.[]; . == null)
           then error("Missing weather data")
@@ -95,22 +97,28 @@ if ! weather_values=$(
           end
     ' <<<"$weather"
 ); then
-    echo "OpenWeather returned incomplete or invalid data." >&2
+    echo "Open-Meteo returned incomplete weather data." >&2
     exit 1
 fi
 
 IFS=$'\t' read -r \
     weather_temp \
     weather_feels_like \
-    sunset \
-    weather_icon <<<"$weather_values"
+    weather_code \
+    is_day \
+    precipitation_probability \
+    sunset <<<"$weather_values"
 
 weather_temp=$(round_temperature "$weather_temp")
 weather_feels_like=$(round_temperature "$weather_feels_like")
-sunset_time=$(date -d "@$sunset" '+%H:%M')
 
-printf '%s %s%s (%s%s) %s\n' \
-    "$(get_icon "$weather_icon")" \
+# Sunset is returned as YYYY-MM-DDTHH:MM.
+sunset_time="${sunset#*T}"
+sunset_time="${sunset_time:0:5}"
+
+printf '%s %s%s (%s%s) %s [%s%%]\n' \
+    "$(get_icon "$weather_code" "$is_day")" \
     "$weather_temp" "$SYMBOL" \
     "$weather_feels_like" "$SYMBOL" \
-    "$sunset_time"
+    "$sunset_time" \
+    "$precipitation_probability"
