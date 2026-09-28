@@ -3,10 +3,11 @@ set -euo pipefail
 
 DOTS="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 readonly DOTS
+readonly NETWORK_CONFIG=/etc/dotfiles-network
 TEMP_DIR=""
 
 readonly -a REQUIRED_COMMANDS=(yay git dinitctl)
-readonly -a DINIT_SERVICES=(cronie bluetoothd iwd chronyd chrony)
+readonly -a DINIT_SERVICES=(cronie bluetoothd chronyd chrony)
 
 die() {
     if [[ -t 2 && -z "${NO_COLOR:-}" ]]; then
@@ -36,6 +37,7 @@ success() {
 print_readonly_variables() {
     step "Read-only configuration"
     printf '  DOTS=%s\n' "$DOTS"
+    printf '  NETWORK_CONFIG=%s\n' "$NETWORK_CONFIG"
     printf '  REQUIRED_COMMANDS=%s\n' "${REQUIRED_COMMANDS[*]}"
     printf '  DINIT_SERVICES=%s\n' "${DINIT_SERVICES[*]}"
 }
@@ -171,10 +173,27 @@ POLICY
 }
 
 configure_services() {
-    local service
+    local network_mode network_package network_service service
+
+    [[ -r "$NETWORK_CONFIG" ]] || die "Missing network selection: $NETWORK_CONFIG"
+    read -r network_mode < "$NETWORK_CONFIG"
+    case "$network_mode" in
+        wifi)
+            network_package=iwd-dinit
+            network_service=iwd
+            ;;
+        ethernet)
+            network_package=dhcpcd-dinit
+            network_service=dhcpcd
+            ;;
+        *) die "Invalid network selection in $NETWORK_CONFIG: $network_mode" ;;
+    esac
+    pacman -Q "$network_package" >/dev/null || die "Missing network package: $network_package"
+
     for service in "${DINIT_SERVICES[@]}"; do
         sudo dinitctl enable "$service"
     done
+    sudo dinitctl enable "$network_service"
 }
 
 refresh_caches() {

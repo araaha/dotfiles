@@ -29,7 +29,6 @@ hyperfine
 ifuse
 imagemagick
 impala
-iwd-dinit
 jdtls
 jless
 jq

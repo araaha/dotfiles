@@ -9,6 +9,7 @@ readonly TIMEZONE=Canada/Eastern
 readonly LOCALE=en_CA.UTF-8
 readonly REPOSITORY=https://github.com/araaha/dotfiles
 readonly TARGET=/mnt
+readonly NETWORK_CONFIG=/etc/dotfiles-network
 readonly PACMAN_PARALLEL_DOWNLOADS=100
 readonly -a KERNEL_PARAMETERS=(
     rw
@@ -35,6 +36,7 @@ DISK=${1:-}
 HOSTNAME=${2:-}
 BOOT_SIZE=256M
 ROOT_SIZE=50G
+NETWORK_MODE=wifi
 ESP=""
 ROOT=""
 HOME_PARTITION=""
@@ -74,6 +76,7 @@ print_readonly_variables() {
     printf '  LOCALE=%s\n' "$LOCALE"
     printf '  REPOSITORY=%s\n' "$REPOSITORY"
     printf '  TARGET=%s\n' "$TARGET"
+    printf '  NETWORK_CONFIG=%s\n' "$NETWORK_CONFIG"
     printf '  PACMAN_PARALLEL_DOWNLOADS=%s\n' "$PACMAN_PARALLEL_DOWNLOADS"
     printf '  KERNEL_PARAMETERS=%s\n' "${KERNEL_PARAMETERS[*]}"
     printf '  PREREQUISITE_PACKAGES=%s\n' "${PREREQUISITE_PACKAGES[*]}"
@@ -177,6 +180,31 @@ prompt_partition_sizes() {
     ROOT_SIZE=$(normalize_partition_size "${input:-$ROOT_SIZE}")
 }
 
+prompt_network_mode() {
+    local input
+
+    read -r -p "Network connection [wifi/ethernet] [$NETWORK_MODE]: " input
+    case "${input,,}" in
+        ""|wifi|w) NETWORK_MODE=wifi ;;
+        ethernet|wired|e) NETWORK_MODE=ethernet ;;
+        *) die "Invalid network connection '$input'; choose wifi or ethernet." ;;
+    esac
+}
+
+network_package() {
+    case "$NETWORK_MODE" in
+        wifi) printf '%s\n' iwd-dinit ;;
+        ethernet) printf '%s\n' dhcpcd-dinit ;;
+    esac
+}
+
+network_service() {
+    case "$NETWORK_MODE" in
+        wifi) printf '%s\n' iwd ;;
+        ethernet) printf '%s\n' dhcpcd ;;
+    esac
+}
+
 confirm_disk_erasure() {
     local confirmation
 
@@ -187,6 +215,7 @@ confirm_disk_erasure() {
     echo "  partition 1: $BOOT_SIZE FAT32 EFI System Partition mounted at /boot"
     echo "  partition 2: $ROOT_SIZE ext4 root filesystem"
     echo "  partition 3: remaining space as an ext4 /home filesystem"
+    echo "  network: $NETWORK_MODE"
     read -r -p "Type 'ERASE $DISK' to continue: " confirmation
     [[ "$confirmation" == "ERASE $DISK" ]] || die "Confirmation did not match; nothing changed."
 }
@@ -222,10 +251,13 @@ mount_filesystems() {
 }
 
 install_base_system() {
+    local selected_network_package
+
+    selected_network_package=$(network_package)
     basestrap "$TARGET" \
         base base-devel dinit elogind-dinit \
         linux linux-firmware "$MICROCODE_PACKAGE" \
-        efibootmgr git iwd-dinit sudo zsh
+        efibootmgr git "$selected_network_package" sudo zsh
     enable_pacman_parallel_downloads "$TARGET/etc/pacman.conf"
     fstabgen -U "$TARGET" > "$TARGET/etc/fstab"
 }
@@ -238,6 +270,7 @@ configure_system() {
     artix-chroot "$TARGET" locale-gen
     echo "LANG=$LOCALE" > "$TARGET/etc/locale.conf"
     echo "$HOSTNAME" > "$TARGET/etc/hostname"
+    echo "$NETWORK_MODE" > "$TARGET$NETWORK_CONFIG"
     cat > "$TARGET/etc/hosts" <<EOF
 127.0.0.1 localhost
 ::1       localhost
@@ -260,9 +293,11 @@ install_dotfiles_and_yay() {
     artix-chroot "$TARGET" runuser -u "$USERNAME" -- \
         git clone "$REPOSITORY" "/home/$USERNAME/dotfiles"
 
-    install -Dm0644 \
-        "$TARGET/home/$USERNAME/dotfiles/etc/iwd/main.conf" \
-        "$TARGET/etc/iwd/main.conf"
+    if [[ "$NETWORK_MODE" == wifi ]]; then
+        install -Dm0644 \
+            "$TARGET/home/$USERNAME/dotfiles/etc/iwd/main.conf" \
+            "$TARGET/etc/iwd/main.conf"
+    fi
 
     echo '%wheel ALL=(ALL:ALL) NOPASSWD: ALL' > "$TARGET/etc/sudoers.d/bootstrap"
     chmod 0440 "$TARGET/etc/sudoers.d/bootstrap"
@@ -272,7 +307,7 @@ install_dotfiles_and_yay() {
 }
 
 enable_boot_services() {
-    artix-chroot "$TARGET" dinitctl --offline enable iwd
+    artix-chroot "$TARGET" dinitctl --offline enable "$(network_service)"
 }
 
 create_efi_entry() {
@@ -303,6 +338,8 @@ main() {
     check_prerequisites
     step "Selecting partition sizes"
     prompt_partition_sizes
+    step "Selecting the network connection"
+    prompt_network_mode
     step "Confirming target disk erasure"
     confirm_disk_erasure
     step "Partitioning and formatting $DISK"
