@@ -50,7 +50,6 @@ parallel
 pass
 pass-otp
 perl-image-exiftool
-picom
 pipewire
 pipewire-pulse
 playerctl

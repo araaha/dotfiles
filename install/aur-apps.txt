@@ -1,3 +1,4 @@
+fastcompmgr-git
 chroncal-bin
 codelldb-bin
 cyme-bin

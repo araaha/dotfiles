@@ -4,7 +4,7 @@ polybar --quiet main &
 ./scripts/bluetooth-autoconnect.sh &
 ./scripts/bluetooth-battery.sh &
 ./scripts/battery.sh &
-picom -b &
+fastcompmgr &
 carillon watch &
 xwallpaper --stretch "$XDG_DATA_HOME/Wallpapers/Pacman.png" &
 xset s off -dpms &
