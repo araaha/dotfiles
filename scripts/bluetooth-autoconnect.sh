@@ -25,11 +25,24 @@ connected() {
         grep -q "true"
 }
 
+headset_name() {
+    busctl get-property \
+        org.bluez \
+        "$device_path" \
+        org.bluez.Device1 \
+        Name 2>/dev/null |
+        sed 's/^s "\(.*\)"$/\1/'
+}
+
 # Record the initial state.
 connected && was_connected=1
 
 while true; do
     if connected; then
+        if (( ! was_connected )); then
+            dunstify --urgency low "Bluetooth" "$(headset_name) connected"
+        fi
+
         was_connected=1
         grace_until=0
 
@@ -38,6 +51,7 @@ while true; do
         if (( was_connected )); then
             grace_until=$((SECONDS + GRACE_PERIOD))
             was_connected=0
+            dunstify --urgency low "Bluetooth" "$(headset_name) disconnected"
         fi
 
         if (( SECONDS >= grace_until )); then
