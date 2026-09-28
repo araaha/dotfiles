@@ -1,0 +1,487 @@
+#compdef iwctl
+
+# ShellCheck does not support Zsh. These diagnostics are false positives for
+# Zsh completion syntax and completion-system variables used in this file.
+# shellcheck disable=SC1087,SC2034,SC2148,SC2154,SC2203,SC2206,SC2296
+
+# -----------------------------------------------------------------------------
+# Helpers
+# -----------------------------------------------------------------------------
+
+# Run iwctl while suppressing as much terminal formatting as possible,
+# then strip any ANSI escape sequences that remain.
+_iwctl_clean() {
+    TERM=dumb command iwctl "$@" 2>/dev/null |
+        sed $'s/\033\\[[0-9;]*[[:alpha:]]//g'
+}
+
+# -----------------------------------------------------------------------------
+# Dynamic values
+# -----------------------------------------------------------------------------
+
+_iwctl_devices() {
+    local -a devices
+
+    devices=(${(f)"$(
+        _iwctl_clean device list |
+        awk '
+            /^[[:space:]]*Name[[:space:]]/ {
+                table = 1
+                next
+            }
+
+            table && /^[[:space:]]*-+[[:space:]]*$/ {
+                next
+            }
+
+            table && NF {
+                print $1
+            }
+        '
+    )"})
+
+    _describe 'device' devices
+}
+
+_iwctl_stations() {
+    local -a stations
+
+    stations=(${(f)"$(
+        _iwctl_clean station list |
+        awk '
+            /^[[:space:]]*Name[[:space:]]/ {
+                table = 1
+                next
+            }
+
+            table && /^[[:space:]]*-+[[:space:]]*$/ {
+                next
+            }
+
+            table && NF {
+                print $1
+            }
+        '
+    )"})
+
+    _describe 'station' stations
+}
+
+_iwctl_adapters() {
+    local -a adapters
+
+    adapters=(${(f)"$(
+        _iwctl_clean adapter list |
+        awk '
+            /^[[:space:]]*Name[[:space:]]/ {
+                table = 1
+                next
+            }
+
+            table && /^[[:space:]]*-+[[:space:]]*$/ {
+                next
+            }
+
+            table && NF {
+                print $1
+            }
+        '
+    )"})
+
+    _describe 'adapter' adapters
+}
+
+_iwctl_known_networks() {
+    local -a networks
+
+    networks=(${(f)"$(
+        _iwctl_clean known-networks list |
+        awk '
+            /^[[:space:]]*Name[[:space:]]+Security/ {
+                table = 1
+                next
+            }
+
+            table && /^[[:space:]]*-+[[:space:]]*$/ {
+                next
+            }
+
+            table && NF {
+                line = $0
+
+                sub(/^[[:space:]]+/, "", line)
+
+                sub(/[[:space:]]+(psk|open|8021x)([[:space:]].*)?$/, "", line)
+
+                if (length(line))
+                    print line
+            }
+        '
+    )"})
+
+    _describe 'known network' networks
+}
+
+_iwctl_networks() {
+    local station="$1"
+    local -a networks
+
+    networks=(${(f)"$(
+        _iwctl_clean station "$station" get-networks |
+        awk '
+            /^[[:space:]]*Available networks/ {
+                table = 1
+                next
+            }
+
+            table && /^[[:space:]]*-+[[:space:]]*$/ {
+                next
+            }
+
+            table && NF {
+                line = $0
+
+                # Remove leading whitespace.
+                sub(/^[[:space:]]+/, "", line)
+
+                # iwctl may mark the connected network with ">".
+                sub(/^>[[:space:]]*/, "", line)
+
+                # Network type is one of:
+                #
+                #   psk
+                #   open
+                #   8021x
+                #
+                # Everything after it consists of signal/security
+                # information that we do not want in the SSID.
+                sub(/[[:space:]]+(psk|open|8021x)([[:space:]].*)?$/, "", line)
+
+                if (length(line))
+                    print line
+            }
+        '
+    )"})
+
+    _describe 'network' networks
+}
+
+# -----------------------------------------------------------------------------
+# station
+#
+#   iwctl station <station> ...
+# -----------------------------------------------------------------------------
+
+_iwctl_station() {
+    case $CURRENT in
+        2)
+            _iwctl_stations
+            ;;
+
+        3)
+            _values 'station command' \
+                'show[show station information]' \
+                'scan[scan for networks]' \
+                'get-networks[list available networks]' \
+                'connect[connect to a network]' \
+                'connect-hidden[connect to a hidden network]' \
+                'disconnect[disconnect from current network]'
+            ;;
+
+        4)
+            case $words[3] in
+                connect)
+                    _iwctl_networks "$words[2]"
+                    ;;
+
+                connect-hidden)
+                    _message 'hidden network name'
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+# -----------------------------------------------------------------------------
+# device
+#
+#   iwctl device <device> ...
+# -----------------------------------------------------------------------------
+
+_iwctl_device() {
+    case $CURRENT in
+        2)
+            _iwctl_devices
+            ;;
+
+        3)
+            _values 'device command' \
+                'show[show device information]' \
+                'set-property[set device property]'
+            ;;
+
+        4)
+            case $words[3] in
+                set-property)
+                    _values 'property' \
+                        'Powered[enable or disable device]' \
+                        'Mode[set device operating mode]'
+                    ;;
+            esac
+            ;;
+
+        5)
+            if [[ $words[3] == set-property ]]; then
+                case $words[4] in
+                    Powered)
+                        _values 'state' \
+                            'on[enable device]' \
+                            'off[disable device]'
+                        ;;
+
+                    Mode)
+                        _values 'mode' \
+                            'station[station mode]' \
+                            'ad-hoc[ad-hoc mode]' \
+                            'ap[access point mode]'
+                        ;;
+                esac
+            fi
+            ;;
+    esac
+}
+
+# -----------------------------------------------------------------------------
+# adapter
+#
+#   iwctl adapter <adapter> ...
+# -----------------------------------------------------------------------------
+
+_iwctl_adapter() {
+    case $CURRENT in
+        2)
+            _iwctl_adapters
+            ;;
+
+        3)
+            _values 'adapter command' \
+                'show[show adapter information]' \
+                'set-property[set adapter property]'
+            ;;
+
+        4)
+            if [[ $words[3] == set-property ]]; then
+                _values 'property' \
+                    'Powered[enable or disable adapter]'
+            fi
+            ;;
+
+        5)
+            if [[ $words[3] == set-property &&
+                  $words[4] == Powered ]]; then
+                _values 'state' \
+                    'on[enable adapter]' \
+                    'off[disable adapter]'
+            fi
+            ;;
+    esac
+}
+
+# -----------------------------------------------------------------------------
+# known-networks
+#
+#   iwctl known-networks <network> ...
+# -----------------------------------------------------------------------------
+
+_iwctl_known_networks_cmd() {
+    case $CURRENT in
+        2)
+            _iwctl_known_networks
+            ;;
+
+        3)
+            _values 'known network command' \
+                'show[show known network information]' \
+                'forget[forget network]' \
+                'set-property[set network property]'
+            ;;
+
+        4)
+            if [[ $words[3] == set-property ]]; then
+                _values 'property' \
+                    'AutoConnect[automatically connect to network]'
+            fi
+            ;;
+
+        5)
+            if [[ $words[3] == set-property &&
+                  $words[4] == AutoConnect ]]; then
+                _values 'state' \
+                    'yes[enable automatic connection]' \
+                    'no[disable automatic connection]'
+            fi
+            ;;
+    esac
+}
+
+# -----------------------------------------------------------------------------
+# AP
+#
+#   iwctl ap <device> ...
+# -----------------------------------------------------------------------------
+
+_iwctl_ap() {
+    case $CURRENT in
+        2)
+            _iwctl_devices
+            ;;
+
+        3)
+            _values 'access point command' \
+                'start[start access point]' \
+                'start-profile[start access point from profile]' \
+                'stop[stop access point]' \
+                'show[show access point information]'
+            ;;
+
+        4)
+            case $words[3] in
+                start)
+                    _message 'SSID'
+                    ;;
+
+                start-profile)
+                    _message 'profile'
+                    ;;
+            esac
+            ;;
+
+        5)
+            if [[ $words[3] == start ]]; then
+                _message 'passphrase'
+            fi
+            ;;
+    esac
+}
+
+# -----------------------------------------------------------------------------
+# Ad-hoc
+#
+#   iwctl ad-hoc <device> ...
+# -----------------------------------------------------------------------------
+
+_iwctl_ad_hoc() {
+    case $CURRENT in
+        2)
+            _iwctl_devices
+            ;;
+
+        3)
+            _values 'ad-hoc command' \
+                'start[start ad-hoc network]' \
+                'start-open[start open ad-hoc network]' \
+                'stop[stop ad-hoc network]' \
+                'show[show ad-hoc information]'
+            ;;
+
+        4)
+            case $words[3] in
+                start|start-open)
+                    _message 'SSID'
+                    ;;
+            esac
+            ;;
+
+        5)
+            if [[ $words[3] == start ]]; then
+                _message 'passphrase'
+            fi
+            ;;
+    esac
+}
+
+# -----------------------------------------------------------------------------
+# WSC
+#
+#   iwctl wsc <device> ...
+# -----------------------------------------------------------------------------
+
+_iwctl_wsc() {
+    case $CURRENT in
+        2)
+            _iwctl_devices
+            ;;
+
+        3)
+            _values 'WSC command' \
+                'push-button[start push-button configuration]' \
+                'cancel[cancel WSC operation]'
+            ;;
+    esac
+}
+
+# -----------------------------------------------------------------------------
+# Main completion
+# -----------------------------------------------------------------------------
+
+_iwctl() {
+    local context state line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(-h --help)'{-h,--help}'[show help]' \
+        '(-v --version)'{-v,--version}'[show version]' \
+        '--username=[EAP username]:username:' \
+        '--password=[EAP password]:password:' \
+        '--passphrase=[network passphrase]:passphrase:' \
+        '1:command:->command' \
+        '*::argument:->args'
+
+    case $state in
+        command)
+            _values 'command' \
+                'adapter[manage wireless adapters]' \
+                'ad-hoc[manage ad-hoc networks]' \
+                'ap[manage access points]' \
+                'device[manage wireless devices]' \
+                'known-networks[manage known networks]' \
+                'station[manage wireless stations]' \
+                'wsc[manage Wi-Fi Simple Configuration]'
+            ;;
+
+        args)
+            case $words[1] in
+                adapter)
+                    _iwctl_adapter
+                    ;;
+
+                ad-hoc)
+                    _iwctl_ad_hoc
+                    ;;
+
+                ap)
+                    _iwctl_ap
+                    ;;
+
+                device)
+                    _iwctl_device
+                    ;;
+
+                known-networks)
+                    _iwctl_known_networks_cmd
+                    ;;
+
+                station)
+                    _iwctl_station
+                    ;;
+
+                wsc)
+                    _iwctl_wsc
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_iwctl "$@"
+
