@@ -30,7 +30,7 @@ check_battery() {
     # Low battery
     if (( level <= 20 && state != 1 )); then
         if (( ! notified_low )); then
-            DISPLAY=:0 dunstify -u CRITICAL -t 1000 \
+            dunstify -u CRITICAL -t 1000 \
                 "Battery level is ${level}%!"
             notified_low=1
         fi
@@ -42,7 +42,7 @@ check_battery() {
     # Notify again whenever the percentage increases.
     if (( level >= 80 && state == 1 )); then
         if (( level != notified_high_at )); then
-            DISPLAY=:0 dunstify -u CRITICAL -t 1000 \
+            dunstify -u CRITICAL -t 1000 \
                 "Battery level is ${level}%! Unplug"
             notified_high_at=$level
         fi
