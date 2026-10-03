@@ -1,0 +1,77 @@
+@define-color bg #242424;
+@define-color fg #ebdbb2;
+@define-color aqua #8ec07c;
+@define-color orange #FE8019;
+@define-color green #9dc365;
+@define-color yellow #fabd2f;
+@define-color blue #7DAEA3;
+@define-color white #ebdbb2;
+@define-color pink #fc9690;
+
+* {
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+    font-family: "MesloLGS NF";
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    letter-spacing: 0;
+}
+
+window#waybar {
+    background: @bg;
+    color: @fg;
+}
+
+#custom-events,
+#bluetooth,
+#pulseaudio,
+#custom-weather,
+#custom-uair,
+#clock,
+#custom-backlight,
+#battery,
+#memory,
+#temperature,
+#network {
+    color: @bg;
+    padding: 0 10px;
+}
+
+#bluetooth,
+#custom-uair {
+    background: @green;
+}
+
+#pulseaudio {
+    background: @yellow;
+}
+
+#custom-weather,
+#battery {
+    background: @pink;
+}
+
+#clock,
+#memory {
+    background: @blue;
+}
+
+#custom-backlight {
+    background: @aqua;
+}
+
+#temperature {
+    background: @white;
+}
+
+#network {
+    background: @orange;
+}
+
+tooltip {
+    background: @bg;
+    color: @fg;
+    border: 1px solid @blue;
+}

@@ -428,7 +428,7 @@ desc = "Chmod on selected files"
 
 [[mgr.prepend_keymap]]
 on  = ["<Space>", "y"]
-run = [ "shell -- echo %s | xclip -i -selection clipboard -t text/uri-list", "yank" ]
+run = [ "shell -- echo %s | wl-copy --type text/uri-list", "yank" ]
 
 [[mgr.prepend_keymap]]
 on   = "l"
@@ -544,5 +544,5 @@ desc = "Open Omni Trash"
 
 [[mgr.prepend_keymap]]
 on   = [ "s", "x" ]
-run  = [ "shell --orphan -- nsxiv -g 800x600+560+240 -b -a -sf %s", "toggle_all --state=off" ]
-desc = "Open Nsxiv"
+run  = [ "shell --orphan -- swayimg %s", "toggle_all --state=off" ]
+desc = "Open Swayimg"

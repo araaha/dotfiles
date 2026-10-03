@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Swayimg
+GenericName=Image Viewer
+Exec=swayimg %F
+MimeType=image/bmp;image/gif;image/jpeg;image/png;image/tiff;image/webp;image/heic;image/svg+xml;image/jp2;image/jxl;image/avif;image/heif;image/x-portable-anymap;image/x-portable-bitmap;image/x-portable-graymap;image/x-portable-pixmap;image/x-xbitmap;image/x-xpixmap;image/x-tga;
+NoDisplay=true
+Icon=image-x-generic
+Categories=Graphics;Viewer;

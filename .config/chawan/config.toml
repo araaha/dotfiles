@@ -20,7 +20,7 @@ image-mode="none"
 highlight-color="#3F3F3F"
 
 [external]
-copy-cmd="xclip -sel clip"
+copy-cmd="wl-copy"
 mailcap = ["~/.config/chawan/mailcap"]
 download-dir = "~/Downloads"
 tmpdir="~/.cache/chawan"

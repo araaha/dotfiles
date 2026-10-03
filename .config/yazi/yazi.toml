@@ -68,7 +68,7 @@ trash = [
 	{ run = "ya pub trash-empty --list %S",   desc = "Empty trash bin" },
 ]
 image = [
-    { run = "nsxiv -g 800x600+560+240 -b -a -sf %s", orphan = true, desc = "nsxiv" },
+    { run = "swayimg %s", orphan = true, desc = "swayimg" },
 ]
 
 [open]

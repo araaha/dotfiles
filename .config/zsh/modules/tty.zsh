@@ -1,8 +1,10 @@
 export MOD="$ZDOTDIR/modules"
 
-if [[ -z $DISPLAY ]] && ! pgrep -x Xorg >/dev/null; then
-    exec startx
+if [[ -z $DISPLAY && -z $WAYLAND_DISPLAY ]] && [[ $(tty) == /dev/tty1 ]]; then
+    exec labwc
 fi
+
+[[ "$TERM" == linux ]] || return
 
 echo -en "\e]P0242424" #black
 echo -en "\e]P1cc241d" #darkred

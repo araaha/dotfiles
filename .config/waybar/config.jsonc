@@ -1,0 +1,123 @@
+{
+    "layer": "overlay",
+    "position": "top",
+    "height": 28,
+    "spacing": 0,
+    "exclusive": false,
+    "start_hidden": true,
+    "on-sigusr1": "toggle",
+    "modes": {
+        "invisible": {
+            "layer": "overlay",
+            "exclusive": false,
+            "passthrough": true,
+            "visible": false
+        }
+    },
+
+    "modules-left": [
+        "bluetooth",
+        "pulseaudio",
+        "custom/weather",
+        "custom/uair"
+    ],
+    "modules-center": [
+        "clock"
+    ],
+    "modules-right": [
+        "custom/backlight",
+        "battery",
+        "memory",
+        "temperature",
+        "network"
+    ],
+
+    "bluetooth": {
+        "format": "",
+        "format-disabled": "",
+        "format-off": "",
+        "format-on": "",
+        "format-no-controller": "",
+        "format-connected": "",
+        "format-connected-battery": " {device_battery_percentage}%",
+        "tooltip-format-connected": "{device_alias}",
+        "tooltip-format-connected-battery": "{device_alias}: {device_battery_percentage}%",
+        "on-click": "bluetoothctl disconnect 34:09:C9:68:FB:A3"
+    },
+
+    "pulseaudio": {
+        "format": "󰕾 {volume}%",
+        "format-bluetooth": "󰕾 {volume}%",
+        "format-muted": "󰝟 {volume}%",
+        "scroll-step": 2,
+        "tooltip": false
+    },
+
+    "custom/weather": {
+        "exec": "$HOME/.config/waybar/scripts/weather.sh",
+        "interval": 30,
+        "format": "{text}",
+        "tooltip": false
+    },
+
+    "custom/uair": {
+        "exec": "uair",
+        "exec-if": "test ! -e $XDG_RUNTIME_DIR/uair.sock",
+        "restart-interval": 1,
+        "format": "󱎫 {text}",
+        "hide-empty-text": true,
+        "tooltip": false
+    },
+
+    "clock": {
+        "interval": 1,
+        "format": "{:%a, %b %d %H:%M:%S}",
+        "tooltip": false
+    },
+
+    "custom/backlight": {
+        "exec": "sh $HOME/.config/waybar/scripts/backlight.sh",
+        "interval": 1,
+        "format": " {text}",
+        "on-scroll-up": "light -A 2",
+        "on-scroll-down": "light -U 2",
+        "tooltip": false
+    },
+
+    "battery": {
+        "bat": "BAT0",
+        "adapter": "ADP1",
+        "interval": 1,
+        "format": "{icon} {capacity}%",
+        "format-charging": " {capacity}%",
+        "format-plugged": " {capacity}%",
+        "format-full": " {capacity}%",
+        "format-icons": ["", "", "", "", ""],
+        "tooltip": false
+    },
+
+    "memory": {
+        "interval": 1,
+        "format": " {used:0.1f}G/{total:0.1f}G",
+        "tooltip": false
+    },
+
+    "temperature": {
+        "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:18.3/hwmon",
+        "input-filename": "temp1_input",
+        "interval": 1,
+        "format": " {temperatureC}°C",
+        "tooltip": false
+    },
+
+    "network": {
+        "interface": "wlan0",
+        "interval": 1,
+        "format": "",
+        "format-wifi": "直 {essid}",
+        "format-linked": "直 {ifname}",
+        "format-disconnected": "",
+        "format-disabled": "",
+        "tooltip": false
+    }
+}

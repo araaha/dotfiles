@@ -10,7 +10,7 @@ _rofi () {
 }
 
 _image_viewer () {
-	feh -
+	swayimg -
 }
 
 # We expect to find these fields in pass(1)'s output
@@ -22,6 +22,7 @@ OTPmethod_field='otp_method'
 default_autotype="user :tab pass"
 delay=2
 wait=0.2
+# Legacy config files may still set xdotool_delay.
 xdotool_delay=12
 default_do='menu' # menu, copyPass, typeUser, typePass, copyUser, copyUrl, viewEntry, typeMenu, actionMenu, copyMenu, openUrl
 auto_enter='false'
@@ -68,12 +69,42 @@ list_passwords() {
 
 }
 
+# Keep text on stdin so passwords do not appear in process arguments.
+type_text () {
+	if ! command -v wtype >/dev/null 2>&1; then
+		printf '%s\n' 'rofi-pass: install wtype to enable Wayland typing.' >&2
+		return 1
+	fi
+	wtype -d "${typing_delay:-$xdotool_delay}" -
+}
+
 doClip () {
+	local content
 	case "$clip" in
-		"primary") xclip ;;
-		"clipboard") xclip -selection clipboard;;
-		"both") xclip; xclip -o | xclip -selection clipboard;;
+		primary) wl-copy --primary ;;
+		clipboard) wl-copy ;;
+		both)
+			# Read stdin once; preserve trailing newlines and avoid a clipboard round trip.
+			IFS= read -r -d '' content || true
+			printf '%s' "$content" | wl-copy --primary || return
+			printf '%s' "$content" | wl-copy
+			;;
+		*) printf 'rofi-pass: invalid clipboard selection: %s\n' "$clip" >&2; return 1 ;;
 	esac
+}
+
+clear_clipboard_later () {
+	(
+		sleep "$clip_clear"
+		case "$clip" in
+			primary) wl-copy --primary --clear ;;
+			clipboard) wl-copy --clear ;;
+			both) wl-copy --primary --clear; wl-copy --clear ;;
+		esac
+		if [[ $notify == "true" ]]; then
+			notify-send "rofi-pass" "Clipboard cleared"
+		fi
+	) &
 }
 
 checkIfPass () {
@@ -82,30 +113,26 @@ checkIfPass () {
 
 
 autopass () {
-	x_repeat_enabled=$(xset q | awk '/auto repeat:/ {print $3}')
-	xset r off
 
 	rm -f "$HOME/.cache/rofi-pass/last_used"
 	printf '%s\n' "${root}: $selected_password" > "$HOME/.cache/rofi-pass/last_used"
 	for word in ${stuff["$AUTOTYPE_field"]}; do
 		case "$word" in
-			":tab") xdotool key Tab;;
-			":space") xdotool key space;;
+			":tab") wtype -k Tab;;
+			":space") wtype -k space;;
 			":delay") sleep "${delay}";;
-			":enter") xdotool key Return;;
-			":otp") printf '%s' "$(generateOTP)" | xdotool type --delay ${xdotool_delay} --clearmodifiers --file -;;
-			"pass") printf '%s' "${password}" | xdotool type --delay ${xdotool_delay} --clearmodifiers --file -;;
- 			"path") printf '%s' "${selected_password}" | rev | cut -d'/' -f1 | rev | xdotool type --clearmodifiers --file -;;
-			*) printf '%s' "${stuff[${word}]}" | xdotool type --delay ${xdotool_delay} --clearmodifiers --file -;;
+			":enter") wtype -k Return;;
+			":otp") printf '%s' "$(generateOTP)" | type_text;;
+			"pass") printf '%s' "${password}" | type_text;;
+ 			"path") printf '%s' "${selected_password}" | rev | cut -d'/' -f1 | rev | type_text;;
+			*) printf '%s' "${stuff[${word}]}" | type_text;;
 		esac
 	done
 
 	if [[ ${auto_enter} == "true" ]]; then
-		xdotool key Return
+		wtype -k Return
 	fi
 
-	xset r "$x_repeat_enabled"
-	unset x_repeat_enabled
 	clearUp
 }
 
@@ -145,13 +172,9 @@ openURL () {
 typeUser () {
 	checkIfPass
 
-	x_repeat_enabled=$(xset q | awk '/auto repeat:/ {print $3}')
-	xset r off
 
-	printf '%s' "${stuff[${USERNAME_field}]}" | xdotool type --delay ${xdotool_delay} --clearmodifiers --file -
+	printf '%s' "${stuff[${USERNAME_field}]}" | type_text
 
-	xset r "$x_repeat_enabled"
-	unset x_repeat_enabled
 
 	clearUp
 }
@@ -159,10 +182,8 @@ typeUser () {
 typePass () {
 	checkIfPass
 
-	x_repeat_enabled=$(xset q | awk '/auto repeat:/ {print $3}')
-	xset r off
 
-	printf '%s' "${password}" | xdotool type --delay ${xdotool_delay} --clearmodifiers --file -
+	printf '%s' "${password}" | type_text
 
 	if [[ $notify == "true" ]]; then
 		if [[ "${stuff[notify]}" == "false" ]]; then
@@ -178,8 +199,6 @@ typePass () {
 		fi
 	fi
 
-	xset r "$x_repeat_enabled"
-	unset x_repeat_enabled
 	clearUp
 }
 
@@ -187,18 +206,14 @@ typeField () {
 	checkIfPass
 	local to_type
 
-	x_repeat_enabled=$(xset q | awk '/auto repeat:/ {print $3}')
-	xset r off
 
 	case $typefield in
 		"OTP") to_type="$(generateOTP)" ;;
 		*) to_type="${stuff[${typefield}]}" ;;
 	esac
 
-	printf '%s' "$to_type" | xdotool type --delay ${xdotool_delay} --clearmodifiers --file -
+	printf '%s' "$to_type" | type_text
 
-	xset r "$x_repeat_enabled"
-	unset x_repeat_enabled
 	unset to_type
 
 	clearUp
@@ -244,11 +259,7 @@ copyPass () {
 		notify-send "rofi-pass" "Copied Password\\nClearing in $clip_clear seconds"
 	fi
 
-	if [[ $notify == "true" ]]; then
-		(sleep $clip_clear; printf '%s' "" | xclip; printf '%s' "" | xclip -selection clipboard | notify-send "rofi-pass" "Clipboard cleared") &
-	elif [[ $notify == "false" ]]; then
-		(sleep $clip_clear; printf '%s' "" | xclip; printf '%s' "" | xclip -selection clipboard) &
-	fi
+	clear_clipboard_later
 }
 
 viewEntry () {
@@ -606,11 +617,7 @@ showEntry () {
 			if [[ $notify == "true" ]]; then
 				notify-send "rofi-pass" "Copied Password\\nClearing in $clip_clear seconds"
 			fi
-			if [[ $notify == "true" ]]; then
-				(sleep $clip_clear; printf '%s' "" | xclip; printf '%s' "" | xclip -selection clipboard | notify-send "rofi-pass" "Clipboard cleared") &
-			elif [[ $notify == "false" ]]; 	then
-				(sleep $clip_clear; printf '%s' "" | xclip; printf '%s' "" | xclip -selection clipboard) &
-			fi
+			clear_clipboard_later
 			exit
 		fi
 	fi
@@ -670,7 +677,7 @@ listgpg () {
 }
 
 insertPass () {
-	url=$(xclip --selection clipboard -o)
+	url=$(wl-paste --no-newline 2>/dev/null)
 
 	if [[ "${url:0:4}" == "http" ]]; then
 		domain_name="$(printf '%s\n' "${url}" | awk -F / '{l=split($3,a,"."); print (a[l-1]=="com"?a[l-2] OFS:X) a[l-1] OFS a[l]}' OFS=".")"
@@ -794,7 +801,7 @@ main () {
 
 	# create tmp dir
 	if [[ ! -d "$HOME/.cache/rofi-pass" ]]; then
-		mkdir "$HOME/.cache/rofi-pass"
+		mkdir -p "$HOME/.cache/rofi-pass"
 	fi
 
 	# fix keyboard layout if enabled in config
@@ -860,5 +867,7 @@ main () {
 	esac
 }
 
-main "$@"
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+	main "$@"
+fi
 

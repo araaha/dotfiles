@@ -1,5 +1,0 @@
-#!/bin/bash
-
-case "$1" in
-    "X") while read file; do garbage put "$file"; done
-esac

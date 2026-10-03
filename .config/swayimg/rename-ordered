@@ -1,0 +1,77 @@
+#!/usr/bin/env python3
+"""Safely number image files in the order supplied by Swayimg."""
+
+from __future__ import annotations
+
+import os
+from pathlib import Path
+import sys
+
+
+def fail(message: str) -> int:
+    print(f"swayimg ordered rename: {message}", file=sys.stderr)
+    return 1
+
+
+def main(arguments: list[str]) -> int:
+    if not arguments:
+        return fail("no files supplied")
+
+    try:
+        sources = [Path(item).resolve(strict=True) for item in arguments]
+    except OSError as error:
+        return fail(str(error))
+
+    directory = sources[0].parent
+    if any(source.parent != directory for source in sources):
+        return fail("all files must be in one directory")
+
+    width = max(3, len(str(len(sources))))
+    targets: list[Path] = []
+    for index, source in enumerate(sources, 1):
+        dot = source.name.rfind(".")
+        extension = source.name[dot:] if dot >= 0 else ""
+        targets.append(directory / f"{index:0{width}d}{extension}")
+
+    if len(set(targets)) != len(targets):
+        return fail("the generated target names are not unique")
+
+    source_set = set(sources)
+    for target in targets:
+        if target.exists() and target not in source_set:
+            return fail(f"refusing to overwrite {target}")
+
+    temporaries = [
+        directory / f".swayimg-order-{os.getpid()}-{index}"
+        for index in range(len(sources))
+    ]
+    if any(path.exists() for path in temporaries):
+        return fail("a temporary path already exists")
+
+    moved_to_temporary = 0
+    try:
+        for source, temporary in zip(sources, temporaries):
+            source.rename(temporary)
+            moved_to_temporary += 1
+    except OSError as error:
+        for index in range(moved_to_temporary - 1, -1, -1):
+            temporaries[index].rename(sources[index])
+        return fail(str(error))
+
+    moved_to_target = 0
+    try:
+        for temporary, target in zip(temporaries, targets):
+            temporary.rename(target)
+            moved_to_target += 1
+    except OSError as error:
+        for index in range(moved_to_target - 1, -1, -1):
+            targets[index].rename(temporaries[index])
+        for temporary, source in zip(temporaries, sources):
+            temporary.rename(source)
+        return fail(str(error))
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))
