@@ -73,35 +73,36 @@ au("LspAttach", {
             end
         end)
         --
-        local function update_list_if_visible()
-            local loclist = vim.fn.getloclist(0, { winid = 0 })
-            local qflist = vim.fn.getqflist({ winid = 0 })
-            if loclist.winid ~= 0 then
-                vim.diagnostic.setloclist({ open = false })
+        vim.keymap.set("n", "<C-s>", function()
+            local clients = vim.lsp.get_clients({ bufnr = ev.buf, method = "textDocument/formatting" })
+            if #clients > 0 then
+                vim.lsp.buf.format({ bufnr = ev.buf })
             end
-            if qflist.winid ~= 0 then
-                vim.diagnostic.setqflist({ open = false })
+            vim.cmd("silent! write")
+        end, opts)
+
+    end,
+})
+
+local group = vim.api.nvim_create_augroup("UserLspLists", { clear = true })
+au("DiagnosticChanged", {
+    group = group,
+    callback = function()
+        -- Location lists belong to windows; update all visible lists.
+        for _, win in ipairs(vim.api.nvim_list_wins()) do
+            if vim.fn.getloclist(win, { winid = 0 }).winid ~= 0 then
+                vim.api.nvim_win_call(win, function()
+                    vim.diagnostic.setloclist({ open = false })
+                end)
             end
         end
-
-        au("DiagnosticChanged", {
-            callback = update_list_if_visible,
-        })
-
-        au("FileType", {
-            pattern = "qf",
-            callback = function()
-                vim.bo.buflisted = false
-            end,
-        })
-
-        for _, client in pairs(vim.lsp.get_clients()) do
-            if client.name ~= "copilot" then
-                vim.keymap.set("n", "<C-s>", function()
-                    vim.lsp.buf.format()
-                    vim.cmd("silent! write")
-                end, opts)
-            end
+        if vim.fn.getqflist({ winid = 0 }).winid ~= 0 then
+            vim.diagnostic.setqflist({ open = false })
         end
     end,
+})
+au("FileType", {
+    group = group,
+    pattern = "qf",
+    callback = function(ev) vim.bo[ev.buf].buflisted = false end,
 })
