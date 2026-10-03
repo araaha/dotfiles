@@ -1,8 +1,5 @@
 fpath=($fpath $ZDOTDIR/plugins/zsh-completion-generator/custom-completions/)
 autoload -Uz compinit
-if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
-  compinit
-else
-  compinit -C
-fi
-
+# A full check also notices added/removed completions after migration.
+# Keep the dump at the same path compiled by .zlogin.
+compinit -d "$ZDOTDIR/.zcompdump"

@@ -1,4 +1,4 @@
-export XDG_RUNTIME_DIR="/run/user/1000"
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_DATA_DIRS="/usr/local/share:/usr/share"
 export XDG_CURRENT_DESKTOP=labwc
@@ -10,7 +10,7 @@ export DBUS_SESSION_BUS_ADDRESS="${DBUS_SESSION_BUS_ADDRESS:-unix:path=$XDG_RUNT
 export GOPATH="$XDG_DATA_HOME/go"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export BUN_INSTALL="$XDG_DATA_HOME/bun"
-export PATH="$PATH:/usr/local/bin:$HOME/.local/bin:$GOPATH/bin:$BUN_INSTALL/bin:$HOME/.local/share/npm/bin:$CARGO_HOME/bin:"
+export PATH="$PATH:/usr/local/bin:$HOME/.local/bin:$GOPATH/bin:$BUN_INSTALL/bin:$HOME/.local/share/npm/bin:$CARGO_HOME/bin"
 export GTK_USE_PORTAL=1
 export QT_QPA_PLATFORMTHEME=xdgdesktopportal
 export WORDCHARS="_*?[]~&;!#$%^(){<>=."
@@ -44,15 +44,12 @@ export ECLIPSE_HOME="$XDG_CONFIG_HOME/eclipse"
 export PSQL_HISTORY="$XDG_STATE_HOME/psql_history"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
 export CODEX_HOME="$XDG_CONFIG_HOME/codex"
-export SSH_HOME="$XDG_CONFIG_HOME/ssh"
 
 export GPG_TTY=$(tty)
 export GNUPGHOME="$XDG_DATA_HOME/.gnupg"
 export PASSWORD_STORE_DIR="$XDG_DATA_HOME/pass"
-export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
 
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
 
 export _ZO_ECHO=0
 export _ZO_DATA_DIR="$HOME/.local/share/zoxide/"
-export TERM=tmux-256color
