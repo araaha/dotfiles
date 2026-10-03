@@ -151,9 +151,9 @@ local function setup(_, options)
         })
     end
 
-    local old_permissions = Status.permissions
+    local old_permissions = Status.perm
 
-    function Status:permissions()
+    function Status:perm()
         return ui.Line({
             old_permissions(self),
             ui.Span(" "),

@@ -17,7 +17,7 @@ require("jumplist"):setup({})
 require("statusline"):setup({
     mode_normal = "#7daea3",
     position = "#7daea3",
-    separator_open = " ",
+    separator_open = "",
     mode_select = "white",
     mode_unset = "white"
 })
