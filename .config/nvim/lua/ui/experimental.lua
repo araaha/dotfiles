@@ -1,9 +1,13 @@
-local ui2 = require("vim._core.ui2")
-local msgs = require("vim._core.ui2.messages")
+-- Private Neovim APIs are optional and may change between releases.
+local ok_ui, ui2 = pcall(require, "vim._core.ui2")
+local ok_msgs, msgs = pcall(require, "vim._core.ui2.messages")
+if not ok_ui or not ok_msgs or type(ui2.enable) ~= "function" or type(msgs.set_pos) ~= "function" then
+    return
+end
 local orig_set_pos = msgs.set_pos
 msgs.set_pos = function(tgt)
     orig_set_pos(tgt)
-    if (tgt == "msg" or tgt == nil) and vim.api.nvim_win_is_valid(ui2.wins.msg) then
+    if (tgt == "msg" or tgt == nil) and ui2.wins and ui2.wins.msg and vim.api.nvim_win_is_valid(ui2.wins.msg) then
         pcall(vim.api.nvim_win_set_config,
             ui2.wins.msg,
             {
@@ -15,7 +19,7 @@ msgs.set_pos = function(tgt)
             })
     end
 end
-ui2.enable({
+pcall(ui2.enable, {
     enable = true,          -- Whether to enable or disable the UI.
     msg = {                 -- Options related to the message module.
         targets = 'msg',
