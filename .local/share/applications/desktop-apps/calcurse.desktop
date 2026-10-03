@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Calcurse
-Icon=calendar
-Terminal=false
-Exec=/home/araaha/.local/bin/st -g 160x50 -e calcurse
-Categories=ConsoleOnly;System;FileTools;FileManager
-MimeType=inode/directory;
