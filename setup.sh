@@ -3,6 +3,8 @@ set -euo pipefail
 
 DOTS="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 readonly DOTS
+# shellcheck source=install/install-ui.sh
+source "$DOTS/install/install-ui.sh"
 readonly NETWORK_CONFIG=/etc/dotfiles-network
 TEMP_DIR=""
 
@@ -10,29 +12,12 @@ readonly -a REQUIRED_COMMANDS=(yay git dinitctl)
 readonly -a DINIT_SERVICES=(cronie bluetoothd chronyd chrony)
 
 die() {
-    if [[ -t 2 && -z "${NO_COLOR:-}" ]]; then
-        printf '\033[1;31merror:\033[0m %s\n' "$*" >&2
-    else
-        printf 'error: %s\n' "$*" >&2
-    fi
+    ui_message error "$*" >&2
     exit 1
 }
 
-step() {
-    if [[ -t 1 && -z "${NO_COLOR:-}" ]]; then
-        printf '\033[1;34m==>\033[0m \033[1m%s\033[0m\n' "$*"
-    else
-        printf '==> %s\n' "$*"
-    fi
-}
-
-success() {
-    if [[ -t 1 && -z "${NO_COLOR:-}" ]]; then
-        printf '\033[1;32m==> %s\033[0m\n' "$*"
-    else
-        printf '==> %s\n' "$*"
-    fi
-}
+step() { ui_message step "$*"; }
+success() { ui_message success "$*"; }
 
 print_readonly_variables() {
     step "Read-only configuration"
@@ -75,6 +60,17 @@ install_packages() {
 install_aur_packages() {
     yay --needed -S - < "$DOTS/install/aur-apps.txt"
 }
+
+install_labwc() (
+    # Build outside the checkout; retain the package for reinstalling or rollback.
+    local build_dir
+    sudo pacman -S --needed base-devel
+    mkdir -p -- "${XDG_CACHE_HOME:-$HOME/.cache}"
+    build_dir=$(mktemp -d "${XDG_CACHE_HOME:-$HOME/.cache}/labwc-patched.XXXXXX")
+    cp -- "$DOTS/install/labwc-patched/"* "$build_dir/"
+    cd -- "$build_dir"
+    makepkg --syncdeps --install --cleanbuild
+)
 
 configure_package_repositories() {
     sudo pacman -Syu --needed --noconfirm artix-archlinux-support
@@ -191,17 +187,36 @@ configure_services() {
     pacman -Q "$network_package" >/dev/null || die "Missing network package: $network_package"
 
     for service in "${DINIT_SERVICES[@]}"; do
-        sudo dinitctl enable "$service"
+        enable_service "$service"
     done
-    sudo dinitctl enable "$network_service"
+    enable_service "$network_service"
+}
+
+enable_service() {
+    local service=$1 output status
+    if output=$(sudo env LC_ALL=C dinitctl enable "$service" 2>&1); then
+        printf '%s\n' "$output"
+    else
+        status=$?
+        printf '%s\n' "$output" >&2
+        [[ "$output" == 'dinitctl: service already enabled.' ]] || return "$status"
+        # An enabled service may be stopped; ensure it is running too.
+        sudo dinitctl start "$service"
+    fi
 }
 
 refresh_caches() {
-    fc-cache -f
-    bat cache --build
+    ui_run_quiet "Refreshing font cache" fc-cache -f
+    ui_run_quiet "Building bat cache" bat cache --build
+}
+
+remove_installation_leftovers() {
+    rm -f -- "$HOME/.bash_profile" "$HOME/.bashrc" "$HOME/.bash_logout"
+    rm -rf -- "$HOME/.npm"
 }
 
 main() {
+    (( $# == 0 )) || die "Usage: $0"
     trap cleanup EXIT
     print_readonly_variables
     step "Checking prerequisites"
@@ -210,6 +225,8 @@ main() {
     configure_package_repositories
     step "Installing repository packages"
     install_packages
+    step "Building and installing patched Labwc"
+    install_labwc
     step "Installing dotfiles"
     install_dotfiles
     step "Installing themes and icons"
@@ -226,7 +243,10 @@ main() {
     install_aur_packages
     step "Refreshing caches"
     refresh_caches
-    success "Setup complete. Reboot."
+    step "Removing default Bash files and npm leftovers"
+    remove_installation_leftovers
+    ui_summary "Setup complete. Reboot." \
+        "Dotfiles: $DOTS" "Enabled services: ${DINIT_SERVICES[*]} and the selected network service"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then

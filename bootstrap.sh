@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+BOOTSTRAP_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=install/install-ui.sh
+source "$BOOTSTRAP_DIR/install/install-ui.sh"
+
 # Install a minimal Artix dinit system from the live ISO and boot its kernel
 # directly through UEFI. This script erases the selected disk.
 
@@ -15,9 +19,6 @@ readonly -a KERNEL_PARAMETERS=(
     rw
     quiet
     splash
-    amdgpu.dcdebugmask=0x10
-    amdgpu.gpu_recovery=1
-    atkbd.softrepeat=1
     vt.cur_default=0x200011
     vt.global_cursor_default=0
     cpufreq.default_governor=powersave
@@ -37,6 +38,7 @@ HOSTNAME=${2:-}
 BOOT_SIZE=256M
 ROOT_SIZE=50G
 NETWORK_MODE=wifi
+FIRMWARE_PACKAGES=()
 ESP=""
 ROOT=""
 HOME_PARTITION=""
@@ -45,29 +47,12 @@ MICROCODE_IMAGE=""
 MOUNTED=false
 
 die() {
-    if [[ -t 2 && -z "${NO_COLOR:-}" ]]; then
-        printf '\033[1;31merror:\033[0m %s\n' "$*" >&2
-    else
-        printf 'error: %s\n' "$*" >&2
-    fi
+    ui_message error "$*" >&2
     exit 1
 }
 
-step() {
-    if [[ -t 1 && -z "${NO_COLOR:-}" ]]; then
-        printf '\033[1;34m==>\033[0m \033[1m%s\033[0m\n' "$*"
-    else
-        printf '==> %s\n' "$*"
-    fi
-}
-
-success() {
-    if [[ -t 1 && -z "${NO_COLOR:-}" ]]; then
-        printf '\033[1;32m==> %s\033[0m\n' "$*"
-    else
-        printf '==> %s\n' "$*"
-    fi
-}
+step() { ui_message step "$*"; }
+success() { ui_message success "$*"; }
 
 print_readonly_variables() {
     step "Read-only configuration"
@@ -87,14 +72,14 @@ require_command() {
 }
 
 usage() {
-    echo "Usage: sudo $0 /dev/DEVICE HOSTNAME"
+    echo "Usage: sudo $0 /dev/DEVICE [HOSTNAME]"
     echo "Example: sudo $0 /dev/nvme0n1 atlas"
 }
 
 check_invocation() {
     (( EUID == 0 )) || die "Run this script as root from an Artix live ISO."
-    [[ -n "$DISK" && -n "$HOSTNAME" ]] || { usage; exit 2; }
-    [[ "$HOSTNAME" =~ ^[a-zA-Z0-9][a-zA-Z0-9.-]*$ ]] || die "Invalid hostname: $HOSTNAME"
+    [[ -n "$DISK" ]] || { usage; exit 2; }
+    [[ -z "$HOSTNAME" || "$HOSTNAME" =~ ^[a-zA-Z0-9][a-zA-Z0-9.-]*$ ]] || die "Invalid hostname: $HOSTNAME"
     [[ -d /sys/firmware/efi/efivars ]] || die "The ISO was not booted in UEFI mode."
     [[ -r /etc/os-release ]] || die "Could not identify the live environment."
 
@@ -122,6 +107,13 @@ enable_pacman_parallel_downloads() {
 install_prerequisites() {
     enable_pacman_parallel_downloads /etc/pacman.conf
     pacman -Sy --needed --noconfirm "${PREREQUISITE_PACKAGES[@]}"
+    # Gum is optional; a live ISO may not have it in its configured repositories.
+    if [[ ${DOTFILES_PLAIN:-0} != 1 ]] && ! command -v gum >/dev/null; then
+        if pacman -Si gum >/dev/null 2>&1; then
+            pacman -S --needed --noconfirm gum || \
+                printf 'Gum could not be installed; using text prompts.\n' >&2
+        fi
+    fi
 }
 
 cleanup() {
@@ -170,25 +162,67 @@ normalize_partition_size() {
     printf '%s\n' "$value"
 }
 
+prompt_hostname() {
+    if [[ -z "$HOSTNAME" ]]; then
+        HOSTNAME=$(ui_input 'Hostname') || die "Hostname selection cancelled."
+    fi
+    [[ "$HOSTNAME" =~ ^[a-zA-Z0-9][a-zA-Z0-9.-]*$ ]] || die "Invalid hostname: $HOSTNAME"
+}
+
 prompt_partition_sizes() {
     local input
-
-    [[ -t 0 ]] || die "An interactive terminal is required to choose partition sizes."
-    read -r -p "Boot partition size [$BOOT_SIZE]: " input
-    BOOT_SIZE=$(normalize_partition_size "${input:-$BOOT_SIZE}")
-    read -r -p "Root partition size [$ROOT_SIZE]: " input
-    ROOT_SIZE=$(normalize_partition_size "${input:-$ROOT_SIZE}")
+    input=$(ui_input 'Boot partition size' "$BOOT_SIZE") || die "Partition selection cancelled."
+    BOOT_SIZE=$(normalize_partition_size "$input")
+    input=$(ui_input 'Root partition size' "$ROOT_SIZE") || die "Partition selection cancelled."
+    ROOT_SIZE=$(normalize_partition_size "$input")
 }
 
 prompt_network_mode() {
-    local input
-
-    read -r -p "Network connection [wifi/ethernet] [$NETWORK_MODE]: " input
-    case "${input,,}" in
-        ""|wifi|w) NETWORK_MODE=wifi ;;
-        ethernet|wired|e) NETWORK_MODE=ethernet ;;
-        *) die "Invalid network connection '$input'; choose wifi or ethernet." ;;
+    NETWORK_MODE=$(ui_choose 'Network connection' wifi ethernet) || die "Network selection cancelled."
+    case "$NETWORK_MODE" in
+        wifi|ethernet) ;;
+        *) die "Invalid network selection: $NETWORK_MODE" ;;
     esac
+}
+
+prompt_firmware_packages() {
+    local packages selected package defaults="" known existing duplicate
+    local -a available
+    packages=$(pacman -Slq) || die "Could not list available firmware packages."
+    mapfile -t available < <(printf '%s\n' "$packages" |
+        LC_ALL=C sort -u | awk '/^linux-firmware(-[a-z0-9-]+)?$/')
+    (( ${#available[@]} > 0 )) || die "No linux-firmware packages found in configured repositories."
+
+    # Preserve the previous machine's defaults when those packages are available.
+    for package in linux-firmware-amdgpu linux-firmware-mediatek; do
+        for known in "${available[@]}"; do
+            [[ "$known" == "$package" ]] && defaults+="${defaults:+,}$package"
+        done
+    done
+    if [[ -z "$defaults" ]]; then
+        for known in "${available[@]}"; do
+            [[ "$known" == linux-firmware ]] && defaults=linux-firmware
+        done
+    fi
+    printf 'Select firmware for your GPU, network, and other devices.\n' >&2
+    printf 'linux-firmware is the broad meta-package; individual packages keep installation smaller.\n' >&2
+    selected=$(ui_choose_many 'Firmware packages (Tab to select, Enter to accept)' \
+        "$defaults" "${available[@]}") || die "Firmware selection cancelled or invalid."
+    FIRMWARE_PACKAGES=()
+    while IFS= read -r package; do
+        [[ -n "$package" ]] || continue
+        known=false
+        for existing in "${available[@]}"; do
+            [[ "$existing" == "$package" ]] && known=true
+        done
+        [[ "$known" == true ]] || die "Unavailable firmware package: $package"
+        duplicate=false
+        for existing in "${FIRMWARE_PACKAGES[@]}"; do
+            [[ "$existing" == "$package" ]] && duplicate=true
+        done
+        [[ "$duplicate" == true ]] || FIRMWARE_PACKAGES+=("$package")
+    done <<< "$selected"
+    (( ${#FIRMWARE_PACKAGES[@]} > 0 )) || die "Select at least one firmware package."
 }
 
 network_package() {
@@ -216,8 +250,9 @@ confirm_disk_erasure() {
     echo "  partition 2: $ROOT_SIZE ext4 root filesystem"
     echo "  partition 3: remaining space as an ext4 /home filesystem"
     echo "  network: $NETWORK_MODE"
-    read -r -p "Type 'ERASE $DISK' to continue: " confirmation
-    [[ "$confirmation" == "ERASE $DISK" ]] || die "Confirmation did not match; nothing changed."
+    echo "  firmware: ${FIRMWARE_PACKAGES[*]}"
+    confirmation=$(ui_input "Type 'ERASE $DISK' to continue") || die "Disk erasure cancelled."
+    [[ "$confirmation" == "ERASE $DISK" ]] || die "Confirmation did not match; disk was not modified."
 }
 
 partition_disk() {
@@ -256,7 +291,7 @@ install_base_system() {
     selected_network_package=$(network_package)
     basestrap "$TARGET" \
         base base-devel dinit elogind-dinit \
-        linux linux-firmware "$MICROCODE_PACKAGE" \
+        linux "${FIRMWARE_PACKAGES[@]}" "$MICROCODE_PACKAGE" \
         efibootmgr git "$selected_network_package" sudo zsh
     enable_pacman_parallel_downloads "$TARGET/etc/pacman.conf"
     fstabgen -U "$TARGET" > "$TARGET/etc/fstab"
@@ -307,7 +342,22 @@ install_dotfiles_and_yay() {
 }
 
 enable_boot_services() {
-    artix-chroot "$TARGET" dinitctl --offline enable "$(network_service)"
+    local output status
+    if output=$(artix-chroot "$TARGET" env LC_ALL=C dinitctl --offline enable "$(network_service)" 2>&1); then
+        printf '%s\n' "$output"
+    else
+        status=$?
+        printf '%s\n' "$output" >&2
+        [[ "$output" == 'dinitctl: service already enabled.' ]] || return "$status"
+    fi
+}
+
+install_resolver() {
+    # Run after all chroot calls, which may temporarily replace resolv.conf.
+    cp --remove-destination -- \
+        "$TARGET/home/$USERNAME/dotfiles/etc/resolv.conf" \
+        "$TARGET/etc/resolv.conf"
+    chmod 0644 "$TARGET/etc/resolv.conf"
 }
 
 create_efi_entry() {
@@ -336,10 +386,14 @@ main() {
     install_prerequisites
     step "Checking installation prerequisites"
     check_prerequisites
+    step "Selecting the hostname"
+    prompt_hostname
     step "Selecting partition sizes"
     prompt_partition_sizes
     step "Selecting the network connection"
     prompt_network_mode
+    step "Selecting firmware packages"
+    prompt_firmware_packages
     step "Confirming target disk erasure"
     confirm_disk_erasure
     step "Partitioning and formatting $DISK"
@@ -356,11 +410,17 @@ main() {
     enable_boot_services
     step "Creating the EFISTUB firmware entry"
     create_efi_entry
+    step "Installing DNS configuration for first boot"
+    install_resolver
 
     echo
-    success "Artix is installed with a direct EFISTUB boot entry."
+    ui_summary "Artix is installed with a direct EFISTUB boot entry." \
+        "Hostname: $HOSTNAME" "Network: $NETWORK_MODE" \
+        "Firmware: ${FIRMWARE_PACKAGES[*]}"
     echo "After rebooting, connect to the network and run:"
     echo "  /home/$USERNAME/dotfiles/setup.sh"
 }
 
-main "$@"
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    main "$@"
+fi

@@ -1,5 +1,4 @@
 alacritty
-amd-ucode
 bash-language-server
 bat
 bluez
