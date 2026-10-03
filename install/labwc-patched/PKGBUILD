@@ -1,0 +1,43 @@
+# shellcheck shell=bash
+# shellcheck disable=SC2034
+pkgname=labwc-patched
+pkgver=0.20.2
+pkgrel=4
+pkgdesc='Labwc with compact popups, ueberzugpp IPC and cursor autohide'
+arch=('x86_64')
+url='https://github.com/labwc/labwc'
+license=('GPL-2.0-only')
+depends=('cairo' 'glib2' 'glibc' 'libinput' 'libpng' 'librsvg' 'libsfdo'
+         'libwlroots-0.20.so' 'libxkbcommon' 'libxml2' 'pango'
+         'pixman' 'seatd' 'ttf-font' 'wayland')
+makedepends=('meson' 'ninja' 'scdoc' 'wayland-protocols')
+optdepends=('bemenu: default application launcher')
+provides=("labwc=$pkgver")
+conflicts=('labwc')
+options=('!debug')
+source=("labwc-$pkgver.tar.gz::$url/archive/refs/tags/$pkgver.tar.gz"
+        'compact-popups.patch'
+        'labwc-ueberzugpp.patch'
+        'cursor-autohide.patch')
+sha256sums=('fae023b6fe022f7057556707a17cdb2d98e0138c5dffaedaa1dade975699f9e8'
+            'f94ba4433bf8953f8f4803a85185764bd78d76e79d4e1b6bf83a565c46b614d9'
+            '4620c08a92b5f898e46081a582aa32b1156123f744379aebc459fe58c328d865'
+            'd2b3cf00a9aa1fc63f2dc6659d4f768c08ae2a459690170e43822c8a53306384')
+
+prepare() {
+    cd "labwc-$pkgver"
+    patch --batch --forward --fuzz=0 -p1 -i "$srcdir/compact-popups.patch"
+    patch --batch --forward --fuzz=0 -p1 -i "$srcdir/labwc-ueberzugpp.patch"
+    patch --batch --forward --fuzz=0 -p1 -i "$srcdir/cursor-autohide.patch"
+}
+
+build() {
+    meson setup build "labwc-$pkgver" --prefix=/usr --buildtype=plain \
+        -Dman-pages=enabled -Dxwayland=disabled -Dsystemd-session=disabled \
+        -Dtest=disabled
+    meson compile -C build
+}
+
+package() {
+    DESTDIR="$pkgdir" meson install -C build --no-rebuild
+}

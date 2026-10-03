@@ -1,0 +1,648 @@
+diff --git a/include/view.h b/include/view.h
+index 46943ab..911e8d6 100644
+--- a/include/view.h
++++ b/include/view.h
+@@ -185,6 +185,8 @@ struct view {
+ 
+ 	bool mapped;
+ 	bool been_mapped;
++	/* Remain unfocusable if the experimental image IPC peer disconnects. */
++	bool ueberzugpp_overlay;
+ 	uint64_t creation_id;
+ 	enum lab_ssd_mode ssd_mode;
+ 	enum ssd_preference ssd_preference;
+diff --git a/src/main.c b/src/main.c
+index 081bd62..16f7b00 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -14,6 +14,7 @@
+ #include "config/session.h"
+ #include "labwc.h"
+ #include "theme.h"
++#include "ueberzugpp-ipc.h"
+ #include "translate.h"
+ #include "menu/menu.h"
+ 
+@@ -283,6 +284,7 @@ main(int argc, char *argv[])
+ 	rc.theme = &theme;
+ 
+ 	menu_init();
++	ueberzugpp_ipc_init();
+ 
+ 	/* Delay startup of applications until the event loop is ready */
+ 	struct idle_ctx idle_ctx = {
+@@ -294,6 +296,7 @@ main(int argc, char *argv[])
+ 	wl_display_run(server.wl_display);
+ 
+ 	session_shutdown();
++	ueberzugpp_ipc_finish();
+ 
+ 	menu_finish();
+ 	theme_finish(&theme);
+diff --git a/src/meson.build b/src/meson.build
+index 05163cf..331c992 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -27,6 +27,7 @@ labwc_sources = files(
+   'snap.c',
+   'tearing.c',
+   'theme.c',
++  'ueberzugpp-ipc.c',
+   'view.c',
+   'view-impl-common.c',
+   'window-rules.c',
+diff --git a/src/view-impl-common.c b/src/view-impl-common.c
+index 092ca55..fa96fdd 100644
+--- a/src/view-impl-common.c
++++ b/src/view-impl-common.c
+@@ -4,6 +4,7 @@
+ #include "foreign-toplevel/foreign.h"
+ #include "labwc.h"
+ #include "view.h"
++#include "ueberzugpp-ipc.h"
+ #include "window-rules.h"
+ 
+ void
+@@ -12,13 +13,14 @@ view_impl_map(struct view *view)
+ 	view_update_visibility(view);
+ 
+ 	/* Leave minimized, if minimized before map */
+-	if (!view->minimized) {
++	if (!view->minimized && !ueberzugpp_is_overlay(view)) {
+ 		desktop_focus_view(view, /* raise */ true);
+ 	}
+ 
+ 	if (!view->been_mapped) {
+ 		window_rules_apply(view, LAB_WINDOW_RULE_EVENT_ON_FIRST_MAP);
+ 	}
++	ueberzugpp_overlay_map(view);
+ 
+ 	/*
+ 	 * Create foreign-toplevel handle, respecting skipTaskbar rules.
+diff --git a/src/view.c b/src/view.c
+index 21005f2..fb98e3e 100644
+--- a/src/view.c
++++ b/src/view.c
+@@ -30,6 +30,7 @@
+ #include "snap.h"
+ #include "ssd.h"
+ #include "theme.h"
++#include "ueberzugpp-ipc.h"
+ #include "window-rules.h"
+ #include "wlr/util/log.h"
+ #include "workspaces.h"
+@@ -358,6 +359,9 @@ enum view_wants_focus
+ view_wants_focus(struct view *view)
+ {
+ 	assert(view);
++	if (ueberzugpp_is_overlay(view)) {
++		return VIEW_WANTS_FOCUS_NEVER;
++	}
+ 	if (view->impl->wants_focus) {
+ 		return view->impl->wants_focus(view);
+ 	}
+diff --git a/include/ueberzugpp-ipc.h b/include/ueberzugpp-ipc.h
+new file mode 100644
+index 0000000..c074c1e
+--- /dev/null
++++ b/include/ueberzugpp-ipc.h
+@@ -0,0 +1,10 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef LABWC_UEBERZUGPP_IPC_H
++#define LABWC_UEBERZUGPP_IPC_H
++#include <stdbool.h>
++struct view;
++void ueberzugpp_ipc_init(void);
++void ueberzugpp_ipc_finish(void);
++bool ueberzugpp_is_overlay(struct view *view);
++void ueberzugpp_overlay_map(struct view *view);
++#endif
+diff --git a/src/ueberzugpp-ipc.c b/src/ueberzugpp-ipc.c
+new file mode 100644
+index 0000000..11c1d1e
+--- /dev/null
++++ b/src/ueberzugpp-ipc.c
+@@ -0,0 +1,523 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Restricted, default-on Sway IPC adapter for unmodified ueberzugpp.
++ * Not a general-purpose implementation of Sway IPC. Linux only.
++ */
++#define _GNU_SOURCE
++#include <errno.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/socket.h>
++#include <sys/stat.h>
++#include <sys/un.h>
++#include <unistd.h>
++#include <wlr/types/wlr_output_layout.h>
++#include <wlr/types/wlr_scene.h>
++#include <wlr/util/log.h>
++#include "common/buf.h"
++#include "labwc.h"
++#include "node.h"
++#include "output.h"
++#include "view.h"
++#include "ueberzugpp-ipc.h"
++
++#define HEADER 14
++#define MAX_PAYLOAD 512
++struct ipc_client {
++	struct wl_list link;
++	int fd;
++	pid_t pid;
++	struct wl_event_source *event;
++	unsigned char input[HEADER + MAX_PAYLOAD + 1];
++	size_t used;
++	char *reply;
++	size_t reply_size, sent;
++	uint64_t terminal;
++	struct output *output;
++};
++struct image_overlay {
++	struct wl_list link;
++	struct ipc_client *client;
++	char app_id[32];
++	uint64_t terminal;
++	int dx, dy;
++	bool positioned;
++};
++static struct wl_list clients, overlays;
++static struct wl_event_source *listener, *timer;
++static int listen_fd = -1;
++static char socket_path[sizeof(((struct sockaddr_un *)0)->sun_path)];
++static bool enabled;
++
++static struct view *
++find_view(uint64_t id)
++{
++	struct view *view;
++	wl_list_for_each(view, &server.views, link) {
++		if (view->creation_id == id) return view;
++	}
++	return NULL;
++}
++
++static struct image_overlay *
++find_overlay(struct view *view)
++{
++	if (!enabled || !view->impl->get_pid) return NULL;
++	struct image_overlay *overlay;
++	wl_list_for_each(overlay, &overlays, link) {
++		if (!strcmp(view->app_id, overlay->app_id)
++				&& view->impl->get_pid(view) == overlay->client->pid) return overlay;
++	}
++	return NULL;
++}
++
++bool
++ueberzugpp_is_overlay(struct view *view)
++{
++	return view->ueberzugpp_overlay || find_overlay(view) != NULL;
++}
++
++static bool
++ignore_input(struct wlr_scene_buffer *buffer, double *sx, double *sy)
++{
++	return false;
++}
++
++static void
++disable_input(struct wlr_scene_buffer *buffer, int sx, int sy, void *data)
++{
++	buffer->point_accepts_input = ignore_input;
++}
++
++static void
++update_overlay(struct view *view, struct image_overlay *overlay)
++{
++	struct view *parent = find_view(overlay->terminal);
++	if (!parent) {
++		wlr_scene_node_set_enabled(&view->scene_tree->node, false);
++		return;
++	}
++	view_move_to_workspace(view, parent->workspace);
++	view_set_layer(view, parent->layer);
++	if (overlay->positioned) {
++		int x = parent->current.x + overlay->dx;
++		int y = parent->current.y + overlay->dy;
++		if (view->current.x != x || view->current.y != y) view_move(view, x, y);
++	}
++	wlr_scene_node_set_enabled(&view->scene_tree->node,
++		overlay->positioned && view->mapped && !view->minimized
++		&& parent->mapped && !parent->minimized && !parent->shaded
++		&& parent->scene_tree->node.enabled);
++	if (view->scene_tree->node.parent == parent->scene_tree->node.parent) {
++		/* Preserve a contiguous group of overlays above their terminal,
++		 * avoiding needless restacking/damage every timer tick. */
++		struct wl_list *link = view->scene_tree->node.link.prev;
++		struct wl_list *head = &view->scene_tree->node.parent->children;
++		while (link != head && link != &parent->scene_tree->node.link) {
++			struct wlr_scene_node *node = wl_container_of(link, node, link);
++			struct view *sibling = node->data ? node_view_from_node(node) : NULL;
++			struct image_overlay *other = sibling ? find_overlay(sibling) : NULL;
++			if (!other || other->terminal != overlay->terminal) break;
++			link = link->prev;
++		}
++		if (link != &parent->scene_tree->node.link) {
++			wlr_scene_node_place_above(&view->scene_tree->node, &parent->scene_tree->node);
++		}
++	}
++	wlr_scene_node_for_each_buffer(&view->content_tree->node, disable_input, NULL);
++}
++
++void
++ueberzugpp_overlay_map(struct view *view)
++{
++	struct image_overlay *overlay = find_overlay(view);
++	if (overlay) {
++		view->ueberzugpp_overlay = true;
++		view_set_decorations(view, LAB_SSD_MODE_NONE, true);
++		update_overlay(view, overlay);
++		wl_event_source_timer_update(timer, 16);
++	}
++}
++
++static int
++tick(void *data)
++{
++	bool active = false;
++	struct view *view;
++	wl_list_for_each(view, &server.views, link) {
++		struct image_overlay *overlay = find_overlay(view);
++		if (overlay && view->mapped) {
++			active = true;
++			update_overlay(view, overlay);
++		}
++	}
++	/* No periodic wakeups when there are no mapped image surfaces. */
++	if (active) wl_event_source_timer_update(timer, 16);
++	return 0;
++}
++
++static void
++json_string(struct buf *buf, const char *str)
++{
++	buf_add_char(buf, '"');
++	for (const unsigned char *p = (const unsigned char *)str; *p; ++p) {
++		if (*p == '"' || *p == '\\') {
++			buf_add_char(buf, '\\');
++			buf_add_char(buf, *p);
++		} else if (*p < 32) {
++			buf_add_fmt(buf, "\\u%04x", *p);
++		} else buf_add_char(buf, *p);
++	}
++	buf_add_char(buf, '"');
++}
++
++static void
++rect(struct buf *buf, struct wlr_box box, int factor)
++{
++	buf_add_fmt(buf, "{\"x\":%d,\"y\":%d,\"width\":%d,\"height\":%d}",
++		box.x * factor, box.y * factor, box.width * factor, box.height * factor);
++}
++
++static struct output *
++client_output(struct ipc_client *client)
++{
++	/* Validate cached pointers after hot-unplug before dereferencing. */
++	struct output *output;
++	wl_list_for_each(output, &server.outputs, link) {
++		if (output == client->output && output_is_usable(output)) return output;
++	}
++	client->output = output_nearest_to_cursor();
++	return client->output;
++}
++
++static void
++query_outputs(struct ipc_client *client, struct buf *buf)
++{
++	struct output *focused = client_output(client), *output;
++	bool comma = false;
++	buf_add_char(buf, '[');
++	wl_list_for_each(output, &server.outputs, link) {
++		if (!output_is_usable(output)) continue;
++		buf_add(buf, comma ? ",{\"name\":" : "{\"name\":");
++		comma = true;
++		json_string(buf, output->wlr_output->name);
++		buf_add_fmt(buf, ",\"focused\":%s,\"scale\":%g,\"rect\":",
++			output == focused ? "true" : "false", output->wlr_output->scale);
++		struct wlr_box box;
++		wlr_output_layout_get_box(server.output_layout, output->wlr_output, &box);
++		rect(buf, box, output->wlr_output->scale > 1 ? 2 : 1);
++		buf_add_char(buf, '}');
++	}
++	buf_add_char(buf, ']');
++}
++
++static void
++query_tree(struct ipc_client *client, struct buf *buf)
++{
++	struct output *output = client_output(client);
++	int factor = output && output->wlr_output->scale > 1 ? 2 : 1;
++	bool comma = false;
++	buf_add(buf, "{\"nodes\":[");
++	struct view *view;
++	wl_list_for_each(view, &server.views, link) {
++		if (!view->mapped || !view->impl->get_pid || ueberzugpp_is_overlay(view)) continue;
++		buf_add_fmt(buf, "%s{\"id\":%llu,\"pid\":%d,\"rect\":",
++			comma ? "," : "", (unsigned long long)view->creation_id,
++			(int)view->impl->get_pid(view));
++		comma = true;
++		rect(buf, view->current, factor);
++		buf_add_fmt(buf, ",\"focused\":%s,\"app_id\":",
++			view == server.active_view ? "true" : "false");
++		json_string(buf, view->app_id);
++		buf_add(buf, ",\"nodes\":[],\"floating_nodes\":[]}");
++	}
++	buf_add(buf, "],\"floating_nodes\":[]}");
++}
++
++static bool
++valid_app_id(const char *id)
++{
++	if (strlen(id) != 21 || strncmp(id, "ueberzugpp_", 11)) return false;
++	for (const char *p = id + 11; *p; ++p) {
++		if (!((*p >= 'a' && *p <= 'z') || (*p >= 'A' && *p <= 'Z')
++				|| (*p >= '0' && *p <= '9'))) return false;
++	}
++	return true;
++}
++
++static bool
++position(const char *str, int *x, int *y)
++{
++	if (strncmp(str, "move position ", 14)) return false;
++	str += 14;
++	char *end;
++	errno = 0;
++	long first = strtol(str, &end, 10);
++	if (errno || end == str || *end != ' ' || first < -100000 || first > 100000) return false;
++	str = end + 1;
++	errno = 0;
++	long second = strtol(str, &end, 10);
++	if (errno || end == str || *end || second < -100000 || second > 100000) return false;
++	*x = first;
++	*y = second;
++	return true;
++}
++
++static bool
++command(struct ipc_client *client, const char *payload)
++{
++	char id[32];
++	int consumed = 0;
++	bool registration = sscanf(payload, "no_focus [app_id=\"%31[^\"]\"]%n",
++		id, &consumed) == 1 && consumed && !payload[consumed];
++	if (!registration) {
++		consumed = 0;
++		if (!strncmp(payload, "for_window ", 11)) payload += 11;
++		if (sscanf(payload, "[app_id=\"%31[^\"]\"] %n", id, &consumed) != 1
++				|| !consumed) return false;
++	}
++	if (!valid_app_id(id)) return false;
++	struct image_overlay *overlay;
++	wl_list_for_each(overlay, &overlays, link) {
++		if (!strcmp(overlay->app_id, id)) {
++			if (overlay->client != client) return false;
++			goto found;
++		}
++	}
++	if (!registration || !find_view(client->terminal)) return false;
++	if (wl_list_length(&overlays) >= 128) {
++		/* Retain hidden previews for tmux hide/show, but bound history.
++		 * Reclaim an old registration whose surface has been destroyed. */
++		struct image_overlay *candidate;
++		wl_list_for_each_reverse(candidate, &overlays, link) {
++			if (!candidate->positioned) continue;
++			bool exists = false;
++			struct view *view;
++			wl_list_for_each(view, &server.views, link) {
++				if (find_overlay(view) == candidate) { exists = true; break; }
++			}
++			if (!exists) {
++				wl_list_remove(&candidate->link);
++				free(candidate);
++				break;
++			}
++		}
++		if (wl_list_length(&overlays) >= 128) return false;
++	}
++	overlay = calloc(1, sizeof(*overlay));
++	if (!overlay) return false;
++	overlay->client = client;
++	overlay->terminal = client->terminal;
++	strcpy(overlay->app_id, id);
++	wl_list_insert(&overlays, &overlay->link);
++	wl_event_source_timer_update(timer, 16);
++found:
++	if (registration || !strcmp(payload + consumed, "floating enable")) return true;
++	int x, y;
++	if (!position(payload + consumed, &x, &y)) return false;
++	struct view *parent = find_view(overlay->terminal);
++	struct output *output = client_output(client);
++	if (!parent || !output) return false;
++	struct wlr_box box;
++	wlr_output_layout_get_box(server.output_layout, output->wlr_output, &box);
++	overlay->dx = x + box.x - parent->current.x;
++	overlay->dy = y + box.y - parent->current.y;
++	overlay->positioned = true;
++	struct view *view;
++	wl_list_for_each(view, &server.views, link) {
++		if (find_overlay(view) == overlay && view->mapped) update_overlay(view, overlay);
++	}
++	return true;
++}
++
++static void
++destroy_client(struct ipc_client *client)
++{
++	struct image_overlay *overlay, *tmp;
++	wl_list_for_each_safe(overlay, tmp, &overlays, link) {
++		if (overlay->client != client) continue;
++		struct view *view;
++		wl_list_for_each(view, &server.views, link) {
++			if (find_overlay(view) == overlay)
++				wlr_scene_node_set_enabled(&view->scene_tree->node, false);
++		}
++		wl_list_remove(&overlay->link);
++		free(overlay);
++	}
++	wl_event_source_remove(client->event);
++	close(client->fd);
++	wl_list_remove(&client->link);
++	free(client->reply);
++	free(client);
++}
++
++static int
++client_event(int fd, uint32_t mask, void *data)
++{
++	struct ipc_client *client = data;
++	if (mask & (WL_EVENT_HANGUP | WL_EVENT_ERROR)) goto fail;
++	if (!client->reply) {
++		/* Read one frame, leaving pipelined frames in the kernel. */
++		size_t needed = HEADER;
++		if (client->used >= HEADER) {
++			uint32_t length;
++			memcpy(&length, client->input + 6, 4);
++			if (memcmp(client->input, "i3-ipc", 6) || length > MAX_PAYLOAD) goto fail;
++			needed += length;
++		}
++		if (client->used < needed) {
++			ssize_t n = recv(fd, client->input + client->used, needed - client->used, 0);
++			if (n == 0 || (n < 0 && errno != EAGAIN && errno != EINTR)) goto fail;
++			if (n > 0) client->used += n;
++			if (client->used < HEADER) return 0;
++		}
++		uint32_t length, type;
++		memcpy(&length, client->input + 6, 4);
++		memcpy(&type, client->input + 10, 4);
++		if (memcmp(client->input, "i3-ipc", 6) || length > MAX_PAYLOAD) goto fail;
++		if (client->used < HEADER + length) return 0;
++		client->input[HEADER + length] = 0;
++		struct buf buf = BUF_INIT;
++		if (type == 3 && !length) query_outputs(client, &buf);
++		else if (type == 4 && !length) query_tree(client, &buf);
++		else {
++			bool ok = type == 0 && !memchr(client->input + HEADER, 0, length)
++				&& command(client, (char *)client->input + HEADER);
++			buf_add(&buf, ok ? "[{\"success\":true}]"
++				: "[{\"success\":false,\"error\":\"unsupported ueberzugpp request\"}]");
++		}
++		client->reply_size = HEADER + buf.len;
++		client->reply = malloc(client->reply_size);
++		if (!client->reply) { buf_reset(&buf); goto fail; }
++		memcpy(client->reply, "i3-ipc", 6);
++		uint32_t reply_length = buf.len;
++		memcpy(client->reply + 6, &reply_length, 4);
++		memcpy(client->reply + 10, &type, 4);
++		memcpy(client->reply + HEADER, buf.data, buf.len);
++		buf_reset(&buf);
++		client->sent = 0;
++	}
++	ssize_t n = send(fd, client->reply + client->sent,
++		client->reply_size - client->sent, MSG_NOSIGNAL);
++	if (n < 0 && errno != EAGAIN && errno != EINTR) goto fail;
++	if (n > 0) client->sent += n;
++	if (client->sent == client->reply_size) {
++		free(client->reply);
++		client->reply = NULL;
++		client->used = 0;
++		wl_event_source_fd_update(client->event, WL_EVENT_READABLE);
++	} else wl_event_source_fd_update(client->event, WL_EVENT_WRITABLE);
++	return 0;
++fail:
++	destroy_client(client);
++	return 0;
++}
++
++static int
++accept_client(int fd, uint32_t mask, void *data)
++{
++	int peer = accept4(fd, NULL, NULL, SOCK_NONBLOCK | SOCK_CLOEXEC);
++	if (peer < 0) return 0;
++	struct ucred credentials;
++	socklen_t size = sizeof(credentials);
++	if (wl_list_length(&clients) >= 32
++			|| getsockopt(peer, SOL_SOCKET, SO_PEERCRED, &credentials, &size)
++			|| credentials.uid != getuid()) { close(peer); return 0; }
++	struct ipc_client *client = calloc(1, sizeof(*client));
++	if (!client) { close(peer); return 0; }
++	client->fd = peer;
++	client->pid = credentials.pid;
++	if (server.active_view) {
++		client->terminal = server.active_view->creation_id;
++		client->output = server.active_view->output;
++	}
++	/* Prefer the actual launching terminal over focus when its process
++	 * is an ancestor. Focus is a fallback for tmux server ancestry. */
++	pid_t pid = credentials.pid;
++	for (int depth = 0; pid > 1 && depth < 64; ++depth) {
++		struct view *view;
++		wl_list_for_each(view, &server.views, link) {
++			if (view->mapped && view->impl->get_pid
++					&& view->impl->get_pid(view) == pid && !ueberzugpp_is_overlay(view)) {
++				client->terminal = view->creation_id;
++				client->output = view->output;
++				goto terminal_found;
++			}
++		}
++		char path[64], line[4096];
++		snprintf(path, sizeof(path), "/proc/%d/stat", (int)pid);
++		FILE *file = fopen(path, "r");
++		if (!file) break;
++		char *read = fgets(line, sizeof(line), file);
++		fclose(file);
++		char *end = read ? strrchr(line, ')') : NULL;
++		int ppid;
++		if (!end || sscanf(end + 1, " %*c %d", &ppid) != 1 || ppid == pid) break;
++		pid = ppid;
++	}
++terminal_found:
++	client->event = wl_event_loop_add_fd(server.wl_event_loop, peer,
++		WL_EVENT_READABLE, client_event, client);
++	if (!client->event) { close(peer); free(client); return 0; }
++	wl_list_insert(&clients, &client->link);
++	return 0;
++}
++
++void
++ueberzugpp_ipc_init(void)
++{
++	const char *opt = getenv("LABWC_UEBERZUGPP_IPC");
++	/* Enabled automatically; retain an explicit emergency opt-out. */
++	if (opt && !strcmp(opt, "0")) return;
++	const char *runtime = getenv("XDG_RUNTIME_DIR");
++	struct stat st;
++	if (!runtime || stat(runtime, &st) || !S_ISDIR(st.st_mode)
++			|| st.st_uid != getuid() || (st.st_mode & 0077)) {
++		wlr_log(WLR_ERROR, "ueberzugpp IPC requires a private XDG_RUNTIME_DIR");
++		return;
++	}
++	struct sockaddr_un addr = { .sun_family = AF_UNIX };
++	int n = snprintf(addr.sun_path, sizeof(addr.sun_path),
++		"%s/labwc-ueberzugpp-%ld.sock", runtime, (long)getpid());
++	if (n < 0 || (size_t)n >= sizeof(addr.sun_path)) return;
++	listen_fd = socket(AF_UNIX, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, 0);
++	if (listen_fd < 0) return;
++	mode_t old_mask = umask(0077);
++	int result = bind(listen_fd, (struct sockaddr *)&addr, sizeof(addr));
++	umask(old_mask);
++	if (result < 0) {
++		close(listen_fd); listen_fd = -1;
++		wlr_log(WLR_ERROR, "Cannot bind ueberzugpp IPC socket: %s", strerror(errno));
++		return;
++	}
++	strcpy(socket_path, addr.sun_path);
++	wl_list_init(&clients);
++	wl_list_init(&overlays);
++	enabled = true;
++	if (chmod(socket_path, 0600) < 0) goto fail;
++	if (listen(listen_fd, 32) < 0) goto fail;
++	listener = wl_event_loop_add_fd(server.wl_event_loop, listen_fd,
++		WL_EVENT_READABLE, accept_client, NULL);
++	timer = wl_event_loop_add_timer(server.wl_event_loop, tick, NULL);
++	if (!listener || !timer || setenv("SWAYSOCK", socket_path, 1)) goto fail;
++	wlr_log(WLR_INFO, "Experimental ueberzugpp IPC: %s", socket_path);
++	return;
++fail:
++	ueberzugpp_ipc_finish();
++}
++
++void
++ueberzugpp_ipc_finish(void)
++{
++	if (!enabled) return;
++	struct ipc_client *client, *tmp;
++	wl_list_for_each_safe(client, tmp, &clients, link) destroy_client(client);
++	if (timer) { wl_event_source_remove(timer); timer = NULL; }
++	if (listener) { wl_event_source_remove(listener); listener = NULL; }
++	close(listen_fd); listen_fd = -1;
++	unlink(socket_path);
++	const char *exported = getenv("SWAYSOCK");
++	if (exported && !strcmp(exported, socket_path)) unsetenv("SWAYSOCK");
++	enabled = false;
++}

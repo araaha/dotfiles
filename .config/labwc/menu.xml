@@ -1,0 +1,41 @@
+<openbox_menu>
+    <menu id="snap-menu" label="Window layout">
+        <item label="Left half"><action name="ToggleSnapToRegion" region="left-half"/></item>
+        <item label="Right half"><action name="ToggleSnapToRegion" region="right-half"/></item>
+        <item label="Top half"><action name="ToggleSnapToRegion" region="top-half"/></item>
+        <item label="Bottom half"><action name="ToggleSnapToRegion" region="bottom-half"/></item>
+        <separator/>
+        <item label="Left third"><action name="ToggleSnapToRegion" region="left-third"/></item>
+        <item label="Middle third"><action name="ToggleSnapToRegion" region="middle-third"/></item>
+        <item label="Right third"><action name="ToggleSnapToRegion" region="right-third"/></item>
+        <separator/>
+        <item label="Top-left quarter"><action name="ToggleSnapToRegion" region="top-left-quarter"/></item>
+        <item label="Top-right quarter"><action name="ToggleSnapToRegion" region="top-right-quarter"/></item>
+        <item label="Bottom-left quarter"><action name="ToggleSnapToRegion" region="bottom-left-quarter"/></item>
+        <item label="Bottom-right quarter"><action name="ToggleSnapToRegion" region="bottom-right-quarter"/></item>
+    </menu>
+    <menu id="root-menu" label="Labwc">
+        <menu id="snap-menu"/>
+        <separator/>
+        <menu id="exit" label="Exit" >
+            <item label="Logout">
+                <action name="Exit" />
+            </item>
+            <item label="Suspend">
+                <action name="Execute">
+                    <execute>loginctl suspend</execute>
+                </action>
+            </item>
+            <item label="Reboot">
+                <action name="Execute">
+                    <execute>loginctl reboot</execute>
+                </action>
+            </item>
+            <item label="Shutdown">
+                <action name="Execute">
+                    <execute>loginctl poweroff</execute>
+                </action>
+            </item>
+        </menu>
+    </menu>
+</openbox_menu>

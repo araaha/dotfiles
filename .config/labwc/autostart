@@ -1,0 +1,29 @@
+#!/bin/sh
+# Wayland-native Labwc session startup, migrated from Openbox.
+if [ ! -S "$XDG_RUNTIME_DIR/bus" ]; then
+    dbus-daemon --session --fork --nopidfile --address="unix:path=$XDG_RUNTIME_DIR/bus"
+fi
+export DBUS_SESSION_BUS_ADDRESS="${DBUS_SESSION_BUS_ADDRESS:-unix:path=$XDG_RUNTIME_DIR/bus}"
+dbus-update-activation-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_RUNTIME_DIR
+wlr-randr --output eDP-1 --scale 2
+
+light -S 20 &
+~/dotfiles/scripts/bluetooth-autoconnect.sh &
+~/dotfiles/scripts/bluetooth-battery.sh &
+~/dotfiles/scripts/battery.sh &
+carillon watch &
+
+swaybg -m stretch -i "$XDG_DATA_HOME/Wallpapers/Pacman.png" &
+wlsunset -T 4001 -t 4000 &
+wl-paste --type text --watch cliphist store &
+wl-paste --type image --watch cliphist store &
+waybar &
+
+env HOME="$XDG_DATA_HOME" mega-cmd-server &
+pipewire &
+pipewire-pulse &
+wireplumber &
+pamixer --set-volume 80 &
+mpris-proxy &
+chroncal alarm daemon &
+dunst &

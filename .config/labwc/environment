@@ -1,0 +1,6 @@
+WLR_SCENE_DISABLE_VISIBILITY=1
+PATH=$HOME/.local/bin:$PATH
+XDG_CONFIG_HOME=$HOME/.config
+XDG_DATA_HOME=$HOME/.local/share
+XDG_CURRENT_DESKTOP=labwc
+XKB_DEFAULT_OPTIONS=caps:ctrl_modifier,compose:ralt

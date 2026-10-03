@@ -1,0 +1,47 @@
+--- a/src/workspaces.c
++++ b/src/workspaces.c
+@@ -72,12 +72,17 @@
+ 	uint16_t rect_width = theme->osd_workspace_switcher_boxes_width;
+ 	bool hide_boxes = theme->osd_workspace_switcher_boxes_width == 0 ||
+ 		theme->osd_workspace_switcher_boxes_height == 0;
++	if (!hide_boxes) {
++		/* Keep only a small inset so the OSD border does not overlap boxes. */
++		margin = MAX(theme->osd_border_width, 2);
++	}
+ 
+ 	/* Dimensions */
+ 	size_t workspace_count = wl_list_length(&server.workspaces.all);
+ 	uint16_t marker_width = workspace_count * (rect_width + padding) - padding;
+-	uint16_t width = margin * 2 + (marker_width < 200 ? 200 : marker_width);
+-	uint16_t height = margin * (hide_boxes ? 2 : 3) + rect_height + font_height(&rc.font_osd);
++	uint16_t width = margin * 2 + (hide_boxes ? 200 : marker_width);
++	uint16_t height = margin * 2 + (hide_boxes
++		? font_height(&rc.font_osd) : rect_height);
+ 
+ 	cairo_t *cairo;
+ 	cairo_surface_t *surface;
+@@ -155,7 +160,10 @@
+ 		pango_layout_set_width(layout, req_width * PANGO_SCALE);
+ 		pango_font_description_free(desc);
+ 		pango_layout_set_text(layout, server.workspaces.current->name, -1);
+-		pango_cairo_show_layout(cairo, layout);
++		/* Box-only popup; preserve the text-only fallback when boxes are disabled. */
++		if (hide_boxes) {
++			pango_cairo_show_layout(cairo, layout);
++		}
+ 
+ 		g_object_unref(layout);
+ 		surface = cairo_get_target(cairo);
+--- a/src/cycle/osd-classic.c
++++ b/src/cycle/osd-classic.c
+@@ -84,7 +84,8 @@
+ 	struct window_switcher_classic_theme *switcher_theme =
+ 		&theme->osd_window_switcher_classic;
+ 	int padding = theme->osd_border_width + switcher_theme->padding;
+-	bool show_workspace = wl_list_length(&rc.workspace_config.workspaces) > 1;
++	/* Start the application list immediately, without a workspace header row. */
++	bool show_workspace = false;
+ 	const char *workspace_name = server.workspaces.current->name;
+ 	int nr_views = wl_list_length(&server.cycle.views);
+ 
+
