@@ -14,7 +14,6 @@ delve
 difftastic
 docker
 dunst
-erdtree
 fd
 ffmpegthumbnailer
 firefox
@@ -30,7 +29,6 @@ ifuse
 imagemagick
 impala
 jdtls
-jless
 jq
 lazygit
 light
@@ -42,7 +40,7 @@ noto-fonts-cjk
 noto-fonts-emoji
 openbox
 openssh
-openssl-1.1
+openssl
 ouch
 pamixer
 parallel
@@ -66,7 +64,6 @@ shellcheck-bin
 terminus-font
 tmux
 tree-sitter-cli
-ttf-arphic-uming
 ttf-dejavu
 ttf-liberation
 typst
