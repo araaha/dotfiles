@@ -9,7 +9,6 @@ mdcat-bin
 megacmd-bin
 sioyek-dev
 ticker
-tor-browser-bin
 ttf-ms-fonts
 ttf-weather-icons
 uair
