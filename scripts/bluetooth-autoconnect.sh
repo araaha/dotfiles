@@ -1,61 +1,26 @@
-#!/bin/bash
+#!/usr/bin/env bash
+MAC=${BLUETOOTH_HEADSET_MAC:-34:09:C9:68:FB:A3}
+adapter="/org/bluez/hci0"
+device="$adapter/dev_${MAC//:/_}"
+next_attempt=0
 
-MAC="$(bluetoothctl devices | sed -n 's/^Device //p' | head -n 1 | cut -d ' ' -f1)"
-device_path="/org/bluez/hci0/dev_${MAC//:/_}"
-
-GRACE_PERIOD=10
-grace_until=0
-was_connected=0
-
-powered() {
-    busctl get-property \
-        org.bluez \
-        /org/bluez/hci0 \
-        org.bluez.Adapter1 \
-        Powered 2>/dev/null |
-        grep -q "true"
-}
-
-connected() {
-    busctl get-property \
-        org.bluez \
-        "$device_path" \
-        org.bluez.Device1 \
-        Connected 2>/dev/null |
-        grep -q "true"
-}
-
-headset_name() {
-    busctl get-property \
-        org.bluez \
-        "$device_path" \
-        org.bluez.Device1 \
-        Name 2>/dev/null |
-        sed 's/^s "\(.*\)"$/\1/'
-}
-
-# Record the initial state.
-connected && was_connected=1
+exec 9>"${XDG_RUNTIME_DIR:-/tmp}/bluetooth-autoconnect-$UID.lock"
+flock -n 9 || exit 0
 
 while true; do
-    if connected; then
-        if (( ! was_connected )); then
-            dunstify --urgency low "Bluetooth" "$(headset_name) connected"
+    state=$(busctl --system get-property org.bluez "$device" org.bluez.Device1 Connected 2>/dev/null)
+
+    if [[ "$state" == 'b true' ]]; then
+        next_attempt=""
+    elif [[ "$state" == 'b false' ]]; then
+        # A new disconnection starts the grace period.
+        if [[ -z "$next_attempt" ]]; then
+            next_attempt=$((SECONDS + 10))
         fi
 
-        was_connected=1
-        grace_until=0
-
-    elif powered; then
-        # Start the grace period only when the device has just disconnected.
-        if (( was_connected )); then
-            grace_until=$((SECONDS + GRACE_PERIOD))
-            was_connected=0
-            dunstify --urgency low "Bluetooth" "$(headset_name) disconnected"
-        fi
-
-        if (( SECONDS >= grace_until )); then
-            bluetoothctl connect "$MAC" >/dev/null 2>&1
+        if (( SECONDS >= next_attempt )); then
+            busctl --system --timeout=10 call org.bluez "$device" org.bluez.Device1 Connect >/dev/null 2>&1
+            next_attempt=$((SECONDS + 10))
         fi
     fi
 
