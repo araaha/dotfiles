@@ -27,7 +27,7 @@ case "$action" in
 
         case "$filesystem" in
             vfat|exfat|ntfs|ntfs3)
-                mount -o rw,nosuid,nodev,uid=1000,gid=1000 \
+                mount -o rw,nosuid,nodev,uid=1000,gid=1000,fmask=0133,dmask=0022 \
                     "$device" "$mountpoint"
                 ;;
             *)
