@@ -5,3 +5,9 @@ keymap:
     exact_match: true
     remap:
       C-c: Esc
+  - name: Swayimg hold to close
+    application:
+      only: swayimg
+    exact_match: true
+    remap:
+      q: F19

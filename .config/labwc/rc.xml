@@ -422,6 +422,16 @@
       <action name="ToggleShowDesktop"/>
     </keybind>
     <!-- Keybindings for windows -->
+    <!-- xremap translates plain q to F19 only while swayimg is focused.
+         Recheck the focused app on every repeat before closing a window. -->
+    <keybind key="F19">
+      <action name="If">
+        <query identifier="swayimg"/>
+        <then>
+          <action name="Close"/>
+        </then>
+      </action>
+    </keybind>
     <keybind key="A-F4">
       <action name="Close"/>
     </keybind>
