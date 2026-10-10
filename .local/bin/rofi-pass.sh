@@ -20,8 +20,8 @@ AUTOTYPE_field='autotype'
 OTPmethod_field='otp_method'
 
 default_autotype="user :tab pass"
-delay=2
-wait=0.2
+delay=1
+wait=0
 # Legacy config files may still set xdotool_delay.
 xdotool_delay=12
 default_do='menu' # menu, copyPass, typeUser, typePass, copyUser, copyUrl, viewEntry, typeMenu, actionMenu, copyMenu, openUrl
@@ -362,7 +362,7 @@ mainMenu () {
 		args+=(-kb-mode-previous ""    # These keyboard shortcut options are needed, because
 			-kb-mode-next ""            # Shift+<Left|Right> are otherwise taken by rofi.
 			-select "$entry"
-			-p "> ")
+			-p "  ")
 
 		if [[ ${#roots[@]} -gt "1" || $custom_root == "true" ]]; then
 			args+=(-mesg "PW Store: ${root}")

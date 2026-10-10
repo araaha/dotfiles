@@ -216,12 +216,12 @@
     </keybind>
     <keybind key="C-A-q">
       <action name="Execute">
-        <command>rofi -show calc -modi calc -no-show-match -no-sort -terse -no-bold -calc-command "printf '%s' '{result}' | wl-copy" -kb-secondary-copy "" -kb-accept-entry "Return,Control+c"</command>
+        <command>rofi -show calc -modi calc -no-show-match -no-sort -terse -no-bold -calc-command "printf '%s' '{result}' | wl-copy" -kb-secondary-copy "" -kb-accept-entry "Return"</command>
       </action>
     </keybind>
     <keybind key="C-A-c">
       <action name="Execute">
-        <command>sh -c "cliphist list | rofi -dmenu -p 'Clipboard ' -display-columns 2 | cliphist decode | wl-copy"</command>
+        <command>sh -c "cliphist list | rofi -dmenu -p ' 󰅍 ' -display-columns 2 | cliphist decode | wl-copy"</command>
       </action>
     </keybind>
     <keybind key="C-A-t">
