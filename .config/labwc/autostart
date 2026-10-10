@@ -14,7 +14,8 @@ light -S 20 &
 carillon watch &
 
 swaybg -m stretch -i "$XDG_DATA_HOME/Wallpapers/Pacman.png" &
-wlsunset -T 4001 -t 4000 &
+wl-gammarelay-rs &
+busctl --user set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q 4000
 wl-paste --type text --watch cliphist store &
 wl-paste --type image --watch cliphist store &
 waybar &

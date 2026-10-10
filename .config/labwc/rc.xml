@@ -169,7 +169,16 @@
     <region name="bottom-right-third" x="66%" y="50%" width="34%" height="50%"/>
   </regions>
   <keyboard>
-    <chainQuitKey>C-g</chainQuitKey>
+    <keybind key="XF86AudioPrev">
+      <action name="Execute">
+        <command>busctl --user call rs.wl-gammarelay / rs.wl.gammarelay UpdateGamma d -- -0.1</command>
+      </action>
+    </keybind>
+    <keybind key="XF86AudioMicMute">
+      <action name="Execute">
+        <command>busctl --user call rs.wl-gammarelay / rs.wl.gammarelay UpdateGamma d -- 0.1</command>
+      </action>
+    </keybind>
     <repeatDelay>150</repeatDelay>
     <repeatRate>50</repeatRate>
     <!-- Keybindings for desktop switching -->

@@ -13,6 +13,8 @@ ttf-ms-fonts
 ttf-weather-icons
 uair
 warpd
+xremap-wlroots-bin
+wl-gammarelay-rs
 webtorrent-cli
 xdg-desktop-portal-termfilechooser-nosystemd-git
 zen-browser-bin
