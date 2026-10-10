@@ -1,4 +1,2 @@
 text/html; cha -I %{charset} -T text/html -dump; copiousoutput;
 video/*; mpv '%s'; needsterminal
-video/x-youtube; mpv -vo drm -quiet '%s'; needsterminal
-video/x-youtube; mpv --ytdl-format=bestvideo+bestaudio/best '%s' --autofit=640x480; test=test -n "$DISPLAY"
