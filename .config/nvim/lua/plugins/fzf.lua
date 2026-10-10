@@ -80,7 +80,7 @@ return {
                     vertical = "up:50%",
                     delay = 4,
                 },
-                border = { "┏", "━", "┓", "┃", "┛", "━", "┗", "┃" },
+                border = require("ui.style").border,
                 height = 0.8,
                 width = 0.60,
                 col = 0.48,

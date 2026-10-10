@@ -23,7 +23,7 @@ require("lazy").setup({
         enabled = false
     },
     ui = {
-        border = { "┏", "━", "┓", "┃", "┛", "━", "┗", "┃" },
+        border = require("ui.style").border,
     },
     rocks = {
         enabled = false

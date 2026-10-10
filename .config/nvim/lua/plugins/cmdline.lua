@@ -1,8 +1,7 @@
 return {
     "rachartier/tiny-cmdline.nvim",
-    event = "VeryLazy",
     opts = {
-        border = { "┏", "━", "┓", "┃", "┛", "━", "┗", "┃" },
+        border = require("ui.style").border,
         menu_col_offset = 4,
     }
 }

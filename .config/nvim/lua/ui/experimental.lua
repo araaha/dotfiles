@@ -15,7 +15,7 @@ msgs.set_pos = function(tgt)
                 anchor = "SE",
                 row = vim.o.lines - 1,
                 col = 0,
-                border = { "┏", "━", "┓", "┃", "┛", "━", "┗", "┃" },
+                border = require("ui.style").border,
             })
     end
 end
