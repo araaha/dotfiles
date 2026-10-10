@@ -16,9 +16,12 @@ vim.diagnostic.config({
 
 local au = vim.api.nvim_create_autocmd
 au("LspAttach", {
-    group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+    group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
     callback = function(ev)
         local opts = { buffer = ev.buf }
+        vim.keymap.set("n", "gd", function()
+            require("features.definition_preview").open()
+        end, { buffer = ev.buf, desc = "Preview definition" })
         vim.keymap.set("n", "gD", vim.lsp.buf.definition, opts)
         vim.keymap.set("n", "go", function()
             vim.lsp.buf.hover({ border = "single" })
@@ -51,28 +54,15 @@ au("LspAttach", {
             local qf_winid = vim.fn.getloclist(win, { winid = 0 }).winid
             local action = qf_winid > 0 and "lclose" or "silent! lopen"
             vim.cmd(action)
-        end, { silent = true })
+        end, { buffer = ev.buf, silent = true })
 
         vim.keymap.set("n", "=q", function()
             vim.diagnostic.setqflist({ open = false })
             local qf_winid = vim.fn.getqflist({ winid = 0 }).winid
             local action = qf_winid > 0 and "cclose" or "copen"
             vim.cmd(action)
-        end, { silent = true })
+        end, { buffer = ev.buf, silent = true })
 
-        vim.keymap.set("n", "=f", function()
-            local win = vim.api.nvim_get_current_win()
-            local qf_winid = vim.fn.getqflist({ winid = 0 }).winid
-            local lf_winid = vim.fn.getloclist(win, { winid = 0 }).winid
-            if qf_winid > 0 then
-                vim.cmd("copen")
-            elseif lf_winid > 0 then
-                vim.cmd("lopen")
-            else
-                return
-            end
-        end)
-        --
         vim.keymap.set("n", "<C-s>", function()
             local clients = vim.lsp.get_clients({ bufnr = ev.buf, method = "textDocument/formatting" })
             if #clients > 0 then

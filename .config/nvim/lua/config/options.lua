@@ -38,6 +38,7 @@ local options = {
 local au = vim.api.nvim_create_autocmd
 au({ "VimResized" },
     {
+        group = vim.api.nvim_create_augroup("UserResize", { clear = true }),
         callback = function()
             vim.api.nvim_set_option_value("cmdwinheight", math.floor(vim.o.lines * 0.28), {})
             vim.api.nvim_set_option_value("pumheight", math.floor(vim.o.lines * 0.33), {})
