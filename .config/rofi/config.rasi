@@ -20,6 +20,8 @@ matching: "fuzzy";
 sort: true;
 sorting-method: "fzf";
 drun-match-fields: "name,generic";
+show-icons: false;
+dpi: 48;
 }
 
 
