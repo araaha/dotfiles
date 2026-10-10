@@ -1,5 +1,5 @@
 #!/bin/sh
 # rc.local for Artix -- enter your commands here
 # it should be run when starting local.target service
-dmesg -w --level=err,warn >>/var/log/dmesg-prev.log &
+dmesg -w --time-format iso --level=err,warn >>/var/log/dmesg-prev.log &
 /bin/bash -c /home/araaha/scripts/cpu-perf.sh &
