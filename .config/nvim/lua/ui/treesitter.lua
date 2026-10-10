@@ -1,36 +1,11 @@
-local ensure_installed = {
-    "c", "lua", "vim", "vimdoc", "cpp", "css", "go", "python", "bash",
-    "diff", "yaml", "xml", "markdown", "markdown_inline", "ini", "json",
-    "html", "typst", "make", "toml", "javascript",
-}
-
--- Use nvim-treesitter only as an on-demand installer, not a startup plugin.
-local function TSInstall(force)
-    local installer = vim.fn.stdpath("cache") .. "/treesitter-installer"
-    if vim.fn.isdirectory(installer) == 0 then
-        local result = vim.system({
-            "git", "clone", "--depth", "1", "--branch", "main",
-            "https://github.com/nvim-treesitter/nvim-treesitter", installer,
-        }, { text = true }):wait()
-        assert(result.code == 0, result.stderr)
-    end
-    vim.opt.runtimepath:prepend(installer)
-    local treesitter = require("nvim-treesitter")
-    treesitter.setup({})
-    return treesitter.install(ensure_installed, { force = force, summary = true })
-end
-
-vim.api.nvim_create_user_command("TSInstall", function(args)
-    TSInstall(args.bang)
-end, { bang = true, desc = "Install all configured Tree-sitter parsers and queries" })
-
 vim.api.nvim_create_autocmd({ "FileType" }, {
-    group = vim.api.nvim_create_augroup("Treesitter", {}),
+    group = vim.api.nvim_create_augroup("Treesitter", { clear = true }),
     callback = function(args)
         local buf = args.buf
         local filetype = args.match
 
-        local language = vim.treesitter.language.get_lang(filetype) or filetype
+        -- The zsh ftplugin registers its Bash alias after the first screen.
+        local language = filetype == "zsh" and "bash" or vim.treesitter.language.get_lang(filetype) or filetype
         if not vim.treesitter.language.add(language) then
             return
         end
@@ -44,20 +19,3 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
         vim.treesitter.start(buf, language)
     end,
 })
-
---treesitter
-vim.keymap.set({ "n", "x", "o" }, "<Tab>", function()
-    if vim.treesitter.get_parser(nil, nil, { error = false }) then
-        require("vim.treesitter._select").select_parent(vim.v.count1)
-    else
-        vim.lsp.buf.selection_range(vim.v.count1)
-    end
-end, { desc = "Select parent treesitter node or outer incremental lsp selections" })
-
-vim.keymap.set({ "n", "x", "o" }, "<S-Tab>", function()
-    if vim.treesitter.get_parser(nil, nil, { error = false }) then
-        require("vim.treesitter._select").select_child(vim.v.count1)
-    else
-        vim.lsp.buf.selection_range(-vim.v.count1)
-    end
-end, { desc = "Select child treesitter node or inner incremental lsp selections" })
