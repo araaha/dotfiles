@@ -10,7 +10,7 @@
     horizontal_padding = 10
     frame_width = 2
     gap_size = 1
-    font = "MesloLGS NF 15"
+    font = "MesloLGS Nerd Font 15"
 
     corner_radius = 0
 

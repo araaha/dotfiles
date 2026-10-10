@@ -206,7 +206,7 @@
     </keybind>
     <keybind key="C-A-p">
       <action name="Execute">
-        <command>env PASSWORD_STORE_DIR=/home/araaha/.local/share/pass GNUPGHOME=/home/araaha/.local/share/.gnupg rofi-pass.sh</command>
+      <command>env PASSWORD_STORE_DIR=/home/araaha/.local/share/pass GNUPGHOME=/home/araaha/.local/share/.gnupg rofi-pass.sh</command>
       </action>
     </keybind>
     <keybind key="C-A-r">
@@ -216,7 +216,7 @@
     </keybind>
     <keybind key="C-A-q">
       <action name="Execute">
-        <command>rofi -show calc -modi calc -no-show-match -no-sort -terse -no-bold -calc-command "printf '%s' '{result}' | wl-copy" -kb-secondary-copy "" -kb-accept-entry "Return"</command>
+        <command>rofi -show calc -modi calc -hint-welcome "" -hint-result " " -no-show-match -no-sort -terse -no-bold -calc-command "printf '%s' '{result}' | wl-copy" -kb-secondary-copy "" -kb-accept-entry "Return"</command>
       </action>
     </keybind>
     <keybind key="C-A-c">

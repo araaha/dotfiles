@@ -60,7 +60,7 @@ offset = { x = 0, y = 1 }
 glyph_offset = { x = 0, y = 0 }
 
 [font.normal]
-family = "MesloLGS NF"
+family = "MesloLGS Nerd Font"
 
 [hints]
 alphabet = "werasdfcvjlk"
