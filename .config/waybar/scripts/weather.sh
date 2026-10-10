@@ -26,7 +26,7 @@ weather=$(curl -fs --get \
     "$api" \
     --data-urlencode "latitude=$latitude" \
     --data-urlencode "longitude=$longitude" \
-    --data-urlencode "current=temperature_2m,apparent_temperature,precipitation_probability" \
+    --data-urlencode "current=temperature_2m,apparent_temperature,weather_code" \
     --data-urlencode "daily=sunset" \
     --data-urlencode "timezone=$timezone" \
     --data-urlencode "forecast_days=1") || fallback
@@ -35,7 +35,7 @@ values=$(printf '%s\n' "$weather" | jq -er '
     [
         .current.temperature_2m,
         .current.apparent_temperature,
-        .current.precipitation_probability,
+        .current.weather_code,
         .daily.sunset[0]
     ]
     | if any(.[]; . == null)
@@ -44,7 +44,7 @@ values=$(printf '%s\n' "$weather" | jq -er '
       end
 ') || fallback
 
-IFS="$(printf '\t')" read -r temp feels rain sunset <<EOF
+IFS="$(printf '\t')" read -r temp feels code sunset <<EOF
 $values
 EOF
 
@@ -55,7 +55,18 @@ feels=$(printf '%.0f' "$feels")
 
 sunset=${sunset#*T}
 sunset=$(printf '%.5s' "$sunset")
+condition=""
+case "$code" in
+    51|53|55)             condition="Drizzle" ;;
+    56|57)                condition="Freezing drizzle" ;;
+    61|63|65)             condition="Rain" ;;
+    66|67)                condition="Freezing rain" ;;
+    71|73|75|77|85|86)    condition="Snow" ;;
+    80|81|82)             condition="Showers" ;;
+    95|96|97|99)          condition="Thunderstorm" ;;
+esac
+
 output="$temp° ($feels°) $sunset"
-[ "$rain" -gt 0 ] && output="$output [$rain%]"
+[ -n "$condition" ] && output="$output $condition"
 
 printf '%s\n' "$output" | tee "$cache" | render
