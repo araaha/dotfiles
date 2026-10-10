@@ -1,5 +1,5 @@
 configuration {
-kb-cancel: "Escape,Control+w";
+kb-cancel: "Escape,Control+w,Control+c";
 kb-clear-line: "Control+BackSpace";
 kb-remove-word-back: "";
 kb-secondary-copy: "";
