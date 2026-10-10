@@ -15,7 +15,7 @@ configuration {
 
 /*****----- Global Properties -----*****/
 * {
-    background:     #24242490;
+    background:     #242424;
     foreground:     #EBDBB2FF;
 
     selected:       #ac9f7a50;
@@ -26,7 +26,7 @@ configuration {
 
 
 * {
-    border-colour:               #83a598;
+    border-colour:               #d3869b;
     handle-colour:               var(selected);
     background-colour:           var(background);
     foreground-colour:           var(foreground);
@@ -51,8 +51,8 @@ window {
     location:                    center;
     anchor:                      center;
     fullscreen:                  false;
-    width:                       36.45%;
-    height:                      52.5%;
+    width:                       36%;
+    height:                      56%;
     x-offset:                    0px;
     y-offset:                    0px;
 
@@ -60,7 +60,7 @@ window {
     enabled:                     true;
     margin:                      0px;
     padding:                     0px;
-    border:                      0px solid;
+    border:                      3px solid;
     border-radius:               0px;
     border-color:                @border-colour;
     cursor:                      "default";
@@ -89,8 +89,8 @@ inputbar {
     border:                      0px 0px 0px 0px;
     border-radius:               0px;
     border-color:                @border-colour;
-    background-color:            #83a598;
-    text-color:                  #242424;
+    background-color:            #242424;
+    text-color:                  #ebdbb2;
     children:                    [ "prompt", "entry" ];
 }
 
@@ -116,7 +116,7 @@ entry {
     placeholder-color:           inherit;
     blink:false;
     cursor-color: #9cd365;
-    cursor-width: 22px;
+    cursor-width: 10px;
 
 }
 
@@ -179,6 +179,7 @@ element-icon {
     text-color:                  inherit;
     size:                        12%;
     cursor:                      inherit;
+    enabled: false;
 }
 element-text {
     background-color:            transparent;
