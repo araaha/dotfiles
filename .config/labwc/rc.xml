@@ -803,8 +803,11 @@
     <windowRule identifier="*" serverDecoration="no"/>
     <windowRule identifier="Dropdown" skipTaskbar="yes" skipWindowSwitcher="yes">
       <action name="SnapToRegion" region="bottom-half"/>
-      <action name="ToggleAlwaysOnTop"/>
+      <!-- Keep normal stacking so Alt+Tab can raise apps above the dropdown. -->
       <action name="ToggleOmnipresent"/>
+    </windowRule>
+    <windowRule identifier="Filepicker">
+      <action name="AutoPlace" policy="center"/>
     </windowRule>
   </windowRules>
   <!--
