@@ -3,7 +3,4 @@ return {
     keys = {
         { "%", mode = { "n", "v", "o" } }
     },
-    opts = {
-        debounce_time = 1
-    }
 }
