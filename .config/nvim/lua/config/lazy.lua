@@ -14,13 +14,6 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-if pcall(vim.cmd.packadd, "nvim.undotree") then
-    local ok, undotree = pcall(require, "undotree")
-    if ok then
-        vim.keymap.set("n", "<Leader>u", undotree.open)
-    end
-end
-
 require("lazy").setup({
     spec = {
         { import = "plugins" },

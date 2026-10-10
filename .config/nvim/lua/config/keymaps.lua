@@ -26,7 +26,11 @@ map("n", "J", ":bprev<CR>", { silent = true })
 map("n", "<C-e>", ":b#<CR>", { silent = true })
 map({ "n", "v" }, "<C-PageDown>", ":m .+1<CR>", { silent = true })
 map({ "n", "v" }, "<C-PageUp>", ":m .-2<CR>", { silent = true })
-map("n", "X", ":bdelete!<CR>", { silent = true })
+map("n", "X", function()
+    local preview = package.loaded["features.definition_preview"]
+    if preview and preview.close_if_active() then return end
+    vim.cmd("bdelete!")
+end, { silent = true, desc = "Close definition previews or delete the buffer" })
 map({ "i" }, "<C-s>", "<C-o>:silent! w<CR>", { silent = true })
 map({ "n" }, "<C-s>", ":silent! w<CR>", { silent = true })
 
@@ -53,31 +57,52 @@ map("o", "ar", "a[")
 map("o", "ia", "i<")
 map("o", "aa", "a<")
 
-map("n", "<leader>lf", function()
-    local tmp = vim.fn.tempname()
-
-    vim.cmd.vsplit()
-    vim.cmd.enew()
-
-    vim.fn.jobstart({ "yazi", "--chooser-file", tmp }, {
-        term = true,
-        on_exit = function()
-            vim.schedule(function()
-                local f = io.open(tmp, "r")
-                if f then
-                    local file = f:read("*l")
-                    f:close()
-                    os.remove(tmp)
-
-                    if file and file ~= "" then
-                        vim.cmd("vsplit " .. vim.fn.fnameescape(file))
-                    end
-                end
-            end)
-        end,
-    })
-
-    vim.cmd.startinsert()
-end)
+map("n", "<Leader>lf", function()
+    require("features.yazi").open()
+end, { desc = "Choose a file with Yazi" })
 map("n", "<Leader>lg", ":vert term lazygit<CR>", { silent = true })
 map("n", "<Leader>lp", ":silent! Lazy profile<CR>", { silent = true })
+
+for _, direction in ipairs({ "h", "j", "k", "l" }) do
+    map({ "n", "i", "t", "v" }, "<M-" .. direction .. ">", function()
+        require("features.tmux").navigate(direction)
+    end, { desc = "Navigate Neovim/tmux " .. direction, silent = true })
+end
+
+map("n", "<C-a>", function()
+    require("features.togglewords").toggle_word()
+end, { silent = true, desc = "Toggle word or increment number" })
+map("n", "<C-x>", function()
+    require("features.togglewords").toggle_word_reverse()
+end, { silent = true, desc = "Toggle word or decrement number" })
+map("n", "<Leader>ru", function()
+    require("features.runner").run()
+end, { desc = "Run the current file" })
+map("n", "<Leader>u", function()
+    require("features.undotree").open()
+end, { desc = "Open undo tree" })
+
+map("n", "=f", function()
+    local win = vim.api.nvim_get_current_win()
+    if vim.fn.getqflist({ winid = 0 }).winid > 0 then
+        vim.cmd("copen")
+    elseif vim.fn.getloclist(win, { winid = 0 }).winid > 0 then
+        vim.cmd("lopen")
+    end
+end, { desc = "Focus the open quickfix or location list" })
+
+map({ "n", "x", "o" }, "<Tab>", function()
+    if vim.treesitter.get_parser(nil, nil, { error = false }) then
+        require("vim.treesitter._select").select_parent(vim.v.count1)
+    else
+        vim.lsp.buf.selection_range(vim.v.count1)
+    end
+end, { desc = "Select parent Tree-sitter node or outer LSP selection" })
+
+map({ "n", "x", "o" }, "<S-Tab>", function()
+    if vim.treesitter.get_parser(nil, nil, { error = false }) then
+        require("vim.treesitter._select").select_child(vim.v.count1)
+    else
+        vim.lsp.buf.selection_range(-vim.v.count1)
+    end
+end, { desc = "Select child Tree-sitter node or inner LSP selection" })
