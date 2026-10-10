@@ -87,6 +87,7 @@ wtype
 xdg-desktop-portal
 yazi
 yt-dlp
+zbar
 zola
 zoxide
 zsh
