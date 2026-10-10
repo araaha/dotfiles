@@ -1,0 +1,7 @@
+keymap:
+  - name: Sioyek Escape
+    application:
+      only: sioyek
+    exact_match: true
+    remap:
+      C-c: Esc

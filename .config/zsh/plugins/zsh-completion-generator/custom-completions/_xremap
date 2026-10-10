@@ -1,0 +1,51 @@
+#compdef xremap
+
+autoload -U is-at-least
+
+_xremap() {
+    typeset -A opt_args
+    typeset -a _arguments_options
+    local ret=1
+
+    if is-at-least 5.2; then
+        _arguments_options=(-s -S -C)
+    else
+        _arguments_options=(-s -C)
+    fi
+
+    local context curcontext="$curcontext" state line
+    _arguments "${_arguments_options[@]}" : \
+'*--device=[Limit input devices to the given names or paths. Default is all keyboards]:DEVICE:_default' \
+'*--ignore=[Ignore input devices with the given names or paths]:IGNORE:_default' \
+'*--watch=[Watch for new devices or changing configuration files. Default is not watching for either. Examples - xremap --watch config.yml               # watch devices - xremap --watch=config config.yml        # watch configuration files - xremap --watch=config,device config.yml # watch both]::WATCH:((device\:"add new devices automatically"
+config\:"reload the config automatically"))' \
+'--completions=[Generate shell completions]:SHELL:(bash elvish fish powershell zsh)' \
+'--output-device-name=[Choose the name of the created output device. Default is '\''xremap'\'' or '\''xremap pid=xx'\'']:OUTPUT_DEVICE_NAME:_default' \
+'--vendor=[Choose the vendor value of the created output device. Must be given in hexadecimal with or without a prefix '\''0x'\''. Default is\: 0x1234]:VENDOR:_default' \
+'--product=[Choose the product value of the created output device. Must be given in hexadecimal with or without a prefix '\''0x'\''. Default is\: 0x5678]:PRODUCT:_default' \
+'--allow-launch=[Allow remappings to execute programs. Default is ambiguous. Since v0.15.1]:ALLOW_LAUNCH:(true false)' \
+'--mouse[Listen to mouse devices. Default is false. Trackpads, tablets and other absolute devices are not supported.]' \
+'--list-devices[List info about devices]' \
+'--device-details[Show device details]' \
+'--list-windows[List open windows. Use this to get app_class and title. Since v0.15.5. Not supported for GNOME Wayland or KDE Wayland.]' \
+'--no-window-logging[Suppress logging of window title and application changes. Default is false. Since v0.14.10.]' \
+'--bridge[Open a bridge from the desktop environment to the xremap system service. Since v0.15.1]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+'-V[Print version]' \
+'--version[Print version]' \
+'*::configs -- Config file(s):_files' \
+&& ret=0
+}
+
+(( $+functions[_xremap_commands] )) ||
+_xremap_commands() {
+    local commands; commands=()
+    _describe -t commands 'xremap commands' commands "$@"
+}
+
+if [ "$funcstack[1]" = "_xremap" ]; then
+    _xremap "$@"
+else
+    compdef _xremap xremap
+fi

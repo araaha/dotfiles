@@ -26,4 +26,5 @@ wireplumber &
 pamixer --set-volume 80 &
 mpris-proxy &
 chroncal alarm daemon &
+xremap --watch=config,device ~/.config/xremap/config.yml &
 dunst &
