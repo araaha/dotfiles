@@ -17,6 +17,8 @@ modi: "window,drun,run";
 combi-modi: "window,drun,run";
 location: 0;
 matching: "fuzzy";
+sort: true;
+sorting-method: "fzf";
 drun-match-fields: "name,generic";
 }
 
