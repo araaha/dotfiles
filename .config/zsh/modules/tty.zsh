@@ -1,7 +1,7 @@
 export MOD="$ZDOTDIR/modules"
 
 if [[ -z $DISPLAY && -z $WAYLAND_DISPLAY ]] && [[ $(tty) == /dev/tty1 ]]; then
-    exec labwc
+    exec dbus-run-session -- labwc
 fi
 
 [[ "$TERM" == linux ]] || return

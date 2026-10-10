@@ -1,12 +1,4 @@
-#!/bin/sh
-# Wayland-native Labwc session startup, migrated from Openbox.
-if [ ! -S "$XDG_RUNTIME_DIR/bus" ]; then
-    dbus-daemon --session --fork --nopidfile --address="unix:path=$XDG_RUNTIME_DIR/bus"
-fi
-export DBUS_SESSION_BUS_ADDRESS="${DBUS_SESSION_BUS_ADDRESS:-unix:path=$XDG_RUNTIME_DIR/bus}"
-dbus-update-activation-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_RUNTIME_DIR
 wlr-randr --output eDP-1 --scale 2
-
 light -S 20 &
 ~/dotfiles/scripts/bluetooth-autoconnect.sh &
 ~/dotfiles/scripts/bluetooth-battery.sh &
