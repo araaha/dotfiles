@@ -23,7 +23,7 @@ swayimg.imagelist.adjacent = false
 swayimg.imagelist.fsmon = true
 
 swayimg.text.visible = false
-swayimg.text.font = "MesloLGS Nerd Font Regular"
+swayimg.text.font = "MesloLGS NF Regular"
 swayimg.text.size = 12
 swayimg.text.spacing = 0
 swayimg.text.padding = 6

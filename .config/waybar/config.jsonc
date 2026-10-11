@@ -78,7 +78,7 @@
     "custom/backlight": {
         "exec": "sh $HOME/.config/waybar/scripts/backlight.sh",
         "interval": 1,
-        "format": " {text}",
+        "format": "󰃠 {text}",
         "on-scroll-up": "light -A 2",
         "on-scroll-down": "light -U 2",
         "tooltip": false
@@ -98,7 +98,7 @@
 
     "memory": {
         "interval": 1,
-        "format": " {used:0.1f}G/{total:0.1f}G {swapPercentage}%",
+        "format": "󰍛 {used:0.1f}G/{total:0.1f}G {swapPercentage}%",
         "tooltip": false
     },
 
@@ -114,8 +114,8 @@
         "interface": "wlan0",
         "interval": 1,
         "format": "",
-        "format-wifi": "直 {essid}",
-        "format-linked": "直 {ifname}",
+        "format-wifi": "󰖩 {essid}",
+        "format-linked": "󰖩 {ifname}",
         "format-disconnected": "",
         "format-disabled": "",
         "tooltip": false
