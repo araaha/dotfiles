@@ -11,3 +11,5 @@
 --glob=!*pki/
 --glob=!*.gnupg/
 --glob=!*pkg/
+--glob=!*Codex/
+--glob=!*codex/

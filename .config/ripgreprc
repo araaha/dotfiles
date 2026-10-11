@@ -11,6 +11,8 @@
 --glob=!*pki/
 --glob=!*.gnupg/
 --glob=!*pkg/
+--glob=!*codex/
+--glob=!*Codex/
 --smart-case
 --hidden
 --color=auto
