@@ -10,6 +10,7 @@ chrony
 clang
 cliphist
 cronie
+cyme
 delve
 difftastic
 docker
