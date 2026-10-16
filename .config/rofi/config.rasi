@@ -26,4 +26,4 @@ configuration {
 
 
 
-@theme "/home/araaha/dotfiles/.config/rofi/gruvbox.rasi"
+@theme "~/.config/rofi/gruvbox.rasi"
