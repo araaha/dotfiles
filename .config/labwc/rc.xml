@@ -781,7 +781,8 @@
   </menu>
   <windowRules>
     <windowRule identifier="*" serverDecoration="no"/>
-    <windowRule identifier="Dropdown" skipTaskbar="yes" skipWindowSwitcher="yes">
+    <!-- Keep the foreign-toplevel handle so xremap can detect dropdown focus. -->
+    <windowRule identifier="Dropdown" skipWindowSwitcher="yes">
       <action name="SnapToRegion" region="bottom-half"/>
       <!-- Keep normal stacking so Alt+Tab can raise apps above the dropdown. -->
       <action name="ToggleOmnipresent"/>
