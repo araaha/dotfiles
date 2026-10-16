@@ -53,14 +53,13 @@ check_battery() {
 
 check_battery
 
-gdbus monitor \
-    --system \
-    --dest org.freedesktop.UPower \
-    --object-path "$path" |
 while IFS= read -r line; do
     case "$line" in
         *org.freedesktop.DBus.Properties.PropertiesChanged*)
             check_battery
             ;;
     esac
-done
+done < <(gdbus monitor \
+    --system \
+    --dest org.freedesktop.UPower \
+    --object-path "$path")

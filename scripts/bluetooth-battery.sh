@@ -1,7 +1,6 @@
 #!/bin/bash
 
-MAC="34:09:C9:68:FB:A3"
-
+MAC=$(bluetoothctl devices | cut -d ' ' -f 2)
 headset="${MAC//:/_}"
 
 upower_path="/org/freedesktop/UPower/devices/headset_dev_$headset"
@@ -47,14 +46,13 @@ check_battery() {
 
 check_battery
 
-gdbus monitor \
-    --system \
-    --dest org.freedesktop.UPower \
-    --object-path "$upower_path" |
 while IFS= read -r line; do
     case "$line" in
         *org.freedesktop.DBus.Properties.PropertiesChanged*)
             check_battery
             ;;
     esac
-done
+done < <(gdbus monitor \
+    --system \
+    --dest org.freedesktop.UPower \
+    --object-path "$upower_path")
