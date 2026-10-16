@@ -4,7 +4,7 @@ output_dir="$HOME/Screenshots"
 output="$output_dir/$(date +'%Y-%m-%d-%H%M%S-screenshot.png')"
 mkdir -p "$output_dir"
 
-choice=$(printf 'Select area\nFull screen\n' | rofi -no-show-icons -dmenu -i -p 'Screenshot mode')
+choice=$(printf 'Select area\nFull screen\n' | rofi -no-show-icons -dmenu -i -p '  ')
 
 case "$choice" in
   'Select area')
