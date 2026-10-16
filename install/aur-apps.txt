@@ -9,8 +9,8 @@ sioyek-dev
 ticker
 ttf-ms-fonts
 uair
-xremap-wlroots-bin
 webtorrent-cli
 witr-bin
 wl-gammarelay-rs
 xdg-desktop-portal-termfilechooser-nosystemd-git
+xremap-wlroots-bin
