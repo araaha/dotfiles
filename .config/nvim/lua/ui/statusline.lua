@@ -202,50 +202,55 @@ local function get_lsp_clients()
     return "%#LspClient#" .. string.format(" %s ", table.concat(c, "|"))
 end
 
-local countdown = ""
-
-if _G.Statusline and Statusline.timer then
+if _G.Statusline and Statusline.timer and not Statusline.timer:is_closing() then
     Statusline.timer:stop()
     Statusline.timer:close()
 end
 Statusline = {}
 
-local function pomo()
-    if vim.fn.executable("uairctl") == 0 then return end
-    local timer = assert(vim.uv.new_timer())
-    Statusline.timer = timer
+local countdown = { text = "", started = false, pending = false }
 
-    local function zero()
-        if timer:is_closing() then return end
-        local time = vim.fn.trim(vim.fn.system({ "uairctl", "fetch", "{time}" }))
-        if vim.v.shell_error ~= 0 or time == "" then
-            countdown = ""
-            timer:stop()
-            vim.cmd.redrawstatus()
-            return
-        else
-            countdown = string.format("%%#StatuslineInsertAccent# %s ", time)
-        end
-
-        vim.cmd.redrawstatus()
-        if time == "00:00" then
-            timer:stop()
-            vim.cmd("CellularAutomaton game_of_life")
-            local animation_buffer = vim.api.nvim_get_current_buf()
-            vim.defer_fn(function()
-                if vim.api.nvim_buf_is_valid(animation_buffer) then
-                    vim.api.nvim_buf_delete(animation_buffer, { force = true })
-                end
-                vim.opt_local.statusline = "%{%v:lua.Statusline.active()%}"
-            end, 3000)
-            return
-        end
+local function stop_countdown()
+    local timer = countdown.timer
+    countdown.timer = nil
+    if Statusline.timer == timer then Statusline.timer = nil end
+    if timer and not timer:is_closing() then
+        timer:stop()
+        timer:close()
     end
-
-    timer:start(0, 1000, vim.schedule_wrap(zero))
 end
 
-pomo()
+local function update_countdown()
+    local timer = countdown.timer
+    if countdown.pending or not timer or timer:is_closing() then return end
+    countdown.pending = true
+
+    vim.system({ "uairctl", "fetch", "{time}" }, { text = true, timeout = 1000 },
+        vim.schedule_wrap(function(result)
+            countdown.pending = false
+            if countdown.timer ~= timer or timer:is_closing() then return end
+
+            local time = result.code == 0 and vim.trim(result.stdout or "") or ""
+            local text = time ~= "" and string.format("%%#StatuslineInsertAccent# %s ", time) or ""
+            if countdown.text ~= text then
+                countdown.text = text
+                vim.cmd.redrawstatus()
+            end
+            if time == "" or time == "00:00" then stop_countdown() end
+        end))
+end
+
+local function pomo()
+    if not countdown.started then
+        countdown.started = true
+        if vim.fn.executable("uairctl") == 1 then
+            countdown.timer = assert(vim.uv.new_timer())
+            Statusline.timer = countdown.timer
+            countdown.timer:start(0, 1000, vim.schedule_wrap(update_countdown))
+        end
+    end
+    return countdown.text
+end
 
 local function searchcount()
     if vim.v.hlsearch ~= 1 then return "" end
@@ -262,7 +267,7 @@ Statusline.active = function()
         modified(),
         "%=",
         searchcount(),
-        countdown,
+        pomo(),
         lsp_progress(),
         lsp(),
         get_lsp_clients(),
@@ -291,10 +296,6 @@ vim.api.nvim_create_autocmd("ColorScheme", { group = group, callback = setup_hig
 vim.api.nvim_create_autocmd("VimLeavePre", {
     group = group,
     callback = function()
-        if Statusline.timer then
-            Statusline.timer:stop()
-            Statusline.timer:close()
-            Statusline.timer = nil
-        end
+        stop_countdown()
     end,
 })
