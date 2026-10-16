@@ -1,7 +1,6 @@
 chroncal-bin
 codelldb-bin
 downgrade
-dragon-drop
 lazydocker-bin
 localsend-bin
 mdcat-bin
@@ -9,11 +8,9 @@ megacmd-bin
 sioyek-dev
 ticker
 ttf-ms-fonts
-ttf-weather-icons
 uair
 xremap-wlroots-bin
 webtorrent-cli
 witr-bin
 wl-gammarelay-rs
 xdg-desktop-portal-termfilechooser-nosystemd-git
-zen-browser-bin
