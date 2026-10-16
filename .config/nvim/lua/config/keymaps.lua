@@ -27,7 +27,7 @@ map("n", "<C-e>", ":b#<CR>", { silent = true })
 map({ "n", "v" }, "<C-PageDown>", ":m .+1<CR>", { silent = true })
 map({ "n", "v" }, "<C-PageUp>", ":m .-2<CR>", { silent = true })
 map("n", "X", function()
-    local preview = package.loaded["features.definition_preview"]
+    local preview = package.loaded["features.definition-preview"]
     if preview and preview.close_if_active() then return end
     vim.cmd("bdelete!")
 end, { silent = true, desc = "Close definition previews or delete the buffer" })
