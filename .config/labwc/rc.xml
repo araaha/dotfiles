@@ -355,17 +355,7 @@
       <command>playerctl play-pause</command>
       </action>
     </keybind>
-    <keybind key="W-x">
-      <action name="Execute">
-      <command>warpd --hint</command>
-      </action>
-    </keybind>
-    <keybind key="W-c">
-      <action name="Execute">
-      <command>warpd --normal</command>
-      </action>
-    </keybind>
-    <keybind key="C-A-l">
+        <keybind key="C-A-l">
       <action name="GoToDesktop">
         <to>right</to>
         <wrap>no</wrap>
