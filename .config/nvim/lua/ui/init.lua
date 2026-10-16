@@ -3,6 +3,7 @@ require("ui.indentmini")
 require("ui.treesitter")
 
 vim.schedule(function()
+    require("ui.cmdline")
     require("ui.experimental")
     require("ui.statusline")
     require("ui.qf")

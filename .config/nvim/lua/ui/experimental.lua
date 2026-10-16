@@ -38,3 +38,4 @@ pcall(ui2.enable, {
         },
     },
 })
+require("ui.cmdline").setup()
