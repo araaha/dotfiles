@@ -1,6 +1,5 @@
 chroncal-bin
 codelldb-bin
-cyme-bin
 downgrade
 dragon-drop
 lazydocker-bin
