@@ -221,20 +221,6 @@ local function trash_selection(kind)
     end
 end
 
-local function arm_external_prefix()
-    prefix_token = prefix_token + 1
-    local token = prefix_token
-    status("Ctrl+x: press X to trash")
-    swayimg.defer(2, function()
-        if prefix_token == token then prefix_token = 0 end
-    end)
-end
-
-local function run_external_x(kind)
-    if prefix_token == 0 then return end
-    prefix_token = 0
-    trash_selection(kind)
-end
 
 local function toggle_text()
     swayimg.text.visible = not swayimg.text.visible
@@ -424,8 +410,7 @@ bind(swayimg.viewer, "Shift+q", function() pick_and_quit("viewer") end)
 bind(swayimg.viewer, "Return", function() swayimg.mode = "gallery" end)
 bind(swayimg.viewer, "f", function() swayimg.fullscreen = not swayimg.fullscreen end)
 bind(swayimg.viewer, "Ctrl+s", toggle_text)
-bind(swayimg.viewer, "Ctrl+x", arm_external_prefix)
-bind(swayimg.viewer, "Shift+x", function() run_external_x("viewer") end)
+bind(swayimg.viewer, "Shift+x", function() trash_selection("viewer") end)
 bind(swayimg.viewer, "g", function() swayimg.viewer.open("first") end)
 bind(swayimg.viewer, "Shift+g", function() swayimg.viewer.open("last") end)
 bind(swayimg.viewer, "r", swayimg.viewer.reload)
@@ -442,9 +427,11 @@ bind(swayimg.viewer, "Shift+n", function() navigate_marked("viewer", 1) end)
 bind(swayimg.viewer, "Shift+p", function() navigate_marked("viewer", -1) end)
 
 -- Viewer navigation, zoom and transforms.
+bind(swayimg.viewer, "right", function() open_image("next", true) end)
+bind(swayimg.viewer, "left", function() open_image("prev", true) end)
 bind(swayimg.viewer, "n", function() open_image("next", true) end)
-bind(swayimg.viewer, "space", function() open_image("next", false) end)
 bind(swayimg.viewer, "p", function() open_image("prev", true) end)
+bind(swayimg.viewer, "space", function() open_image("next", false) end)
 bind(swayimg.viewer, "backspace", function() open_image("prev", false) end)
 bind(swayimg.viewer, "bracketright", function() skip_images(10) end)
 bind(swayimg.viewer, "bracketleft", function() skip_images(-10) end)
@@ -477,9 +464,8 @@ bind(swayimg.viewer, "Shift+w", function() swayimg.viewer.set_fix_scale("fit") e
 bind(swayimg.viewer, "Shift+f", function() swayimg.viewer.set_fix_scale("fill") end)
 bind(swayimg.viewer, "e", function() swayimg.viewer.set_fix_scale("width") end)
 bind(swayimg.viewer, "Shift+e", function() swayimg.viewer.set_fix_scale("height") end)
-bind(swayimg.viewer, "less", function() swayimg.viewer.rotate(270) end)
-bind(swayimg.viewer, "greater", function() swayimg.viewer.rotate(90) end)
-bind(swayimg.viewer, "question", function() swayimg.viewer.rotate(180) end)
+bind(swayimg.viewer, "comma", function() swayimg.viewer.rotate(270) end)
+bind(swayimg.viewer, "period", function() swayimg.viewer.rotate(90) end)
 bind(swayimg.viewer, "Shift+h", swayimg.viewer.flip_horizontal)
 bind(swayimg.viewer, "Shift+v", swayimg.viewer.flip_vertical)
 bind(swayimg.viewer, "a", function() swayimg.antialiasing = not swayimg.antialiasing end)
@@ -506,8 +492,7 @@ bind(swayimg.gallery, "Shift+q", function() pick_and_quit("gallery") end)
 bind(swayimg.gallery, "Return", function() swayimg.mode = "viewer" end)
 bind(swayimg.gallery, "f", function() swayimg.fullscreen = not swayimg.fullscreen end)
 bind(swayimg.gallery, "Ctrl+s", toggle_text)
-bind(swayimg.gallery, "Ctrl+x", arm_external_prefix)
-bind(swayimg.gallery, "Shift+x", function() run_external_x("gallery") end)
+bind(swayimg.gallery, "Shift+x", function() trash_selection(kind) end)
 bind(swayimg.gallery, "g", function() swayimg.gallery.select("first") end)
 bind(swayimg.gallery, "Shift+g", function() swayimg.gallery.select("last") end)
 bind(swayimg.gallery, "r", swayimg.gallery.reload)
