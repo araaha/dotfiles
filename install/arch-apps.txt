@@ -81,7 +81,6 @@ uv
 vulkan-radeon
 waybar
 wireplumber
-witr
 wl-clipboard
 wlr-randr
 wtype
