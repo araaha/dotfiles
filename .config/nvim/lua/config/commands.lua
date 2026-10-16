@@ -9,7 +9,7 @@ command("Run", function()
 end, { desc = "Run the current file" })
 
 command("TSInstall", function(opts)
-    require("features.treesitter_install").install(opts.bang)
+    require("features.treesitter-install").install(opts.bang)
 end, { bang = true, desc = "Install all configured Tree-sitter parsers and queries" })
 
 vim.api.nvim_create_autocmd("CmdUndefined", {

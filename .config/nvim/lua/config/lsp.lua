@@ -20,7 +20,7 @@ au("LspAttach", {
     callback = function(ev)
         local opts = { buffer = ev.buf }
         vim.keymap.set("n", "gd", function()
-            require("features.definition_preview").open()
+            require("features.definition-preview").open()
         end, { buffer = ev.buf, desc = "Preview definition" })
         vim.keymap.set("n", "gD", vim.lsp.buf.definition, opts)
         vim.keymap.set("n", "go", function()
@@ -70,7 +70,6 @@ au("LspAttach", {
             end
             vim.cmd("silent! write")
         end, opts)
-
     end,
 })
 
