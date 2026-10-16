@@ -1,4 +1,3 @@
-#!/usr/bin/env zsh
 # Compile without executing shell configuration. Only rebuild changed sources.
 emulate -L zsh
 setopt extendedglob
@@ -31,3 +30,4 @@ if (( rebuilt > 0 )); then
     [[ -t 1 ]] && print -- "Rebuilt $rebuilt Zsh cache files."
 fi
 exit $failed
+
