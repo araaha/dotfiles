@@ -19,7 +19,7 @@ return {
         showStatusIcon = false,
         showEngineInfo = false,
         showStatusInfo = false,
-        startInInsertMode = false,
+        startInInsertMode = true,
         keymaps = {
             nextInput = { i = "<Tab>" },
             prevInput = { i = "<S-Tab>" },
