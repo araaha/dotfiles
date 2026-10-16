@@ -482,8 +482,8 @@ local groups = {
     IndentLine = { link = "Comment" },
     IndentLineCurrent = { fg = colors.yellow },
 
-    MiniHipatternsFixme = { link = "ErrorMsg" },
-    MiniHipatternsTodo = { link = "Todo" },
+    MiniHipatternsFixme = { bg = colors.red, fg = colors.bg0, bold = true },
+    MiniHipatternsTodo = { bg = colors.yellow, fg = colors.bg0, bold = true },
     MiniHipatternsNote = { bg = colors.orange, fg = colors.bg0, bold = true },
     MiniHipatternsHack = { bg = colors.blue, fg = colors.bg0, bold = true },
 }
