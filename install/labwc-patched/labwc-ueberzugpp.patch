@@ -646,3 +646,14 @@ index 0000000..11c1d1e
 +	if (exported && !strcmp(exported, socket_path)) unsetenv("SWAYSOCK");
 +	enabled = false;
 +}
+diff --git a/src/config/session.c b/src/config/session.c
+--- a/src/config/session.c
++++ b/src/config/session.c
+@@ -25,6 +25,7 @@
+ #endif
+ 
+ static const char * const env_vars[] = {
++	"SWAYSOCK",
+ 	"WAYLAND_DISPLAY",
+ 	"XDG_CURRENT_DESKTOP",
+ 	"XCURSOR_SIZE",
