@@ -84,7 +84,6 @@ wireplumber
 witr
 wl-clipboard
 wlr-randr
-wlsunset
 wtype
 xdg-desktop-portal
 yazi

@@ -12,7 +12,7 @@ ttf-ms-fonts
 ttf-weather-icons
 uair
 xremap-wlroots-bin
-wl-gammarelay-rs
 webtorrent-cli
+wl-gammarelay-rs
 xdg-desktop-portal-termfilechooser-nosystemd-git
 zen-browser-bin
