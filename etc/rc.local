@@ -1,5 +1,13 @@
 #!/bin/sh
 # rc.local for Artix -- enter your commands here
 # it should be run when starting local.target service
-dmesg -w --time-format iso --level=err,warn >>/var/log/dmesg-prev.log &
-/bin/bash -c /home/araaha/scripts/cpu-perf.sh &
+if [ -f /var/log/dmesg.log ]; then
+    mv -f /var/log/dmesg.log /var/log/dmesg-prev.log
+fi
+dmesg -w --time-format iso --level=err,warn >>/var/log/dmesg.log &
+
+#cpu perf
+echo "guided"  | tee /sys/devices/system/cpu/amd_pstate/status
+echo powersave | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+echo "1800000" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_min_freq
+
