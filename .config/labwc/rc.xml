@@ -169,6 +169,8 @@
     <region name="bottom-right-third" x="66%" y="50%" width="34%" height="50%"/>
   </regions>
   <keyboard>
+    <repeatDelay>140</repeatDelay>
+    <repeatRate>60</repeatRate>
     <keybind key="XF86AudioPrev">
       <action name="Execute">
         <command>busctl --user call rs.wl-gammarelay / rs.wl.gammarelay UpdateGamma d -- -0.1</command>
@@ -179,8 +181,6 @@
         <command>busctl --user call rs.wl-gammarelay / rs.wl.gammarelay UpdateGamma d -- 0.1</command>
       </action>
     </keybind>
-    <repeatDelay>150</repeatDelay>
-    <repeatRate>50</repeatRate>
     <!-- Keybindings for desktop switching -->
     <!-- Increase backlight 1% -->
     <keybind key="XF86MonBrightnessUp">
