@@ -197,7 +197,7 @@ x-scheme-handler/about=firefox.desktop;
 x-scheme-handler/unknown=firefox.desktop;
 x-scheme-handler/codex=chatgpt.desktop
 
-x-terminal-emulator=alacritty.desktop;
+x-terminal-emulator=Alacritty.desktop;
 
 [Added Associations]
 application/x-shellscript=nvim.desktop;
