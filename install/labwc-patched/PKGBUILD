@@ -2,7 +2,7 @@
 # shellcheck disable=SC2034
 pkgname=labwc-patched
 pkgver=0.20.2
-pkgrel=4
+pkgrel=5
 pkgdesc='Labwc with compact popups, ueberzugpp IPC and cursor autohide'
 arch=('x86_64')
 url='https://github.com/labwc/labwc'
@@ -21,7 +21,7 @@ source=("labwc-$pkgver.tar.gz::$url/archive/refs/tags/$pkgver.tar.gz"
         'cursor-autohide.patch')
 sha256sums=('fae023b6fe022f7057556707a17cdb2d98e0138c5dffaedaa1dade975699f9e8'
             'f94ba4433bf8953f8f4803a85185764bd78d76e79d4e1b6bf83a565c46b614d9'
-            '4620c08a92b5f898e46081a582aa32b1156123f744379aebc459fe58c328d865'
+            '25e6ab6e2b0938a9c90d3c156aff70bdec9a45bb3d887316c646e87e0bc27f54'
             'd2b3cf00a9aa1fc63f2dc6659d4f768c08ae2a459690170e43822c8a53306384')
 
 prepare() {
