@@ -1,5 +1,5 @@
-#!/usr/bin/env bash
-MAC=${BLUETOOTH_HEADSET_MAC:-34:09:C9:68:FB:A3}
+#!/bin/bash
+MAC=$(bluetoothctl devices | cut -d ' ' -f 2)
 adapter="/org/bluez/hci0"
 device="$adapter/dev_${MAC//:/_}"
 next_attempt=0
@@ -20,7 +20,7 @@ while true; do
 
         if (( SECONDS >= next_attempt )); then
             busctl --system --timeout=10 call org.bluez "$device" org.bluez.Device1 Connect >/dev/null 2>&1
-            next_attempt=$((SECONDS + 10))
+            next_attempt=$((SECONDS + 2))
         fi
     fi
 
