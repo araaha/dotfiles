@@ -64,7 +64,7 @@ keymap = [
 	{ on = "?", run = "spot", desc = "Spot hovered file" },
 
 	# Operation
-	{ on = "o",         run = "open",                        desc = "Open selected files" },
+	{ on = "o",         run = [ "open", "toggle_all --state=off" ],                        desc = "Open selected files" },
 	{ on = "O",         run = "open --interactive",          desc = "Open selected files interactively" },
 	# { on = "<Enter>",   run = "open",                        desc = "Open selected files" },
 	{ on = "<S-Enter>", run = "open --interactive",          desc = "Open selected files interactively" },
@@ -87,6 +87,7 @@ keymap = [
 	{ on = ":",         run = "shell --block --interactive", desc = "Run a shell command (block until finishes)" },
 	{ on = ".",         run = "hidden toggle",               desc = "Toggle the visibility of hidden files" },
 	{ on = [ "<Space>", "f", "d" ],         run = "search --via=fd",             desc = "Search files by name via rg --files" },
+	{ on = [ "<Space>", "f", "f" ],         run = "plugin fzf-home",             desc = "Find files in home via fzf" },
 	{ on = [ "<Space>", "r", "g" ],         run = "search --via=rg",             desc = "Search files by content via ripgrep" },
 	{ on = "<C-s>",     run = "escape --search",             desc = "Cancel the ongoing search" },
 	{ on = "<C-t>",     run = "plugin fzf",                  desc = "Jump to a file/directory via fzf" },
@@ -148,7 +149,8 @@ keymap = [
 	{ on = [ "g", "l", "b" ],       run = "cd ~/.local/bin",   desc = "Go to ~/.local/bin" },
 	{ on = [ "g", "b" ],       run = "cd ~/Books",   desc = "Go to books" },
 	{ on = [ "g", "m" ],       run = "cd ~/Downloads/ok",   desc = "Go to mega" },
-	{ on = [ "g", "l", "m" ],       run = "cd ~/.local/share/mail",   desc = "Go to mail" },
+	{ on = [ "g", "l", "n" ],       run = "cd ~/.local/share/nvim",   desc = "Go to nvim" },
+	{ on = [ "g", "l", "f" ],       run = "cd ~/.local/share/fonts",   desc = "Go to fonts" },
 	{ on = [ "g", "T" ],       run = "cd /tmp/",   desc = "Go to tmp" },
 	{ on = [ "g", "t" ],       run = "plugin trash",     desc = "Go to trash bin" },
 	{ on = [ "g", "<Space>" ], run = "cd --interactive", desc = "Jump interactively" },
@@ -426,10 +428,6 @@ desc = "easyjump"
 on   = [ "c", "h" ]
 run  = "plugin chmod"
 desc = "Chmod on selected files"
-
-[[mgr.prepend_keymap]]
-on  = ["<Space>", "y"]
-run = [ "shell -- echo %s | wl-copy --type text/uri-list", "yank" ]
 
 [[mgr.prepend_keymap]]
 on   = "l"
