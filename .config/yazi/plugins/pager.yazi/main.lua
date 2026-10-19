@@ -5,7 +5,7 @@ local get_hovered = ya.sync(function()
     end
 
     return {
-        path = tostring(hovered.url),
+        path = tostring(hovered.url.path),
         ext = hovered.url.ext and hovered.url.ext:lower() or "",
         mime = hovered:mime(),
     }
