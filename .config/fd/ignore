@@ -6,10 +6,8 @@
 --glob=!*state/
 --glob=!*.local/share/themes/
 --glob=!*.local/share/icons/
---glob=!*ok/
+--glob=!*icons/
 --glob=!*uv/
 --glob=!*pki/
 --glob=!*.gnupg/
 --glob=!*pkg/
---glob=!*Codex/
---glob=!*codex/
