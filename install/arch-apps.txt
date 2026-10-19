@@ -30,7 +30,6 @@ himalaya
 hyperfine
 hyprpicker
 ifuse
-imagemagick
 impala
 jdtls
 jq
