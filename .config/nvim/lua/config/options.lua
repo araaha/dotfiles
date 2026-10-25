@@ -5,6 +5,7 @@ local options = {
     undofile      = true,
     undolevels    = 100,
     ignorecase    = true,
+    scrolloff     = 999,
     lazyredraw    = true,
     omnifunc      = "syntaxcomplete#Complete",
     completeopt   = "longest,menuone",

@@ -26,15 +26,6 @@ au({ "BufRead" }, {
     callback = remember,
 })
 
-au({ "CursorMoved" }, {
-    group = viewing,
-    callback = function()
-        if vim.fn.mode() == "n" then
-            vim.cmd("norm! zz")
-        end
-    end
-})
-
 au({ "TermOpen" }, {
     group = terminal,
     callback = function()
