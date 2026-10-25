@@ -1,0 +1,171 @@
+{
+    "$schema": "https://opencode.ai/v2/cli.json",
+    "theme": {
+        "name": "gruvbox-transparent"
+    },
+    "tabs": {
+        "mode": "off",
+        "layout": "vertical",
+        "indicators": "status",
+        "scope": "global"
+    },
+    "session": {
+        "thinking": "show",
+        "sidebar": "hide",
+        "scrollbar": false,
+        "markdown": "rendered",
+        "grouping": "auto",
+        "verbosity": "medium",
+        "tps": true,
+        "permissions": "prompt"
+    },
+    "keybinds": {
+        "leader": "ctrl+space",
+        "prompt.autocomplete.hide": "escape,ctrl+e"
+    },
+    "plugins": [
+      {
+        "package": "github:araaha/opencode-vim",
+        "options": {
+          "vim": {
+            "defaultMode": "normal",
+            "sessionKey": "s",
+            "keymaps": {
+              "insert": {
+                "<C-c>": "normal",
+                "<C-s>": "command:prompt.stash"
+              },
+              "normal": {
+                "H": "^",
+                "L": "$",
+                "j": "command:session.line.down",
+                "k": "command:session.line.up",
+                "D": "dd",
+                "gJ": "J",
+                "gg": "command:session.first",
+                "G": "command:session.last",
+                "gj": "gj",
+                "gk": "gk",
+                "g0": "g0",
+                "g^": "g^",
+                "g$": "g$",
+                "J": "command:opencode-vim.session.previous",
+                "K": "command:opencode-vim.session.next",
+                "gt": "command:session.list",
+                "X": "command:session.tab.close",
+                "<C-e>": "command:session.tab.history.back",
+                "<C-c>": "normal",
+                "<C-s>": "command:prompt.stash",
+                "<C-w>s": "command:session.new",
+                "<C-w>v": "command:session.new",
+                "<C-w>h": "command:pane.focus.left",
+                "<C-w>l": "command:pane.focus.right",
+                "<C-u>": "command:session.half.page.up",
+                "<C-d>": "command:session.half.page.down",
+                "<C-b>": "command:session.page.up",
+                "<C-f>": "command:session.page.down",
+                "[m": "command:session.message.previous",
+                "]m": "command:session.message.next",
+                "[[": "command:session.message.user.previous",
+                "]]": "command:session.message.user.next",
+                "zz": "command:app.exit",
+                "zq": "command:app.exit",
+                "zQ": "command:app.exit",
+                "Zq": "command:app.exit",
+                "<Space>e": "command:prompt.editor",
+                "<Space>b": "command:session.sidebar.toggle",
+                "<Space>t": "command:terminal.toggle",
+                "<Space>os": "command:opencode.status",
+                "<Space>oe": "command:session.export",
+                "<Space>on": "command:session.new",
+                "<Space>ol": "command:session.list",
+                "<Space>do": "command:diff.open",
+                "<Space>lp": "command:plugins.list",
+                "<Space>ot": "command:session.timeline",
+                "<Space>fz": "command:session.cd",
+                "<Space>w": "command:session.tab.close",
+                "<Space>oc": "command:session.compact",
+                "<Space>oq": "command:session.queued_prompts",
+                "<Space>m": "command:model.list",
+                "<Space>a": "command:agent.list",
+                "<Space>y": "y",
+                "<Space>p": "p",
+                "<Space>Y": "command:messages.copy",
+                "<Space>P": "command:prompt.stash.pop",
+                "<Space>u": "command:session.undo",
+                "<C-r>": "command:session.redo",
+                "<Space>i": "command:prompt.images.view",
+                "<Space><CR>": "command:prompt.queue",
+                "<Space>1": "command:session.tab.select.1",
+                "<Space>2": "command:session.tab.select.2",
+                "<Space>3": "command:session.tab.select.3",
+                "<Space>4": "command:session.tab.select.4",
+                "<Space>5": "command:session.tab.select.5",
+                "<Space>6": "command:session.tab.select.6",
+                "<Space>7": "command:session.tab.select.7",
+                "<Space>8": "command:session.tab.select.8",
+                "<Space>9": "command:session.tab.select.9",
+                "<Space>0": "command:session.tab.select.10"
+              },
+              "visual": {
+                "H": "^",
+                "L": "$",
+                "j": "gj",
+                "k": "gk",
+                "<C-c>": "normal",
+                "<Space>y": "y",
+                "<Space>p": "p"
+              },
+              "visual-line": {
+                "<C-c>": "normal"
+              },
+              "panes": {
+                "<M-i>": "command:session.tab.history.forward",
+                "<M-o>": "command:session.tab.history.back"
+              }
+            },
+            "modeColors": {
+              "visual": {
+                "fg": "#242424",
+                "bg": "#D8A657"
+              },
+              "visual-line": {
+                "fg": "#242424",
+                "bg": "#D8A657"
+              },
+              "normal": {
+                "fg": "#242424",
+                "bg": "#7DAEA3"
+              },
+              "insert": {
+                "fg": "#242424",
+                "bg": "#9DC365"
+              }
+            },
+            "cursorStyles": {
+              "insert": {
+                "style": "block",
+                "blinking": false
+              },
+              "normal": {
+                "style": "block",
+                "blinking": false
+              }
+            }
+          }
+        }
+      },
+      {
+        "package": "./plugins/dialog-escape"
+      },
+    ],
+    "diffs": {
+      "fullscreen": false,
+      "view": "unified"
+    },
+    "animations": false,
+    "scroll": {
+      "acceleration": true,
+      "speed": 3.5
+    }
+}

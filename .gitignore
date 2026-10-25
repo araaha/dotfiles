@@ -3,6 +3,7 @@
 *.zcompdump.zwc
 *-lock.json
 *gnupg
+*service.json
 mimeinfo.cache
 
 # Zsh bytecode is rebuilt locally.
