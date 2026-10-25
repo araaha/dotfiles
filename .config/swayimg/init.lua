@@ -20,7 +20,10 @@ swayimg.imagelist.order = "numeric"
 swayimg.imagelist.reverse = false
 swayimg.imagelist.recursive = false
 swayimg.imagelist.adjacent = false
-swayimg.imagelist.fsmon = true
+-- The ordered rename helper moves every file through a temporary name.
+-- In Swayimg 5.6, queued move notifications can remove the rebuilt entries.
+-- Set this at startup: disabling it later does not remove existing watches.
+swayimg.imagelist.fsmon = false
 
 swayimg.text.visible = false
 swayimg.text.font = "MesloLGS NF Regular"
@@ -71,6 +74,7 @@ swayimg.gallery.unselected_color = colors.background
 swayimg.gallery.window_color = colors.background
 swayimg.gallery.hover = false
 swayimg.gallery.cache = 100
+swayimg.gallery.pstore = true
 swayimg.gallery.preload = true
 swayimg.gallery.embedded_thumb = true
 swayimg.gallery.mark_color = colors.mark
@@ -95,7 +99,6 @@ local thumb_levels = { 32, 64, 96, 128, 160 }
 local mark_anchor = nil
 local alternate_path = nil
 local current_path = nil
-local prefix_token = 0
 local checkerboard = false
 
 local function status(message)
@@ -327,8 +330,13 @@ local function rebuild_gallery(entries, selected_index, replacement_paths)
     if not replacement_paths then
         for _, entry in ipairs(entries) do table.insert(paths, entry.path) end
     end
+    -- Keep the requested order for both manual reordering and ordered rename.
+    -- Remove marks the old entries as removed (unlike clear() in 5.6), so the
+    -- gallery discards its old selection before the replacement entries arrive.
     swayimg.imagelist.order = "none"
-    swayimg.imagelist.clear()
+    local old_paths = {}
+    for _, entry in ipairs(entries) do table.insert(old_paths, entry.path) end
+    if #old_paths > 0 then swayimg.imagelist.remove(old_paths) end
     swayimg.imagelist.add(paths)
     for index, entry in ipairs(entries) do
         if entry.mark then
@@ -339,25 +347,141 @@ local function rebuild_gallery(entries, selected_index, replacement_paths)
     swayimg.gallery.select_path(paths[selected_index])
 end
 
+local function marked_indices(entries)
+    local indices = {}
+    for index, entry in ipairs(entries) do
+        if entry.mark then table.insert(indices, index) end
+    end
+    return indices
+end
+
 local function move_gallery_horizontal(delta)
     local selected = swayimg.gallery.get_image()
     if not selected then return end
     local entries = swayimg.imagelist.get()
-    local destination = selected.index + delta
-    if destination < 1 or destination > #entries then return end
-    entries[selected.index], entries[destination] = entries[destination], entries[selected.index]
-    rebuild_gallery(entries, destination)
+    local marked = marked_indices(entries)
+
+    if #marked == 0 then
+        local destination = selected.index + delta
+        if destination < 1 or destination > #entries then return end
+        entries[selected.index], entries[destination] = entries[destination], entries[selected.index]
+    elseif delta > 0 then
+        -- Move each marked run to the right without changing its internal order.
+        local cursor = #entries
+        while cursor >= 1 do
+            if entries[cursor].mark then
+                local last = cursor
+                while cursor >= 1 and entries[cursor].mark do cursor = cursor - 1 end
+                local first = cursor + 1
+                if last < #entries then
+                    local displaced = entries[last + 1]
+                    for index = last, first, -1 do entries[index + 1] = entries[index] end
+                    entries[first] = displaced
+                end
+            else
+                cursor = cursor - 1
+            end
+        end
+    else
+        -- Move each marked run to the left without changing its internal order.
+        local cursor = 1
+        while cursor <= #entries do
+            if entries[cursor].mark then
+                local first = cursor
+                while cursor <= #entries and entries[cursor].mark do cursor = cursor + 1 end
+                local last = cursor - 1
+                if first > 1 then
+                    local displaced = entries[first - 1]
+                    for index = first, last do entries[index - 1] = entries[index] end
+                    entries[last] = displaced
+                end
+            else
+                cursor = cursor + 1
+            end
+        end
+    end
+
+    local selected_index
+    for index, entry in ipairs(entries) do
+        if entry.path == selected.path then
+            selected_index = index; break
+        end
+    end
+    if selected_index then rebuild_gallery(entries, selected_index) end
 end
 
 local function move_gallery_vertical(direction)
     local selected = swayimg.gallery.get_image()
     if not selected then return end
     local entries = swayimg.imagelist.get()
-    if not swayimg.gallery.select(direction) then return end
-    local destination = swayimg.gallery.get_image()
-    if not destination then return end
-    entries[selected.index], entries[destination.index] = entries[destination.index], entries[selected.index]
-    rebuild_gallery(entries, destination.index)
+    local marked = marked_indices(entries)
+
+    if #marked == 0 then
+        if not swayimg.gallery.select(direction) then return end
+        local destination = swayimg.gallery.get_image()
+        if not destination then return end
+        local image = table.remove(entries, selected.index)
+        table.insert(entries, destination.index, image)
+    else
+        -- Ask the gallery for each marked thumbnail's actual grid neighbor.
+        -- Applying the moves together lets a selected block cross itself as a unit.
+        local destinations = {}
+        local destination_set = {}
+        local can_move = true
+        for _, source_index in ipairs(marked) do
+            swayimg.gallery.select_path(entries[source_index].path)
+            if not swayimg.gallery.select(direction) then
+                can_move = false
+                break
+            end
+            local destination = swayimg.gallery.get_image()
+            if not destination or destination_set[destination.index] then
+                can_move = false
+                break
+            end
+            destinations[source_index] = destination.index
+            destination_set[destination.index] = true
+        end
+        swayimg.gallery.select_path(selected.path)
+        if not can_move then
+            status("Cannot move all marked images in that direction")
+            return
+        end
+
+        local source_set = {}
+        for _, source_index in ipairs(marked) do source_set[source_index] = true end
+
+        local vacancies = {}
+        for _, source_index in ipairs(marked) do
+            if not destination_set[source_index] then table.insert(vacancies, source_index) end
+        end
+
+        local displaced = {}
+        for index = 1, #entries do
+            if destination_set[index] and not source_set[index] then
+                table.insert(displaced, index)
+            end
+        end
+        if #vacancies ~= #displaced then return end
+
+        local reordered = {}
+        for index, entry in ipairs(entries) do reordered[index] = entry end
+        for source_index, destination_index in pairs(destinations) do
+            reordered[destination_index] = entries[source_index]
+        end
+        for offset, vacancy in ipairs(vacancies) do
+            reordered[vacancy] = entries[displaced[offset]]
+        end
+        entries = reordered
+    end
+
+    local selected_index
+    for index, entry in ipairs(entries) do
+        if entry.path == selected.path then
+            selected_index = index; break
+        end
+    end
+    if selected_index then rebuild_gallery(entries, selected_index) end
 end
 
 local function ordered_targets(entries)
@@ -492,12 +616,21 @@ bind(swayimg.gallery, "Shift+q", function() pick_and_quit("gallery") end)
 bind(swayimg.gallery, "Return", function() swayimg.mode = "viewer" end)
 bind(swayimg.gallery, "f", function() swayimg.fullscreen = not swayimg.fullscreen end)
 bind(swayimg.gallery, "Ctrl+s", toggle_text)
-bind(swayimg.gallery, "Shift+x", function() trash_selection(kind) end)
+bind(swayimg.gallery, "Shift+x", function() trash_selection() end)
 bind(swayimg.gallery, "g", function() swayimg.gallery.select("first") end)
 bind(swayimg.gallery, "Shift+g", function() swayimg.gallery.select("last") end)
 bind(swayimg.gallery, "r", swayimg.gallery.reload)
 bind(swayimg.gallery, "Shift+r", swayimg.gallery.reload)
 bind(swayimg.gallery, "Shift+d", function() remove_current("gallery") end)
+local function mark_and_step(direction, state)
+    local image = swayimg.gallery.get_image()
+    if not image then return end
+    swayimg.gallery.mark_image(state)
+    swayimg.gallery.select(direction)
+end
+
+bind(swayimg.gallery, "Tab", function() mark_and_step("right") end)
+bind(swayimg.gallery, "Shift+ISO_Left_Tab", function() mark_and_step("left", false) end)
 bind(swayimg.gallery, "m", function() toggle_mark("gallery") end)
 bind(swayimg.gallery, "Shift+m", function() mark_range("gallery") end)
 bind(swayimg.gallery, "Ctrl+m", function()
@@ -517,7 +650,7 @@ bind(swayimg.gallery, { "Ctrl+k", "Ctrl+up" }, function() swayimg.gallery.select
 bind(swayimg.gallery, { "equal", "KP_Add" }, function() thumb_step(1) end)
 bind(swayimg.gallery, { "minus", "KP_Subtract" }, function() thumb_step(-1) end)
 
--- The nsxiv-order patch, recreated using Swayimg's image-list API.
+-- Reorder the current image, or move marked thumbnails together.
 bind(swayimg.gallery, "Shift+h", function() move_gallery_horizontal(-1) end)
 bind(swayimg.gallery, "Shift+j", function() move_gallery_vertical("down") end)
 bind(swayimg.gallery, "Shift+k", function() move_gallery_vertical("up") end)
