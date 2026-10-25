@@ -90,7 +90,19 @@ local function filepath(prefix, current_mode)
         return ""
     end
 
-    if current_mode == "nt" or current_mode == "ntT" or current_mode == "t" then
+    if vim.fn.winnr("$") > 1 then
+        local parts = {}
+        for part in fpath:gmatch("[^/]+") do
+            parts[#parts + 1] = part
+        end
+        for i = 1, #parts - 1 do
+            local directory = parts[i]
+            parts[i] = directory:sub(1, 1) == "."
+                and "." .. directory:sub(2, 2)
+                or directory:sub(1, 1)
+        end
+        fpath = table.concat(parts, "/")
+    elseif current_mode == "nt" or current_mode == "ntT" or current_mode == "t" then
         fpath = fpath:match("%S+") or fpath
     elseif vim.o.columns <= 80 then
         fpath = vim.fn.expand("%:t")
@@ -280,14 +292,23 @@ Statusline.inactive = function()
     return filepath("", vim.api.nvim_get_mode().mode)
 end
 
+local function set_statusline(state)
+    if vim.bo.filetype == "opencode_output" or vim.bo.filetype == "opencode" then
+        vim.opt_local.statusline = " "
+        return
+    end
+
+    vim.opt_local.statusline = "%{%v:lua.Statusline." .. state .. "()%}"
+end
+
 setup_highlights()
-vim.opt_local.statusline = "%{%v:lua.Statusline.active()%}"
+set_statusline("active")
 
 for event, state in pairs({ WinEnter = "active", BufEnter = "active", WinLeave = "inactive", BufLeave = "inactive" }) do
     vim.api.nvim_create_autocmd(event, {
         group = group,
         callback = function()
-            vim.opt_local.statusline = "%{%v:lua.Statusline." .. state .. "()%}"
+            set_statusline(state)
         end,
     })
 end
