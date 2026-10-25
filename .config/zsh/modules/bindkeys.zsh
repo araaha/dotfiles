@@ -14,6 +14,13 @@ bindkey -M vicmd "M" kill-line
 bindkey -M vicmd "H" beginning-of-line
 bindkey -M vicmd "L" end-of-line
 
+copy_visual_selection() {
+    zle vi-yank
+    print -rn -- "$CUTBUFFER" | wl-copy --trim-newline
+}
+zle -N copy_visual_selection
+bindkey -M visual " y" copy_visual_selection
+
 exit_zsh() { exit }
 zle -N exit_zsh
 bindkey -M vicmd "^D" exit_zsh
