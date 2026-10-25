@@ -69,11 +69,8 @@ shellcheck-bin
 slurp
 swaybg
 swayimg
-terminus-font
 tmux
 tree-sitter-cli
-ttf-dejavu
-ttf-liberation
 ty
 typst
 ueberzugpp
