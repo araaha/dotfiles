@@ -1,5 +1,4 @@
 chroncal-bin
-codelldb-bin
 downgrade
 lazydocker-bin
 localsend-bin
