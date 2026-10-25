@@ -11,10 +11,3 @@ end, { desc = "Run the current file" })
 command("TSInstall", function(opts)
     require("features.treesitter-install").install(opts.bang)
 end, { bang = true, desc = "Install all configured Tree-sitter parsers and queries" })
-
-vim.api.nvim_create_autocmd("CmdUndefined", {
-    group = vim.api.nvim_create_augroup("UserDeferredCommands", { clear = true }),
-    pattern = "Undotree",
-    callback = function() require("features.undotree").load() end,
-    desc = "Load the bundled undo tree on its first command",
-})

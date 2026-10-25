@@ -13,6 +13,11 @@ return {
             mode = "n"
         },
         {
+            "<Leader>fu",
+            function() require("fzf-lua").undotree() end,
+            mode = "n"
+        },
+        {
             "<Leader>fz",
             function() require("fzf-lua").zoxide() end,
             mode = "n"
