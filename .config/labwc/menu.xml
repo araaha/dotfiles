@@ -23,17 +23,17 @@
             </item>
             <item label="Suspend">
                 <action name="Execute">
-                    <execute>loginctl suspend</execute>
+                    <execute>sudo suspend</execute>
                 </action>
             </item>
             <item label="Reboot">
                 <action name="Execute">
-                    <execute>loginctl reboot</execute>
+                    <execute>sudo reboot</execute>
                 </action>
             </item>
             <item label="Shutdown">
                 <action name="Execute">
-                    <execute>loginctl poweroff</execute>
+                    <execute>sudo poweroff</execute>
                 </action>
             </item>
         </menu>

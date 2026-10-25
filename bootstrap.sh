@@ -290,7 +290,7 @@ install_base_system() {
 
     selected_network_package=$(network_package)
     basestrap "$TARGET" \
-        base base-devel dinit elogind-dinit \
+        base base-devel dinit seatd-dinit turnstile dbus-dinit \
         linux "${FIRMWARE_PACKAGES[@]}" "$MICROCODE_PACKAGE" \
         efibootmgr git "$selected_network_package" sudo zsh
     enable_pacman_parallel_downloads "$TARGET/etc/pacman.conf"
