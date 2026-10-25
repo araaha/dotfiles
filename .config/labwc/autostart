@@ -7,7 +7,6 @@ carillon watch &
 
 swaybg -m stretch -i "$XDG_DATA_HOME/Wallpapers/Pacman.webp" &
 wl-gammarelay-rs &
-busctl --user set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q 4000
 wl-paste --type text --watch cliphist store &
 wl-paste --type image --watch cliphist store &
 waybar &
@@ -20,4 +19,5 @@ pamixer --set-volume 80 &
 mpris-proxy &
 chroncal alarm daemon &
 xremap --watch=config,device ~/.config/xremap/config.yml &
+gdbus call --session --dest rs.wl-gammarelay --object-path / --method org.freedesktop.DBus.Properties.Set rs.wl.gammarelay Temperature '<uint16 4000>'
 dunst &

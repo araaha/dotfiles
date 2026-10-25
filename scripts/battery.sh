@@ -7,25 +7,20 @@ notified_low=0
 notified_high_at=-1
 
 check_battery() {
-    level="$(
-        busctl --system get-property \
-            org.freedesktop.UPower \
-            "$path" \
-            "$interface" \
-            Percentage
-    )"
+    local level_result state_result level state
 
-    state="$(
-        busctl --system get-property \
-            org.freedesktop.UPower \
-            "$path" \
-            "$interface" \
-            State
-    )"
+    level_result=$(gdbus call --system --dest org.freedesktop.UPower \
+        --object-path "$path" --method org.freedesktop.DBus.Properties.Get \
+        "$interface" Percentage) || return
+    state_result=$(gdbus call --system --dest org.freedesktop.UPower \
+        --object-path "$path" --method org.freedesktop.DBus.Properties.Get \
+        "$interface" State) || return
 
-    level="${level#* }"
-    level="${level%.*}"
-    state="${state#* }"
+    # gdbus wraps property values in a variant tuple, e.g. (<61.0>,).
+    [[ "$level_result" =~ \(([0-9]+)(\.[0-9]+)?\) ]] || return
+    level=${BASH_REMATCH[1]}
+    [[ "$state_result" =~ \([^0-9]*([0-9]+) ]] || return
+    state=${BASH_REMATCH[1]}
 
     # Low battery
     if (( level <= 20 && state != 1 )); then

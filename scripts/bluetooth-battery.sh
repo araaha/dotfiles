@@ -13,25 +13,16 @@ notified_low=0
 
 check_battery() {
     percent="$(
-        busctl --system get-property \
-            org.freedesktop.UPower \
-            "$upower_path" \
-            "$upower_interface" \
-            Percentage 2>/dev/null
+        gdbus get-property --system --dest org.freedesktop.UPower \
+            --object-path "$upower_path" --interface "$upower_interface" Percentage 2>/dev/null
     )" || return
 
     connected="$(
-        busctl --system get-property \
-            org.bluez \
-            "$bluez_path" \
-            "$bluez_interface" \
-            Connected 2>/dev/null
+        gdbus get-property --system --dest org.bluez \
+            --object-path "$bluez_path" --interface "$bluez_interface" Connected 2>/dev/null
     )" || return
 
-    percent="${percent#* }"
     percent="${percent%.*}"
-
-    connected="${connected#* }"
 
     if (( percent <= 20 )) && [[ "$connected" == "true" ]]; then
         if (( ! notified_low )); then
