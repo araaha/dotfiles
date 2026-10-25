@@ -48,6 +48,9 @@ end, { expr = true, desc = "properly indent on empty line when insert" })
 
 map("n", "<Leader>tr", [[:%s/\s\+$//e<CR>:w<CR>]], { silent = true })
 map({ "v" }, "gs", [[y<esc>:%s/<C-r>"//g<left><left>]], {})
+map("n", "gs", function()
+    require("features.splitjoin").toggle()
+end, { desc = "Split/join arguments" })
 map("t", "<esc>", "<C-\\>", {})
 
 map({ "n", "v" }, "<Leader>y", [["+y]], {})
