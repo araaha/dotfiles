@@ -1,3 +1,5 @@
+photocraft-bin
+pdfcraft-bin
 chroncal-bin
 downgrade
 lazydocker-bin
