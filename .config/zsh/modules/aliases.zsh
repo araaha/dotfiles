@@ -3,7 +3,7 @@ alias \$=''
 alias bconn="bluetoothctl connect 34:09:C9:68:FB:A3"
 alias bdisc="bluetoothctl disconnect 34:09:C9:68:FB:A3"
 alias cat="bat -pp --color=auto"
-alias catt="/usr/bin/cat"
+alias catt="command cat"
 alias copy="wl-copy --trim-newline"
 alias cp='cp -v'
 alias cyme="sudo cyme --hide-buses -b icon -b name -b speed -t"
@@ -25,3 +25,6 @@ alias reboot="sudo reboot"
 alias shutdown="sudo poweroff"
 alias ticker='ticker --sort=user --config="$HOME/.config/.ticker.yaml"'
 alias tree="tree --noreport -C"
+bat() {
+    command bat --paging=always --pager="glimpse --label ${(q)1}" "$@"
+}
