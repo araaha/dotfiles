@@ -327,17 +327,17 @@
     </keybind>
     <keybind key="XF86AudioRaiseVolume">
       <action name="Execute">
-        <command>pamixer --allow-boost -i 2</command>
+        <command>wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+</command>
       </action>
     </keybind>
     <keybind key="XF86AudioLowerVolume">
       <action name="Execute">
-        <command>pamixer --allow-boost -d 2 </command>
+        <command>wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-</command>
       </action>
     </keybind>
     <keybind key="XF86AudioMute">
       <action name="Execute">
-        <command>pamixer --toggle-mute</command>
+        <command>wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle</command>
       </action>
     </keybind>
     <keybind key="0xD0">

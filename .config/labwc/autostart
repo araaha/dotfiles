@@ -15,7 +15,7 @@ env HOME="$XDG_DATA_HOME" mega-cmd-server &
 pipewire &
 pipewire-pulse &
 wireplumber &
-pamixer --set-volume 80 &
+wpctl set-volume @DEFAULT_AUDIO_SINK@ 80% &
 mpris-proxy &
 chroncal alarm daemon &
 xremap --watch=config,device ~/.config/xremap/config.yml &

@@ -52,7 +52,6 @@ parallel
 pass
 perl-image-exiftool
 pipewire
-pipewire-pulse
 playerctl
 poppler
 postgresql-dinit
