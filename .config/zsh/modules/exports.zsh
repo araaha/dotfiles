@@ -15,8 +15,8 @@ export GTK_USE_PORTAL=1
 export QT_QPA_PLATFORMTHEME=xdgdesktopportal
 export WORDCHARS="_*?[]~&;!#$%^(){<>=."
 
-export VISUAL=/usr/bin/nvim
-export EDITOR=/usr/bin/nvim
+export VISUAL="/usr/bin/nvim"
+export EDITOR="/usr/bin/nvim"
 
 export BAT_THEME="gruvbox-modified"
 export PAGER="bat"
