@@ -17,7 +17,7 @@
 
     "modules-left": [
         "bluetooth",
-        "pulseaudio",
+        "wireplumber",
         "custom/weather",
         "custom/uair"
     ],
@@ -45,9 +45,8 @@
         "on-click": "bluetoothctl disconnect 34:09:C9:68:FB:A3"
     },
 
-    "pulseaudio": {
+    "wireplumber": {
         "format": "󰕾 {volume}%",
-        "format-bluetooth": "󰕾 {volume}%",
         "format-muted": "󰝟 {volume}%",
         "scroll-step": 2,
         "tooltip": false

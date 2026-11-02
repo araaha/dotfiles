@@ -26,7 +26,7 @@ window#waybar {
 
 #custom-events,
 #bluetooth,
-#pulseaudio,
+#wireplumber,
 #custom-weather,
 #custom-uair,
 #clock,
@@ -44,7 +44,7 @@ window#waybar {
     background: @green;
 }
 
-#pulseaudio {
+#wireplumber {
     background: @yellow;
 }
 
