@@ -20,14 +20,16 @@ integer rebuilt=0 failed=0
 for source in "${sources[@]}"; do
     [[ -f $source && $source != *.zwc ]] || continue
     if [[ ! -s $source.zwc || $source -nt $source.zwc ]]; then
-        zcompile -U -- "$source" && (( ++rebuilt )) || {
+        if zcompile -U -- "$source"; then
+            (( ++rebuilt ))
+            [[ -t 1 ]] && print -- "Rebuilt Zsh cache: $source"
+        else
             print -u2 -- "Could not compile: $source"
             failed=1
-        }
+        fi
     fi
 done
 if (( rebuilt > 0 )); then
     [[ -t 1 ]] && print -- "Rebuilt $rebuilt Zsh cache files."
 fi
 exit $failed
-
