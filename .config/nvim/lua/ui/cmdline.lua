@@ -30,8 +30,12 @@ function M.setup()
         if saved_win ~= win then
             local cfg = api.nvim_win_get_config(win)
             saved = {
-                relative = cfg.relative, anchor = cfg.anchor,
-                row = cfg.row, col = cfg.col, width = cfg.width, border = cfg.border,
+                relative = cfg.relative,
+                anchor = cfg.anchor,
+                row = cfg.row,
+                col = cfg.col,
+                width = cfg.width,
+                border = cfg.border,
             }
             saved_win, menu_pos = win, vim.g.ui_cmdline_pos
         end
