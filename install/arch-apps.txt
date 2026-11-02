@@ -1,3 +1,4 @@
+acpid
 alacritty
 bash-language-server
 bat
