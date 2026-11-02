@@ -40,6 +40,11 @@ function M.open()
             col = 0,
         })
 
+        -- no statusline (nvim 0.12+ draws one on floats); the flag stops
+        -- ui/statusline.lua from setting it again on WinEnter/BufEnter
+        vim.w[win].no_statusline = true
+        vim.wo[win][0].statusline = ""
+
         -- track it
         table.insert(preview_windows, win)
 

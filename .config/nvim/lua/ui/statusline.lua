@@ -293,6 +293,10 @@ Statusline.inactive = function()
 end
 
 local function set_statusline(state)
+    if vim.w.no_statusline then
+        return
+    end
+
     if vim.bo.filetype == "opencode_output" or vim.bo.filetype == "opencode" then
         vim.opt_local.statusline = " "
         return
