@@ -42,6 +42,7 @@ export ECLIPSE_HOME="$XDG_CONFIG_HOME/eclipse"
 export PSQL_HISTORY="$XDG_STATE_HOME/psql_history"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
 export CODEX_HOME="$XDG_CONFIG_HOME/codex"
+export CLAUDE_CONFIG_DIR="$XDG_CONFIG_HOME"/claude
 
 export GPG_TTY=$(tty)
 export GNUPGHOME="$XDG_DATA_HOME/.gnupg"
