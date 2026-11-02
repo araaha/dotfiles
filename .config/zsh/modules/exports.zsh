@@ -25,7 +25,6 @@ export SYSTEMD_PAGER="glimpse"
 export SYSTEMD_PAGERSECURE=true
 
 export LESS="--tilde --save-marks --shift 2 -g --ignore-case --incsearch -j.5 -m -R -n --use-color -g"
-export MOAR="-terminal-fg -no-search-line-highlight -no-linenumbers -no-statusbar -style algol_nu -wrap -colors 16M"
 
 export LESSHISTSIZE=1000
 
