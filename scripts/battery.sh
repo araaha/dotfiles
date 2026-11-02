@@ -16,10 +16,13 @@ check_battery() {
         --object-path "$path" --method org.freedesktop.DBus.Properties.Get \
         "$interface" State) || return
 
-    # gdbus wraps property values in a variant tuple, e.g. (<61.0>,).
-    [[ "$level_result" =~ \(([0-9]+)(\.[0-9]+)?\) ]] || return
+    # gdbus wraps doubles in a variant tuple, e.g. (<61.0>,).
+    local level_pattern='\(<([0-9]+)(\.[0-9]+)?>'
+    [[ "$level_result" =~ $level_pattern ]] || return
     level=${BASH_REMATCH[1]}
-    [[ "$state_result" =~ \([^0-9]*([0-9]+) ]] || return
+    # Match the value after the type, not the digits in "uint32".
+    local state_pattern='^\(<uint32 ([0-9]+)>[,]\)$'
+    [[ "$state_result" =~ $state_pattern ]] || return
     state=${BASH_REMATCH[1]}
 
     # Low battery
@@ -37,7 +40,7 @@ check_battery() {
     # Notify again whenever the percentage increases.
     if (( level >= 80 && state == 1 )); then
         if (( level != notified_high_at )); then
-            dunstify -u CRITICAL -t 1000 \
+            dunstify -u CRITICAL -t 10000 \
                 "Battery level is ${level}%! Unplug"
             notified_high_at=$level
         fi
