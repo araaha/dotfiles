@@ -1,5 +1,3 @@
-photocraft-bin
-pdfcraft-bin
 chroncal-bin
 downgrade
 glimpse-pager
@@ -7,6 +5,8 @@ lazydocker-bin
 localsend-bin
 mdcat-bin
 megacmd-bin
+pdfcraft-bin
+photocraft-bin
 sioyek-dev
 ticker
 ttf-ms-fonts
