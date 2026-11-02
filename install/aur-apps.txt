@@ -2,6 +2,7 @@ photocraft-bin
 pdfcraft-bin
 chroncal-bin
 downgrade
+glimpse-pager
 lazydocker-bin
 localsend-bin
 mdcat-bin

@@ -23,8 +23,8 @@
 #   Example 2: Use ".gitignore"-style highlighting for ".ignore" files
 #--map-syntax "*.ino:C++"
 #--map-syntax ".ignore:Git Ignore"
---style="header"
+--style="plain"
 --map-syntax='*.Rtex:LaTeX'
 --map-syntax='*.conf:TOML'
 # --pager="less +g -Pm'?PB%PB\%'"
---pager="moar -no-linenumbers -no-statusbar -wrap -style algol_nu -colors 16M"
+--pager="glimpse"
