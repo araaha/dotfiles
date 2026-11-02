@@ -81,6 +81,22 @@ end, { silent = true, desc = "Toggle word or decrement number" })
 map("n", "<Leader>ru", function()
     require("features.runner").run()
 end, { desc = "Run the current file" })
+map("o", "%", function()
+    require("features.pairs").jump()
+end, { desc = "Jump between Tree-sitter node boundaries" })
+
+for _, key in ipairs({ "f", "F", "t", "T", ";", "," }) do
+    map({ "n", "x", "o" }, key, function()
+        return require("features.improved-ft").motion(key)
+    end, { expr = true, desc = "Multiline character motion " .. key })
+end
+
+for _, key in ipairs({ "w", "e", "b", "ge" }) do
+    map({ "n", "x", "o" }, key, function()
+        return require("features.neowords").motion(key)
+    end, { expr = true, desc = "Subword motion " .. key })
+end
+
 
 map("n", "=f", function()
     local win = vim.api.nvim_get_current_win()

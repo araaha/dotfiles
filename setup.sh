@@ -148,7 +148,7 @@ configure_user() {
     username=$(id -un)
     shell=$(command -v zsh)
     grep -Fxq "$shell" /etc/shells || die "zsh is not listed in /etc/shells"
-    sudo usermod -aG video,input "$username"
+    sudo usermod -aG seat,video,input,audio,wheel "$username"
     sudo chsh -s "$shell" "$username"
 }
 
