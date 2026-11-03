@@ -1,5 +1,43 @@
 #!/usr/bin/env bash
-# Shared installer presentation. DOTFILES_PLAIN=1 forces text prompts.
+# Shared installer helpers and presentation for bootstrap.sh and setup.sh.
+# DOTFILES_PLAIN=1 forces text prompts.
+
+# bootstrap.sh records the network mode here; setup.sh reads it back.
+#shellcheck disable=SC2034
+readonly NETWORK_CONFIG=/etc/dotfiles-network
+
+die() {
+    ui_message error "$*" >&2
+    exit 1
+}
+
+step() { ui_message step "$*"; }
+
+require_command() {
+    local command
+    for command in "$@"; do
+        command -v "$command" >/dev/null || die "Required command missing: $command"
+    done
+}
+
+# Print the dinit service for a network mode; its package is "<service>-dinit".
+network_service() {
+    case "$1" in
+        wifi) printf '%s\n' iwd ;;
+        ethernet) printf '%s\n' dhcpcd ;;
+        *) return 1 ;;
+    esac
+}
+
+# Print each named variable as NAME=value; arrays are joined with spaces.
+ui_variables() {
+    local name reference
+    for name in "$@"; do
+        reference="${name}[*]"
+        printf '  %s=%s\n' "$name" "${!reference}"
+    done
+}
+
 ui_gum() {
     [[ ${DOTFILES_PLAIN:-0} != 1 && -t 0 && -t 2 ]] && command -v gum >/dev/null
 }

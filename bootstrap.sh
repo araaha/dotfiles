@@ -13,7 +13,6 @@ readonly TIMEZONE=Canada/Eastern
 readonly LOCALE=en_CA.UTF-8
 readonly REPOSITORY=https://github.com/araaha/dotfiles
 readonly TARGET=/mnt
-readonly NETWORK_CONFIG=/etc/dotfiles-network
 readonly PACMAN_PARALLEL_DOWNLOADS=100
 readonly -a KERNEL_PARAMETERS=(
     rw
@@ -38,6 +37,7 @@ HOSTNAME=${2:-}
 BOOT_SIZE=256M
 ROOT_SIZE=50G
 NETWORK_MODE=wifi
+NETWORK_SERVICE=iwd
 FIRMWARE_PACKAGES=()
 ESP=""
 ROOT=""
@@ -46,29 +46,19 @@ MICROCODE_PACKAGE=""
 MICROCODE_IMAGE=""
 MOUNTED=false
 
-die() {
-    ui_message error "$*" >&2
-    exit 1
-}
-
-step() { ui_message step "$*"; }
-success() { ui_message success "$*"; }
-
 print_readonly_variables() {
     step "Read-only configuration"
-    printf '  USERNAME=%s\n' "$USERNAME"
-    printf '  TIMEZONE=%s\n' "$TIMEZONE"
-    printf '  LOCALE=%s\n' "$LOCALE"
-    printf '  REPOSITORY=%s\n' "$REPOSITORY"
-    printf '  TARGET=%s\n' "$TARGET"
-    printf '  NETWORK_CONFIG=%s\n' "$NETWORK_CONFIG"
-    printf '  PACMAN_PARALLEL_DOWNLOADS=%s\n' "$PACMAN_PARALLEL_DOWNLOADS"
-    printf '  KERNEL_PARAMETERS=%s\n' "${KERNEL_PARAMETERS[*]}"
-    printf '  PREREQUISITE_PACKAGES=%s\n' "${PREREQUISITE_PACKAGES[*]}"
+    ui_variables USERNAME TIMEZONE LOCALE REPOSITORY TARGET NETWORK_CONFIG \
+        PACMAN_PARALLEL_DOWNLOADS KERNEL_PARAMETERS PREREQUISITE_PACKAGES
 }
 
-require_command() {
-    command -v "$1" >/dev/null || die "Required command missing: $1"
+contains() {
+    local needle=$1 item
+    shift
+    for item in "$@"; do
+        [[ "$item" == "$needle" ]] && return 0
+    done
+    return 1
 }
 
 usage() {
@@ -79,16 +69,13 @@ usage() {
 check_invocation() {
     (( EUID == 0 )) || die "Run this script as root from an Artix live ISO."
     [[ -n "$DISK" ]] || { usage; exit 2; }
-    [[ -z "$HOSTNAME" || "$HOSTNAME" =~ ^[a-zA-Z0-9][a-zA-Z0-9.-]*$ ]] || die "Invalid hostname: $HOSTNAME"
     [[ -d /sys/firmware/efi/efivars ]] || die "The ISO was not booted in UEFI mode."
     [[ -r /etc/os-release ]] || die "Could not identify the live environment."
 
     # shellcheck source=/dev/null
     source /etc/os-release
     [[ "${ID:-}" == artix ]] || die "Run this script from an Artix live ISO."
-    command -v pacman >/dev/null || die "pacman is unavailable."
-    command -v grep >/dev/null || die "grep is unavailable."
-    command -v sed >/dev/null || die "sed is unavailable."
+    require_command pacman grep sed
 }
 
 enable_pacman_parallel_downloads() {
@@ -124,8 +111,6 @@ cleanup() {
 }
 
 check_prerequisites() {
-    local command
-
     [[ -b "$DISK" ]] || die "Not a block device: $DISK"
     [[ "$(lsblk -dnro TYPE "$DISK")" == disk ]] || die "Select a whole disk, not a partition."
     [[ "$(lsblk -dnro RO "$DISK")" == 0 ]] || die "The selected disk is read-only."
@@ -134,10 +119,8 @@ check_prerequisites() {
     fi
     mountpoint -q "$TARGET" && die "$TARGET is already mounted."
 
-    for command in artix-chroot basestrap blkid efibootmgr fstabgen git \
-        lsblk mkfs.ext4 mkfs.fat mount mountpoint partprobe sgdisk udevadm umount; do
-        require_command "$command"
-    done
+    require_command artix-chroot basestrap blkid efibootmgr fstabgen git \
+        lsblk mkfs.ext4 mkfs.fat mount mountpoint partprobe sgdisk udevadm umount
 
     case "$(awk -F ': ' '/vendor_id/ { print $2; exit }' /proc/cpuinfo)" in
         AuthenticAMD)
@@ -179,14 +162,11 @@ prompt_partition_sizes() {
 
 prompt_network_mode() {
     NETWORK_MODE=$(ui_choose 'Network connection' wifi ethernet) || die "Network selection cancelled."
-    case "$NETWORK_MODE" in
-        wifi|ethernet) ;;
-        *) die "Invalid network selection: $NETWORK_MODE" ;;
-    esac
+    NETWORK_SERVICE=$(network_service "$NETWORK_MODE") || die "Invalid network selection: $NETWORK_MODE"
 }
 
 prompt_firmware_packages() {
-    local packages selected package defaults="" known existing duplicate
+    local packages selected package defaults=""
     local -a available
     packages=$(pacman -Slq) || die "Could not list available firmware packages."
     mapfile -t available < <(printf '%s\n' "$packages" |
@@ -195,14 +175,10 @@ prompt_firmware_packages() {
 
     # Preserve the previous machine's defaults when those packages are available.
     for package in linux-firmware-amdgpu linux-firmware-mediatek; do
-        for known in "${available[@]}"; do
-            [[ "$known" == "$package" ]] && defaults+="${defaults:+,}$package"
-        done
+        contains "$package" "${available[@]}" && defaults+="${defaults:+,}$package"
     done
-    if [[ -z "$defaults" ]]; then
-        for known in "${available[@]}"; do
-            [[ "$known" == linux-firmware ]] && defaults=linux-firmware
-        done
+    if [[ -z "$defaults" ]] && contains linux-firmware "${available[@]}"; then
+        defaults=linux-firmware
     fi
     printf 'Select firmware for your GPU, network, and other devices.\n' >&2
     printf 'linux-firmware is the broad meta-package; individual packages keep installation smaller.\n' >&2
@@ -211,32 +187,10 @@ prompt_firmware_packages() {
     FIRMWARE_PACKAGES=()
     while IFS= read -r package; do
         [[ -n "$package" ]] || continue
-        known=false
-        for existing in "${available[@]}"; do
-            [[ "$existing" == "$package" ]] && known=true
-        done
-        [[ "$known" == true ]] || die "Unavailable firmware package: $package"
-        duplicate=false
-        for existing in "${FIRMWARE_PACKAGES[@]}"; do
-            [[ "$existing" == "$package" ]] && duplicate=true
-        done
-        [[ "$duplicate" == true ]] || FIRMWARE_PACKAGES+=("$package")
+        contains "$package" "${available[@]}" || die "Unavailable firmware package: $package"
+        contains "$package" "${FIRMWARE_PACKAGES[@]}" || FIRMWARE_PACKAGES+=("$package")
     done <<< "$selected"
     (( ${#FIRMWARE_PACKAGES[@]} > 0 )) || die "Select at least one firmware package."
-}
-
-network_package() {
-    case "$NETWORK_MODE" in
-        wifi) printf '%s\n' iwd-dinit ;;
-        ethernet) printf '%s\n' dhcpcd-dinit ;;
-    esac
-}
-
-network_service() {
-    case "$NETWORK_MODE" in
-        wifi) printf '%s\n' iwd ;;
-        ethernet) printf '%s\n' dhcpcd ;;
-    esac
 }
 
 confirm_disk_erasure() {
@@ -255,6 +209,10 @@ confirm_disk_erasure() {
     [[ "$confirmation" == "ERASE $DISK" ]] || die "Confirmation did not match; disk was not modified."
 }
 
+partition_path() {
+    lsblk -lnpo NAME,PARTN "$DISK" | awk -v number="$1" '$2 == number { print $1; exit }'
+}
+
 partition_disk() {
     sgdisk --zap-all "$DISK"
     sgdisk \
@@ -265,9 +223,9 @@ partition_disk() {
     partprobe "$DISK"
     udevadm settle
 
-    ESP=$(lsblk -lnpo NAME,PARTN "$DISK" | awk '$2 == 1 { print $1; exit }')
-    ROOT=$(lsblk -lnpo NAME,PARTN "$DISK" | awk '$2 == 2 { print $1; exit }')
-    HOME_PARTITION=$(lsblk -lnpo NAME,PARTN "$DISK" | awk '$2 == 3 { print $1; exit }')
+    ESP=$(partition_path 1)
+    ROOT=$(partition_path 2)
+    HOME_PARTITION=$(partition_path 3)
     [[ -b "$ESP" && -b "$ROOT" && -b "$HOME_PARTITION" ]] || \
         die "Could not locate the new partitions."
 
@@ -286,13 +244,10 @@ mount_filesystems() {
 }
 
 install_base_system() {
-    local selected_network_package
-
-    selected_network_package=$(network_package)
     basestrap "$TARGET" \
         base base-devel dinit seatd-dinit turnstile dbus-dinit \
         linux "${FIRMWARE_PACKAGES[@]}" "$MICROCODE_PACKAGE" \
-        efibootmgr git "$selected_network_package" sudo zsh
+        efibootmgr git "$NETWORK_SERVICE-dinit" sudo zsh
     enable_pacman_parallel_downloads "$TARGET/etc/pacman.conf"
     fstabgen -U "$TARGET" > "$TARGET/etc/fstab"
 }
@@ -343,7 +298,7 @@ install_dotfiles_and_yay() {
 
 enable_boot_services() {
     local output status
-    if output=$(artix-chroot "$TARGET" env LC_ALL=C dinitctl --offline enable "$(network_service)" 2>&1); then
+    if output=$(artix-chroot "$TARGET" env LC_ALL=C dinitctl --offline enable "$NETWORK_SERVICE" 2>&1); then
         printf '%s\n' "$output"
     else
         status=$?
