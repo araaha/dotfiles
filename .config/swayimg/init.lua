@@ -36,11 +36,10 @@ swayimg.text.shadow = 0x00000000
 swayimg.text.timeout = 0
 swayimg.text.status_timeout = 3
 
--- swayimg.viewer.animation = true
 swayimg.viewer.default_scale = "fit"
 swayimg.viewer.default_position = "center"
 swayimg.viewer.drag_button = "MouseMiddle"
-swayimg.viewer.autocenter = true
+swayimg.viewer.autopos = "center"
 swayimg.viewer.loop = false
 swayimg.viewer.preload = 1
 swayimg.viewer.history = 16
@@ -607,8 +606,14 @@ swayimg.viewer.on_mouse("MouseLeft", function()
     end
 end)
 swayimg.viewer.on_mouse("MouseRight", function() swayimg.mode = "gallery" end)
-swayimg.viewer.on_mouse("ScrollUp", function() zoom_step(1, true) end)
-swayimg.viewer.on_mouse("ScrollDown", function() zoom_step(-1, true) end)
+-- Swayimg 5.7 replaced Scroll* mouse buttons with on_scroll(); vertical > 0 is scroll down.
+swayimg.viewer.on_scroll(function(_, _, vertical)
+    if vertical < 0 then
+        zoom_step(1, true)
+    elseif vertical > 0 then
+        zoom_step(-1, true)
+    end
+end)
 
 -- General gallery bindings.
 bind(swayimg.gallery, "q", function() swayimg.exit() end)
@@ -669,10 +674,14 @@ swayimg.gallery.on_mouse("MouseRight", function()
         swayimg.gallery.mark_image()
     end
 end)
-swayimg.gallery.on_mouse("ScrollUp", function() swayimg.gallery.select("up") end)
-swayimg.gallery.on_mouse("ScrollDown", function() swayimg.gallery.select("down") end)
-swayimg.gallery.on_mouse("Ctrl+ScrollUp", function() swayimg.gallery.select("pgup") end)
-swayimg.gallery.on_mouse("Ctrl+ScrollDown", function() swayimg.gallery.select("pgdown") end)
+swayimg.gallery.on_scroll(function(kmods, _, vertical)
+    local ctrl = kmods == "Ctrl"
+    if vertical < 0 then
+        swayimg.gallery.select(ctrl and "pgup" or "up")
+    elseif vertical > 0 then
+        swayimg.gallery.select(ctrl and "pgdown" or "down")
+    end
+end)
 
 bind(swayimg.slideshow, "s", function() swayimg.mode = "viewer" end)
 bind(swayimg.slideshow, "q", function() swayimg.exit() end)
