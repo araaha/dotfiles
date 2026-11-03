@@ -1,3 +1,0 @@
-@include /usr/lib/dinit.d/getty
-inittab-id = 6
-inittab-line = tty6

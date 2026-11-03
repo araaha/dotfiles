@@ -23,7 +23,6 @@ fzf
 gdu
 gnome-epub-thumbnailer
 gnome-keyring
-go
 gopls
 grim
 gum
@@ -46,7 +45,6 @@ noto-fonts-emoji
 oath-toolkit
 opencode
 openssh
-openssl
 ouch
 pamixer
 parallel
@@ -76,7 +74,6 @@ upower
 uv
 vulkan-radeon
 waybar
-wireplumber
 wl-clipboard
 wlr-randr
 wtype
