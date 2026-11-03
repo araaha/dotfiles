@@ -1,0 +1,7 @@
+{
+  "name": "opencode-local-notify",
+  "type": "module",
+  "exports": {
+    "./tui": "./tui.ts"
+  }
+}

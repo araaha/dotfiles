@@ -1,0 +1,8 @@
+{
+  "name": "opencode-vim-mini",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./tui": "./tui.tsx"
+  }
+}
