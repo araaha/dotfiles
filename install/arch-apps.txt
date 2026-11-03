@@ -56,7 +56,6 @@ pipewire
 playerctl
 poppler
 postgresql-dinit
-qrencode
 qrtool
 resvg
 ripgrep
